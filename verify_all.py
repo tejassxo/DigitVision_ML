@@ -15,7 +15,10 @@ import time
 
 DELIVERABLES = {
     "1. WORKING SOFTWARE": [
+        "src/config.py",
         "src/preprocessing/canonical.py",
+        "src/data/dataset.py",
+        "src/data/eda.py",
         "src/intelligence/quality.py",
         "src/intelligence/confidence.py",
         "src/intelligence/forensics.py",
@@ -28,7 +31,7 @@ DELIVERABLES = {
         "src/app/static/css/style.css",
         "src/app/static/js/app.js"
     ],
-    "2. MACHINE LEARNING EXPERIMENTS": [
+    "2. MACHINE LEARNING EXPERIMENTS & DATA ARTIFACTS": [
         "experiments/run_experiments.py",
         "experiments/models/digitvision_convnet.keras",
         "experiments/models/lenet5.keras",
@@ -40,15 +43,25 @@ DELIVERABLES = {
         "experiments/figures/model_comparison.png",
         "experiments/figures/calibration_reliability.png",
         "experiments/figures/robustness_curves.png",
-        "experiments/figures/gradcam_gallery.png"
+        "experiments/figures/gradcam_gallery.png",
+        "artifacts/PHASE_01_MANIFEST.json",
+        "artifacts/data/sample_image_grid.png",
+        "artifacts/data/class_distribution.png",
+        "artifacts/data/pixel_intensity_distribution.png",
+        "artifacts/data/average_image_per_class.png",
+        "artifacts/data/representative_examples_per_class.png"
     ],
     "3. TECHNICAL DOCUMENTATION": [
         "README.md",
+        "docs/DATASET.md",
+        "docs/PREPROCESSING.md",
+        "docs/EXPERIMENT_PROTOCOL.md",
         "docs/ARCHITECTURE.md",
         "docs/MATHEMATICAL_FOUNDATIONS.md",
         "docs/EXPERIMENT_REPORT.md",
         "docs/MODEL_CARD.md",
-        "docs/API_SPECIFICATION.md"
+        "docs/API_SPECIFICATION.md",
+        "docs/PHASE_01_REPORT.md"
     ],
     "4. SCIENTIFIC PRESENTATION": [
         "src/presentation/generate_pptx.py",
@@ -57,6 +70,7 @@ DELIVERABLES = {
     ],
     "5. VERIFICATION EVIDENCE": [
         "tests/test_preprocessing.py",
+        "tests/test_data.py",
         "tests/test_intelligence.py",
         "tests/test_models.py",
         "tests/test_xai.py",
