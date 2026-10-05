@@ -110,20 +110,23 @@ def canonical_preprocess(
     image_input: Any,
     target_size: Tuple[int, int] = (28, 28),
     inner_box_size: int = 20,
-    threshold: int = 25
+    threshold: int = 25,
+    use_otsu: bool = False,
+    return_tensor: bool = False
 ) -> Tuple[np.ndarray, Dict[str, Any]]:
     """
     Canonical MNIST-standard preprocessing invariant pipeline:
     1. Decode input into single-channel grayscale (H, W).
     2. Normalize contrast (bright stroke on dark background).
-    3. Detect foreground bounding box using thresholding.
+    3. Detect foreground bounding box using Otsu or justified thresholding.
     4. Aspect-ratio preserving resize into an inner box (e.g. 20x20).
     5. Place inside 28x28 black canvas.
     6. Calculate center-of-mass (moments) and translate centroid to frame center (13.5, 13.5).
     7. Normalize intensity to float32 range [0.0, 1.0].
+    8. If return_tensor=True, emit shape (1, 28, 28, 1) float32 tensor.
 
     Returns:
-        processed_image: np.ndarray of shape (28, 28) with values in [0.0, 1.0], float32.
+        processed_image: np.ndarray of shape (28, 28) or (1, 28, 28, 1) in [0.0, 1.0], float32.
         metadata: Dict containing diagnostic info (is_empty, bbox, centroid, shifts).
     """
     raw_gray = decode_image_input(image_input)
@@ -137,17 +140,27 @@ def canonical_preprocess(
         "centroid_final": None,
         "dx": 0.0,
         "dy": 0.0,
-        "active_pixel_ratio": 0.0
+        "active_pixel_ratio": 0.0,
+        "threshold_used": threshold
     }
 
-    # Identify foreground pixels
-    binary = (norm_gray > threshold).astype(np.uint8)
+    # Identify foreground pixels via Otsu or justified thresholding
+    if use_otsu:
+        # Otsu binarization computes optimal global threshold
+        otsu_val, binary = cv2.threshold(norm_gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        metadata["threshold_used"] = float(otsu_val)
+    else:
+        binary = (norm_gray > threshold).astype(np.uint8) * 255
+
     coords = cv2.findNonZero(binary)
 
     if coords is None or len(coords) < 8:
         # Canvas has fewer than 8 active pixels: considered empty/blank
         metadata["is_empty"] = True
-        blank = np.zeros(target_size, dtype=np.float32)
+        if return_tensor:
+            blank = np.zeros((1, target_size[1], target_size[0], 1), dtype=np.float32)
+        else:
+            blank = np.zeros(target_size, dtype=np.float32)
         return blank, metadata
 
     # Get bounding rectangle of the digit stroke
@@ -198,4 +211,34 @@ def canonical_preprocess(
     metadata["centroid_final"] = (float(final_cx), float(final_cy))
     metadata["active_pixel_ratio"] = float(np.count_nonzero(final_img > 0.05) / (canvas_w * canvas_h))
 
+    if return_tensor:
+        final_img = np.expand_dims(final_img, axis=(0, -1))
+
     return final_img, metadata
+
+
+def canonical_preprocess_tensor(
+    image_input: Any,
+    target_size: Tuple[int, int] = (28, 28),
+    inner_box_size: int = 20,
+    threshold: int = 25,
+    use_otsu: bool = False
+) -> Tuple[np.ndarray, Dict[str, Any]]:
+    """
+    Authoritative canonical preprocessing wrapper returning a float32 tensor
+    of exact shape (1, 28, 28, 1) normalized to [0.0, 1.0].
+    
+    Fulfills the core system invariant:
+    Raw Image -> Grayscale -> Contrast/background normalization ->
+    Otsu / justified thresholding -> Foreground detection -> Bounding box ->
+    Aspect-ratio preservation -> Fit into ~20x20 region -> Center of mass ->
+    28x28 canvas -> Normalize [0,1] -> float32 tensor -> (1, 28, 28, 1).
+    """
+    return canonical_preprocess(
+        image_input=image_input,
+        target_size=target_size,
+        inner_box_size=inner_box_size,
+        threshold=threshold,
+        use_otsu=use_otsu,
+        return_tensor=True
+    )

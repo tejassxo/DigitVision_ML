@@ -238,6 +238,11 @@ pres_dir = os.path.abspath("src/presentation")
 if os.path.exists(pres_dir):
     app.mount("/presentation", StaticFiles(directory=pres_dir), name="presentation")
 
+artifacts_dir = os.path.abspath("artifacts")
+if os.path.exists(artifacts_dir):
+    app.mount("/artifacts", StaticFiles(directory=artifacts_dir), name="artifacts")
+
+
 
 @app.get("/")
 def serve_dashboard():

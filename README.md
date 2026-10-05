@@ -124,16 +124,24 @@ ML_project/
 │   └── failures/                 # Mined high-confidence failure cases
 ├── docs/
 │   ├── ARCHITECTURE.md           # System architecture & invariants
+│   ├── DATASET.md                # MNIST dataset foundation, spaces & distributions
+│   ├── PREPROCESSING.md          # Canonical preprocessing invariant & moments
+│   ├── EXPERIMENT_PROTOCOL.md    # Experiment protocol, evaluation & zero-leakage
 │   ├── MATHEMATICAL_FOUNDATIONS.md # Formal proofs, moments, loss & calibration
 │   ├── EXPERIMENT_REPORT.md      # Detailed experimental results & findings
 │   ├── MODEL_CARD.md             # Production model card (Mitchell et al.)
-│   └── API_SPECIFICATION.md      # REST endpoints and schemas
+│   ├── API_SPECIFICATION.md      # REST endpoints and schemas
+│   └── PHASE_01_REPORT.md        # Phase 01 milestone engineering report
 ├── tests/
-│   ├── test_preprocessing.py     # Centroiding & invariant test suite
+│   ├── test_preprocessing.py     # Centroiding, moments & invariant test suite (12 tests)
+│   ├── test_data.py              # Dataset pipeline, partitions & leakage test suite (6 tests)
 │   ├── test_intelligence.py      # Quality score & uncertainty unit tests
 │   ├── test_models.py            # Model structure & probability simplex tests
 │   ├── test_xai.py               # Grad-CAM & Saliency unit tests
 │   └── test_api.py               # REST API test suite
+├── artifacts/
+│   ├── data/                     # Executed EDA plots (grid, distribution, averages, centroids)
+│   └── PHASE_01_MANIFEST.json   # Phase 01 engineering deliverable manifest
 ├── verify_all.py                 # Master verification & repository audit harness
 ├── requirements.txt              # Production dependency lockfile
 └── README.md                     # Master documentation
