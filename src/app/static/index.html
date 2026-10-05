@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIGITVISION AI — Explainable Handwritten Digit Intelligence Platform</title>
+  <meta name="description" content="Production-grade, explainable, confidence-aware handwritten digit intelligence platform with canonical preprocessing, Grad-CAM attribution, uncertainty calibration, and real-world robustness benchmarking.">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header-bar">
+    <div class="brand-section">
+      <h1 class="brand-title">DIGITVISION AI</h1>
+      <span class="brand-badge">v1.0.0-PROD</span>
+      <span class="brand-subtitle">EXPLAINABLE, CONFIDENCE-AWARE HANDWRITTEN DIGIT INTELLIGENCE</span>
+    </div>
+    <div class="header-meta">
+      <div class="status-indicator">
+        <span class="status-dot"></span>
+        <span id="header-status">SYSTEM ONLINE</span>
+      </div>
+      <div>MODEL: <span id="header-model-name" style="color:var(--text-primary);font-weight:600;">DigitVision-DeepConvNet</span></div>
+      <div>ROUNDTRIP: <span id="header-latency" style="color:var(--accent-confidence-high);">0.0 ms</span></div>
+    </div>
+  </header>
+
+  <!-- NAVIGATION TABS -->
+  <nav class="nav-tabs">
+    <button class="nav-tab-btn active" data-tab="tab-recognition">LIVE RECOGNITION &amp; FORENSICS</button>
+    <button class="nav-tab-btn" data-tab="tab-benchmarks">EXPERIMENT BENCHMARKS</button>
+    <button class="nav-tab-btn" data-tab="tab-failures">ERROR INTELLIGENCE</button>
+    <button class="nav-tab-btn" data-tab="tab-presentation">SCIENTIFIC PRESENTATION</button>
+  </nav>
+
+  <!-- MAIN VIEWPORT -->
+  <main class="main-content">
+
+    <!-- TAB 1: LIVE RECOGNITION & FORENSICS -->
+    <section id="tab-recognition" class="tab-pane active">
+      <div class="recognition-grid">
+
+        <!-- COLUMN 1: DRAWING INPUT & CONTROLS -->
+        <div class="obsidian-card">
+          <div class="card-header">
+            <span class="card-title">CANVAS INPUT MATRIX</span>
+            <span class="brand-badge">280×280 RAW</span>
+          </div>
+          <div class="card-body">
+            <div class="canvas-wrapper">
+              <canvas id="digit-canvas" width="280" height="280"></canvas>
+            </div>
+
+            <div class="brush-control-row">
+              <span>STROKE THICKNESS</span>
+              <input type="range" id="brush-size" class="brush-slider" min="8" max="28" value="18">
+              <span id="brush-size-val">18px</span>
+            </div>
+
+            <div class="controls-row">
+              <select id="model-select" title="Active Model Architecture">
+                <option value="DigitVision-DeepConvNet">DigitVision DeepConvNet</option>
+                <option value="LeNet-5">Classic LeNet-5</option>
+                <option value="SVM-RBF">Support Vector Machine (RBF)</option>
+                <option value="Random-Forest">Random Forest</option>
+                <option value="Logistic-Regression">Logistic Regression</option>
+              </select>
+            </div>
+
+            <div class="controls-row">
+              <button id="btn-infer" class="btn-primary" style="flex:1;">RECOGNIZE</button>
+              <button id="btn-clear" style="flex:1;">CLEAR</button>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;font-family:var(--font-mono);font-size:11px;color:var(--text-secondary);">
+              <input type="checkbox" id="check-live" style="accent-color:var(--accent-confidence-high)">
+              <label for="check-live">LIVE INFERENCE WHILE DRAWING</label>
+            </div>
+
+            <!-- PRESET SAMPLES -->
+            <div class="preset-section">
+              <div class="preset-title">VECTOR DIGIT PRESETS (0–9)</div>
+              <div class="preset-grid">
+                <button class="preset-btn" id="preset-0">0</button>
+                <button class="preset-btn" id="preset-1">1</button>
+                <button class="preset-btn" id="preset-2">2</button>
+                <button class="preset-btn" id="preset-3">3</button>
+                <button class="preset-btn" id="preset-4">4</button>
+                <button class="preset-btn" id="preset-5">5</button>
+                <button class="preset-btn" id="preset-6">6</button>
+                <button class="preset-btn" id="preset-7">7</button>
+                <button class="preset-btn" id="preset-8">8</button>
+                <button class="preset-btn" id="preset-9">9</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COLUMN 2: PREDICTION HUD & CONFIDENCE BREAKDOWN -->
+        <div class="obsidian-card">
+          <div class="card-header">
+            <span class="card-title">PREDICTION &amp; UNCERTAINTY HUD</span>
+            <span class="brand-badge">CALIBRATED</span>
+          </div>
+          <div class="card-body">
+            <div class="prediction-display-box">
+              <div class="prediction-large-digit" id="pred-digit">—</div>
+              <div class="prediction-meta-block">
+                <div class="prediction-confidence-val" id="pred-confidence">0.0%</div>
+                <div class="decision-badge" id="pred-status-badge">STANDBY</div>
+              </div>
+            </div>
+
+            <!-- TOP-K BARS -->
+            <div style="margin-bottom:6px;font-size:10px;font-weight:600;color:var(--text-telemetry);text-transform:uppercase;">
+              TOP-5 PROBABILITY DISTRIBUTION
+            </div>
+            <div id="top-k-bars" class="top-k-container">
+              <div style="color:var(--text-telemetry);font-size:11px;">Draw a digit on the canvas to begin telemetry.</div>
+            </div>
+
+            <!-- FORENSICS METRICS TABLE -->
+            <div style="margin-top:18px;margin-bottom:6px;font-size:10px;font-weight:600;color:var(--text-telemetry);text-transform:uppercase;">
+              UNCERTAINTY &amp; LATENCY TELEMETRY
+            </div>
+            <table class="telemetry-table">
+              <tbody>
+                <tr>
+                  <td class="label-col">SHANNON ENTROPY</td>
+                  <td class="value-col" id="telem-entropy">0.000 bits</td>
+                </tr>
+                <tr>
+                  <td class="label-col">PREDICTION MARGIN (p1 - p2)</td>
+                  <td class="value-col" id="telem-margin">0.000</td>
+                </tr>
+                <tr>
+                  <td class="label-col">INPUT QUALITY SCORE</td>
+                  <td class="value-col" id="telem-quality-score">—</td>
+                </tr>
+                <tr>
+                  <td class="label-col">ACTIVE STROKE PIXELS</td>
+                  <td class="value-col" id="telem-stroke-pixels">0</td>
+                </tr>
+                <tr>
+                  <td class="label-col">CENTROID OFFSET</td>
+                  <td class="value-col" id="telem-centroid-offset">0.00 px</td>
+                </tr>
+                <tr>
+                  <td class="label-col">LAPLACIAN SHARPNESS</td>
+                  <td class="value-col" id="telem-sharpness">0.0</td>
+                </tr>
+                <tr>
+                  <td class="label-col">PREPROCESSING LATENCY</td>
+                  <td class="value-col" id="telem-lat-prep">0.00 ms</td>
+                </tr>
+                <tr>
+                  <td class="label-col">FORWARD PASS INFERENCE</td>
+                  <td class="value-col" id="telem-lat-infer">0.00 ms</td>
+                </tr>
+                <tr>
+                  <td class="label-col">TOTAL END-TO-END</td>
+                  <td class="value-col" id="telem-lat-total">0.00 ms</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- COLUMN 3: EXPLAINABILITY & VISUAL FORENSICS -->
+        <div class="obsidian-card">
+          <div class="card-header">
+            <span class="card-title">DIGIT FORENSICS &amp; EXPLAINABLE AI (XAI)</span>
+            <span class="brand-badge">LAYER: conv_cam</span>
+          </div>
+          <div class="card-body">
+            <div class="xai-views-container">
+              <!-- VIEW 1: CANONICAL 28x28 -->
+              <div class="xai-view-box">
+                <div class="xai-view-title">CANONICAL (28×28)</div>
+                <img id="preview-canonical" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="Canonical Centered Digit">
+                <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-telemetry);margin-top:4px;">CENTROIDED INVARIANT</div>
+              </div>
+
+              <!-- VIEW 2: GRAD-CAM OVERLAY -->
+              <div class="xai-view-box">
+                <div class="xai-view-title">GRAD-CAM ATTRIBUTION</div>
+                <img id="preview-gradcam" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="Grad-CAM Heatmap">
+                <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-telemetry);margin-top:4px;">CONV_CAM WEIGHTED</div>
+              </div>
+
+              <!-- VIEW 3: INPUT SALIENCY -->
+              <div class="xai-view-box">
+                <div class="xai-view-title">PIXEL SALIENCY</div>
+                <img id="preview-saliency" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" alt="Pixel Saliency Map">
+                <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-telemetry);margin-top:4px;">|d(y_c) / d(x)|</div>
+              </div>
+            </div>
+
+            <!-- ARCHITECTURAL INVARIANT NOTICE -->
+            <div style="background-color:var(--bg-surface);border:1px solid var(--border-subtle);padding:12px;margin-top:16px;">
+              <div style="font-size:10px;font-weight:700;color:var(--accent-confidence-high);margin-bottom:4px;letter-spacing:0.06em;">
+                CANONICAL PREPROCESSING INVARIANT ENFORCED
+              </div>
+              <p style="font-size:11px;color:var(--text-secondary);line-height:1.4;">
+                Every input stroke—whether produced on canvas or imported from test partitions—undergoes identical aspect-ratio preserved scaling into a 20×20 bounding box inside 28×28, followed by spatial moment centroiding aligning the center of mass strictly to (13.5, 13.5).
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TAB 2: EXPERIMENT BENCHMARKS -->
+    <section id="tab-benchmarks" class="tab-pane">
+      <div class="obsidian-card" style="margin-bottom:20px;">
+        <div class="card-header">
+          <span class="card-title">EMPIRICAL BENCHMARKS — ISOLATED 10,000 TEST SAMPLES</span>
+          <span class="brand-badge">REAL MEASUREMENTS</span>
+        </div>
+        <div class="card-body">
+          <div class="comparison-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>MODEL ARCHITECTURE</th>
+                  <th>TEST ACCURACY</th>
+                  <th>MACRO F1-SCORE</th>
+                  <th>CALIBRATION (ECE)</th>
+                  <th>MEAN LATENCY (MS)</th>
+                  <th>THROUGHPUT (SAMPLES/SEC)</th>
+                </tr>
+              </thead>
+              <tbody id="benchmark-table-body">
+                <tr>
+                  <td colspan="6" style="text-align:center;color:var(--text-telemetry);">Loading executed experiment records...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="benchmarks-grid">
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--text-secondary);margin-bottom:8px;text-transform:uppercase;">
+                FIGURE 1: DEEP CONVNET CONFUSION MATRIX (10×10)
+              </div>
+              <img src="/figures/confusion_matrix_convnet.png" class="figure-display" alt="Confusion Matrix">
+            </div>
+
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--text-secondary);margin-bottom:8px;text-transform:uppercase;">
+                FIGURE 2: ACCURACY &amp; LATENCY BENCHMARK COMPARISON
+              </div>
+              <img src="/figures/model_comparison.png" class="figure-display" alt="Model Comparison">
+            </div>
+
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--text-secondary);margin-bottom:8px;text-transform:uppercase;">
+                FIGURE 3: PROBABILITY CALIBRATION RELIABILITY DIAGRAM
+              </div>
+              <img src="/figures/calibration_reliability.png" class="figure-display" alt="Reliability Diagram">
+            </div>
+
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--text-secondary);margin-bottom:8px;text-transform:uppercase;">
+                FIGURE 4: ROBUSTNESS UNDER 6 PERTURBATIONS &amp; CORRUPTIONS
+              </div>
+              <img src="/figures/robustness_curves.png" class="figure-display" alt="Robustness Degradation">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: ERROR INTELLIGENCE -->
+    <section id="tab-failures" class="tab-pane">
+      <div class="obsidian-card">
+        <div class="card-header">
+          <span class="card-title">HIGH-CONFIDENCE FAILURE AUDIT (SILENT ERROR MINING)</span>
+          <span class="brand-badge">CONFIDENCE &gt;= 80%</span>
+        </div>
+        <div class="card-body">
+          <p style="color:var(--text-secondary);font-size:12px;margin-bottom:16px;">
+            Instances where the Production Deep ConvNet exhibited high certainty (&ge; 80%) yet misclassified the digit. These failures expose topological ambiguity (e.g. malformed loops in 3 vs 8, ambiguous ascenders in 4 vs 9) and guide rejection boundary calibration.
+          </p>
+          <div id="failures-gallery" class="failures-grid">
+            <div style="color:var(--text-telemetry);font-size:11px;">Loading high-confidence failure artifacts...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: SCIENTIFIC PRESENTATION -->
+    <section id="tab-presentation" class="tab-pane">
+      <div class="obsidian-card">
+        <div class="card-header">
+          <span class="card-title">SYNCHRONIZED TECHNICAL PRESENTATION</span>
+          <span class="brand-badge">DEEP OBSIDIAN DECK</span>
+        </div>
+        <div class="card-body">
+          <p style="color:var(--text-secondary);font-size:12px;margin-bottom:16px;">
+            The synchronized scientific presentation is generated directly from executed experiment metrics.
+            You can view the interactive HTML slide deck or download the compiled PPTX presentation.
+          </p>
+          <div style="display:flex;gap:12px;margin-bottom:20px;">
+            <a href="/presentation/slides.html" target="_blank" style="background-color:var(--accent-confidence-high);color:#000000;text-decoration:none;padding:10px 18px;font-weight:700;font-family:var(--font-mono);font-size:11px;border-radius:2px;">
+              OPEN INTERACTIVE SLIDES (NEW WINDOW)
+            </a>
+            <a href="/presentation/DigitVision_AI_Presentation.pptx" download style="background-color:var(--bg-surface);border:1px solid var(--border-prominent);color:#FFFFFF;text-decoration:none;padding:10px 18px;font-weight:700;font-family:var(--font-mono);font-size:11px;border-radius:2px;">
+              DOWNLOAD PPTX DECK (.pptx)
+            </a>
+          </div>
+          <iframe src="/presentation/slides.html" style="width:100%;height:680px;border:1px solid var(--border-subtle);background-color:#050505;"></iframe>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
