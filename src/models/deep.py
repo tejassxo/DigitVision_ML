@@ -78,26 +78,28 @@ def build_lenet5(input_shape: Tuple[int, int, int] = (28, 28, 1), num_classes: i
 def build_deep_convnet(input_shape: Tuple[int, int, int] = (28, 28, 1), num_classes: int = 10) -> tf.keras.Model:
     """
     DigitVision Production Deep ConvNet Architecture:
-    Multi-stage convolutional network with explicit 'conv_cam' layer for Grad-CAM
-    attribution and high-accuracy digit recognition.
+    Block 1: Conv2D(32, 3x3, ReLU) -> Conv2D(32, 3x3, ReLU) -> MaxPool(2x2) -> Dropout(0.25)
+    Block 2: Conv2D(64, 3x3, ReLU) -> Conv2D(64, 3x3, ReLU, name='conv_cam') -> MaxPool(2x2) -> Dropout(0.25)
+    Head: Flatten -> Dense(128, ReLU) -> Dropout(0.40) -> Dense(10, Softmax)
     """
     inputs = layers.Input(shape=input_shape, name="input_canvas")
 
     # Block 1
-    x = layers.Conv2D(32, kernel_size=(3, 3), padding='same', activation='relu', name='conv1')(inputs)
+    x = layers.Conv2D(32, kernel_size=(3, 3), padding='same', activation='relu', name='conv1_1')(inputs)
+    x = layers.Conv2D(32, kernel_size=(3, 3), padding='same', activation='relu', name='conv1_2')(x)
     x = layers.MaxPooling2D(pool_size=(2, 2), name='pool1')(x)
+    x = layers.Dropout(0.25, name='drop1')(x)
 
     # Block 2 with Grad-CAM hook
+    x = layers.Conv2D(64, kernel_size=(3, 3), padding='same', activation='relu', name='conv2_1')(x)
     x = layers.Conv2D(64, kernel_size=(3, 3), padding='same', activation='relu', name='conv_cam')(x)
     x = layers.MaxPooling2D(pool_size=(2, 2), name='pool2')(x)
-
-    # Block 3
-    x = layers.Conv2D(64, kernel_size=(3, 3), padding='same', activation='relu', name='conv3')(x)
+    x = layers.Dropout(0.25, name='drop2')(x)
 
     # Classification Head
     x = layers.Flatten(name='flatten')(x)
     x = layers.Dense(128, activation='relu', name='dense1')(x)
-    x = layers.Dropout(0.3, name='drop')(x)
+    x = layers.Dropout(0.40, name='drop3')(x)
     outputs = layers.Dense(num_classes, activation='softmax', name='prediction_head')(x)
 
     model = models.Model(inputs=inputs, outputs=outputs, name="DigitVision-DeepConvNet")
@@ -108,3 +110,29 @@ def build_deep_convnet(input_shape: Tuple[int, int, int] = (28, 28, 1), num_clas
         metrics=['accuracy']
     )
     return model
+
+
+def build_mlp(input_shape: Tuple[int, int, int] = (28, 28, 1), num_classes: int = 10) -> tf.keras.Model:
+    """
+    Multi-Layer Perceptron (MLP) Deep Architecture:
+    Flatten -> Dense(256) -> BN -> Dropout(0.25) -> Dense(128) -> BN -> Dropout(0.25) -> Dense(10, softmax)
+    """
+    model = models.Sequential([
+        layers.Input(shape=input_shape),
+        layers.Flatten(name='mlp_flatten'),
+        layers.Dense(256, activation='relu', name='mlp_dense1'),
+        layers.BatchNormalization(name='mlp_bn1'),
+        layers.Dropout(0.25, name='mlp_drop1'),
+        layers.Dense(128, activation='relu', name='mlp_dense2'),
+        layers.BatchNormalization(name='mlp_bn2'),
+        layers.Dropout(0.25, name='mlp_drop2'),
+        layers.Dense(num_classes, activation='softmax', name='prediction_head')
+    ], name="MLP-Deep")
+
+    model.compile(
+        optimizer=tf.keras.optimizers.Adam(learning_rate=1e-3),
+        loss='sparse_categorical_crossentropy',
+        metrics=['accuracy']
+    )
+    return model
+

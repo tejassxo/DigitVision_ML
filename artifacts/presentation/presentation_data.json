@@ -1,0 +1,139 @@
+{
+  "timestamp": "2026-10-07T05:25:38Z",
+  "git_commit": "c543352",
+  "best_model": "DigitVision-DeepConvNet",
+  "best_accuracy_pct": 98.31,
+  "models": {
+    "Dummy-Baseline": {
+      "accuracy": 0.1135,
+      "accuracy_pct": 11.35,
+      "macro_f1": 0.0204,
+      "ece": 0.8865,
+      "latency": {
+        "mean_latency_ms": 0.131,
+        "std_latency_ms": 0.031,
+        "median_latency_ms": 0.12,
+        "p95_latency_ms": 0.209,
+        "p99_latency_ms": 0.243,
+        "throughput_samples_per_sec": 7636.3
+      }
+    },
+    "Logistic-Regression": {
+      "accuracy": 0.9149,
+      "accuracy_pct": 91.49,
+      "macro_f1": 0.9137,
+      "ece": 0.0113,
+      "latency": {
+        "mean_latency_ms": 0.057,
+        "std_latency_ms": 0.011,
+        "median_latency_ms": 0.057,
+        "p95_latency_ms": 0.081,
+        "p99_latency_ms": 0.097,
+        "throughput_samples_per_sec": 17408.6
+      }
+    },
+    "SVM-RBF": {
+      "accuracy": 0.9611,
+      "accuracy_pct": 96.11,
+      "macro_f1": 0.9607,
+      "ece": 0.0217,
+      "latency": {
+        "mean_latency_ms": 1.727,
+        "std_latency_ms": 0.479,
+        "median_latency_ms": 1.63,
+        "p95_latency_ms": 2.64,
+        "p99_latency_ms": 3.101,
+        "throughput_samples_per_sec": 578.9
+      }
+    },
+    "Random-Forest": {
+      "accuracy": 0.9548,
+      "accuracy_pct": 95.48,
+      "macro_f1": 0.9543,
+      "ece": 0.1918,
+      "latency": {
+        "mean_latency_ms": 102.091,
+        "std_latency_ms": 94.016,
+        "median_latency_ms": 76.085,
+        "p95_latency_ms": 299.85,
+        "p99_latency_ms": 492.788,
+        "throughput_samples_per_sec": 9.8
+      }
+    },
+    "MLP-Deep": {
+      "accuracy": 0.9591,
+      "accuracy_pct": 95.91,
+      "macro_f1": 0.9587,
+      "ece": 0.0258,
+      "latency": {
+        "mean_latency_ms": 3.873,
+        "std_latency_ms": 0.571,
+        "median_latency_ms": 3.647,
+        "p95_latency_ms": 5.07,
+        "p99_latency_ms": 5.476,
+        "throughput_samples_per_sec": 258.2
+      }
+    },
+    "LeNet-5": {
+      "accuracy": 0.9625,
+      "accuracy_pct": 96.25,
+      "macro_f1": 0.9623,
+      "ece": 0.0131,
+      "latency": {
+        "mean_latency_ms": 9.717,
+        "std_latency_ms": 10.012,
+        "median_latency_ms": 5.405,
+        "p95_latency_ms": 29.326,
+        "p99_latency_ms": 49.955,
+        "throughput_samples_per_sec": 102.9
+      }
+    },
+    "DigitVision-DeepConvNet": {
+      "accuracy": 0.9831,
+      "accuracy_pct": 98.31,
+      "macro_f1": 0.9831,
+      "ece": 0.0031,
+      "latency": {
+        "mean_latency_ms": 9.139,
+        "std_latency_ms": 1.183,
+        "median_latency_ms": 8.982,
+        "p95_latency_ms": 11.245,
+        "p99_latency_ms": 12.751,
+        "throughput_samples_per_sec": 109.4
+      }
+    }
+  },
+  "top_confusion_pairs": [
+    {
+      "true_class": 4,
+      "predicted_class": 9,
+      "error_count": 18
+    },
+    {
+      "true_class": 7,
+      "predicted_class": 2,
+      "error_count": 16
+    },
+    {
+      "true_class": 5,
+      "predicted_class": 3,
+      "error_count": 11
+    },
+    {
+      "true_class": 8,
+      "predicted_class": 2,
+      "error_count": 7
+    },
+    {
+      "true_class": 7,
+      "predicted_class": 3,
+      "error_count": 6
+    },
+    {
+      "true_class": 8,
+      "predicted_class": 5,
+      "error_count": 5
+    }
+  ],
+  "temperature": 0.917
+}

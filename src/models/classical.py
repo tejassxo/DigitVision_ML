@@ -65,6 +65,14 @@ def build_svm_rbf(c_param: float = 5.0, gamma: str = 'scale') -> SVC:
     )
 
 
+from sklearn.dummy import DummyClassifier
+
+
+def build_dummy_baseline(strategy: str = "most_frequent") -> DummyClassifier:
+    """Zero-rule baseline classifier that always predicts the majority class."""
+    return DummyClassifier(strategy=strategy, random_state=42)
+
+
 def build_random_forest(n_estimators: int = 100, max_depth: Optional[int] = 20) -> RandomForestClassifier:
     return RandomForestClassifier(
         n_estimators=n_estimators,
@@ -72,3 +80,5 @@ def build_random_forest(n_estimators: int = 100, max_depth: Optional[int] = 20) 
         random_state=42,
         n_jobs=-1
     )
+
+
