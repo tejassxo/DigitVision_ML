@@ -793,17 +793,20 @@
       <div class="slide-title">Interactive ML Mission Control Web Console</div>
       
               <div class="grid-2col">
-                <div class="content-box" style="display: flex; align-items: center; justify-content: center; padding: 10px;">
-                  <img src="/experiments/figures/robustness_curves.png" alt="Robustness Curves" style="max-width: 100%; max-height: 100%; object-fit: contain; border: 1px solid var(--border-subtle);" />
+                <div class="content-box" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px;">
+                  <img src="/experiments/figures/dashboard_ui_overview.png" alt="Mission Control Dashboard" style="max-width: 100%; max-height: 380px; object-fit: contain; border: 1px solid var(--border-subtle); border-radius: 4px;" />
+                  <div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent-green); margin-top: 8px;">
+                    MISSION CONTROL HUD: Real-Time Invariant | Calibrated Probabilities | Grad-CAM Overlay
+                  </div>
                 </div>
                 <div class="content-box">
-                  <div class="box-title">Mission Control Console Capabilities</div>
+                  <div class="box-title" style="color: var(--accent-green);">Live Inference Workflow & Architectural Novelty</div>
                   <ul class="bullet-list">
-                    <li>Deep Obsidian Theme: Strict engineering aesthetic (#050505, #121212) with zero distracting neon.</li>
-                    <li>Interactive Canvas: Real-time mouse/touch drawing with instant sub-pixel stroke capture.</li>
-                    <li>Live Telemetry HUD: Displays prediction latency (9.14 ms), parameter count, and preprocessor flags.</li>
-                    <li>Real-Time Grad-CAM: Renders heatmaps side-by-side with drawn strokes within 15 ms of canvas release.</li>
-                    <li>Robustness Hardening: Benchmarked across 6 synthetic corruptions (noise, rotation +-30 deg, translation, dilation).</li>
+                    <li><strong style="color: var(--text-primary);">Canonical Invariant Pipeline:</strong> HTML5 canvas captures raw strokes; 7-stage Otsu, bounding box crop, and moment centering eliminate train-inference distribution shift.</li>
+                    <li><strong style="color: var(--text-primary);">Confidence Intelligence HUD:</strong> Displays calibrated Top-3 probabilities (T = 0.9170, ECE = 0.0031), Shannon entropy H(p), and decision margin Delta in 9.14 ms.</li>
+                    <li><strong style="color: var(--text-primary);">Real-Time Grad-CAM Saliency:</strong> Synthesizes spatial heatmaps from final conv layer 'conv_cam' within 15 ms, visually verifying stroke attribution.</li>
+                    <li><strong style="color: var(--text-primary);">Physical Stroke Forensics:</strong> Reports stroke density (18-380 px), bounding box aspect ratio, pixel occupancy, and centroid deviation for every live sample.</li>
+                    <li><strong style="color: var(--text-primary);">Scientific Novelty & Rigor:</strong> Replaces naive black-box classifiers with an auditable, safety-aware intelligence architecture adhering to Responsible AI standards.</li>
                   </ul>
                 </div>
               </div>
@@ -1006,11 +1009,11 @@
     "ans": "ReLU is applied because we are only interested in features that have a positive influence on the target class score. Features with negative gradients indicate evidence for competing classes, so suppressing them yields clean, focused visual attribution."
   },
   "19": {
-    "comm": "Demonstrates the live ML Mission Control web application deployed on FastAPI at 127.0.0.1:8000.",
-    "why": "Proves that the system is fully operational and capable of serving real-time inferences with complete telemetry and Grad-CAM visualizations.",
-    "tech": "FastAPI handles asynchronous POST requests containing base64 image payloads. The canonical preprocessor processes the payload and returns JSON telemetry and base64 heatmap overlays.",
-    "viva": "How does the application perform under noisy or rotated input?",
-    "ans": "As shown in the robustness curves on the left, our model maintains >95% accuracy up to +-15 degrees of rotation and moderate Gaussian noise. Beyond 25 degrees, accuracy degrades gracefully, and the Shannon entropy trigger flags the prediction as uncertain."
+    "comm": "Demonstrates the live ML Mission Control web application deployed on FastAPI at 127.0.0.1:8000, illustrating the complete end-to-end user inference workflow.",
+    "why": "Bridges the gap between an offline trained model and a production-grade intelligence platform that provides real-time calibrated predictions with full visual explainability.",
+    "tech": "FastAPI processes asynchronous JSON POST requests containing canvas image payloads. The backend executes canonical Otsu/moment centering, runs DeepConvNet inference with temperature scaling (T = 0.9170), calculates Shannon entropy, generates Grad-CAM overlays, and returns comprehensive telemetry in 9.14 ms.",
+    "viva": "What happens when a user draws an unrecognizable scribble or non-digit symbol on the canvas?",
+    "ans": "Rather than outputting an overconfident false classification, the system's confidence intelligence triggers: Shannon entropy exceeds the 1.2 nats threshold and the decision margin drops below 0.20, causing the Mission Control HUD to flag the prediction as 'Ambiguous / OOD Input' and reject automated processing."
   },
   "20": {
     "comm": "Summarizes the successful achievement of all 7 pre-defined objectives, candidly outlines architectural limitations, and charts the future research roadmap.",

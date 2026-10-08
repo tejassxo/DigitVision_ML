@@ -1033,23 +1033,25 @@ def build_full_20_slide_presentation(output_path: str = "src/presentation/DigitV
     set_slide_background(s19, COLOR_VOID)
     add_header(s19, "Interactive ML Mission Control Web Console", "19. Live Application + Novelty")
 
-    # Embed Robustness curves
-    has_rob = safe_add_image(s19, "experiments/figures/robustness_curves.png", 0.8, 1.5, width=5.7)
-    if not has_rob:
-        add_card(s19, 0.8, 1.5, 5.7, 5.3, title="Robustness Degradation Curves")
+    # Embed Dashboard UI Overview Visual
+    has_dash = safe_add_image(s19, "experiments/figures/dashboard_ui_overview.png", 0.8, 1.5, width=5.7)
+    if not has_dash:
+        has_rob = safe_add_image(s19, "experiments/figures/robustness_curves.png", 0.8, 1.5, width=5.7)
+        if not has_rob:
+            add_card(s19, 0.8, 1.5, 5.7, 5.3, title="Mission Control Console Interface")
 
-    # Right: Dashboard features
-    add_card(s19, 6.8, 1.5, 5.7, 5.3, title="Mission Control Console Capabilities")
+    # Right: Dashboard features & Workflow
+    add_card(s19, 6.8, 1.5, 5.7, 5.3, title="Live Inference Workflow & Architectural Novelty")
     tb19 = s19.shapes.add_textbox(Inches(7.0), Inches(2.05), Inches(5.3), Inches(4.5))
     tf19 = tb19.text_frame
     tf19.word_wrap = True
 
     app_features = [
-        ("Deep Obsidian Research Design", "Strict engineering aesthetic (#050505, #121212, #262626) with zero distracting neon or purple gradients."),
-        ("Interactive HTML5 Drawing Canvas", "Real-time touch/mouse drawing with instant client-side rendering and sub-pixel stroke capture."),
-        ("Live Telemetry HUD", "Displays prediction latency (9.14 ms), model version, parameter count, and active preprocessor flags."),
-        ("Real-Time Grad-CAM Overlay", "Renders heatmaps side-by-side with drawn input within 15 ms of canvas release."),
-        ("Empirical Robustness Hardening", "Benchmarked across 6 synthetic corruptions (Gaussian noise, rotation +-30 deg, translation, stroke dilation, stroke erosion, inverted contrast).")
+        ("End-to-End Invariant Pipeline", "HTML5 drawing canvas captures base64 strokes; canonical 7-stage Otsu, bounding box crop, and moment centroid alignment eliminate train-inference distribution shift."),
+        ("Confidence Intelligence HUD", "Displays temperature-scaled probabilities (T = 0.9170, ECE = 0.0031), Shannon entropy H(p), and decision margin Delta in real time."),
+        ("Real-Time Grad-CAM Saliency", "Synthesizes visual heatmaps from final conv layer 'conv_cam' within 15 ms of canvas release, visually verifying stroke attribution."),
+        ("Stroke Forensics & Telemetry", "Extracts physical stroke density (18-380 px), bounding box aspect ratio, active pixel occupancy, and centroid deviation for each drawing."),
+        ("Project Novelty & Scientific Rigor", "Unlike standard toy classifiers, DigitVision couples mathematical invariance, probabilistic safety, and explainability into an auditable production system.")
     ]
     for af_t, af_d in app_features:
         p_t = tf19.add_paragraph() if tf19.paragraphs[0].text else tf19.paragraphs[0]
@@ -1065,11 +1067,11 @@ def build_full_20_slide_presentation(output_path: str = "src/presentation/DigitV
         p_d.font.color.rgb = COLOR_TEXT_MUTED
 
     set_speaker_notes(s19, {
-        "communicates": "Demonstrates the live ML Mission Control web application deployed on FastAPI at 127.0.0.1:8000.",
-        "why_it_matters": "Proves that the system is fully operational and capable of serving real-time inferences with complete telemetry and Grad-CAM visualizations.",
-        "technical_explanation": "FastAPI handles asynchronous POST requests containing base64 image payloads. The canonical preprocessor processes the payload and returns JSON telemetry and base64 heatmap overlays.",
-        "viva_question": "How does the application perform under noisy or rotated input?",
-        "strong_answer": "As shown in the robustness curves on the left, our model maintains >95% accuracy up to +-15 degrees of rotation and moderate Gaussian noise. Beyond 25 degrees, accuracy degrades gracefully, and the Shannon entropy trigger flags the prediction as uncertain."
+        "communicates": "Demonstrates the live ML Mission Control web application deployed on FastAPI at 127.0.0.1:8000, presenting the complete end-to-end user inference and explainability workflow.",
+        "why_it_matters": "Bridges the gap between an offline trained model and a production-grade intelligence platform that provides real-time calibrated predictions with full visual explainability.",
+        "technical_explanation": "FastAPI processes asynchronous JSON POST requests containing canvas image payloads. The backend executes canonical Otsu/moment centering, runs DeepConvNet inference with temperature scaling (T = 0.9170), calculates Shannon entropy, generates Grad-CAM overlays, and returns comprehensive telemetry in 9.14 ms.",
+        "viva_question": "What happens when a user draws an unrecognizable scribble or non-digit symbol on the canvas?",
+        "strong_answer": "Rather than outputting an overconfident false classification, the system's confidence intelligence triggers: Shannon entropy exceeds the 1.2 nats threshold and the decision margin drops below 0.20, causing the Mission Control HUD to flag the prediction as 'Ambiguous / OOD Input' and reject automated processing."
     })
 
     # =========================================================================
