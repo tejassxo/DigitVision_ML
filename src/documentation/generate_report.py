@@ -21,6 +21,8 @@ import json
 import docx
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
 
 
 def format_cell(cell, text, bold=False, font_size=10, align=WD_ALIGN_PARAGRAPH.LEFT, color_rgb=(0, 0, 0)):
@@ -1356,7 +1358,39 @@ def generate_full_report():
     set_paragraph_text(doc.paragraphs[233], "Student 1:  Roll No. 22071A6601   Name: G. Tejaswi", font_size=11, bold=True)
     set_paragraph_text(doc.paragraphs[235], "Student 2:  Roll No. 22071A6602   Name: K. Rahul", font_size=11, bold=True)
 
-    # 6. SAVE FINAL REPORT
+    # 6. CONFIGURE SECTION BREAK & PAGE NUMBERING
+    # Separate Front Matter (Section 0, no page numbers) from Chapters (Section 1, page numbering starts at 1)
+    p67 = doc.paragraphs[67]
+    pPr67 = p67._element.get_or_add_pPr()
+    sectPr = OxmlElement('w:sectPr')
+    pPr67.append(sectPr)
+
+    # Remove pageBreakBefore from Chapter 1 (P68) to prevent an extra blank page
+    p68 = doc.paragraphs[68]
+    pPr68 = p68._element.pPr
+    pbb = pPr68.find(qn('w:pageBreakBefore'))
+    if pbb is not None:
+        pPr68.remove(pbb)
+
+    # doc.sections[0] = Front Matter, doc.sections[1] = Chapter 1 onwards
+    s0 = doc.sections[0]
+    s1 = doc.sections[1]
+
+    # Unlink footer in Section 1 so it doesn't replicate to Section 0
+    s1.footer.is_linked_to_previous = False
+
+    # Set page numbering in Section 1 to start at 1
+    pgNumType = s1._sectPr.find(qn('w:pgNumType'))
+    if pgNumType is None:
+        pgNumType = OxmlElement('w:pgNumType')
+        s1._sectPr.append(pgNumType)
+    pgNumType.set(qn('w:start'), '1')
+
+    # Ensure Section 0 footer has no page number or text
+    for p in s0.footer.paragraphs:
+        p.text = ""
+
+    # 7. SAVE FINAL REPORT
     out_file = "docs/DigitVision_AI_Micro_Project_Report.docx"
     os.makedirs(os.path.dirname(out_file), exist_ok=True)
     doc.save(out_file)
