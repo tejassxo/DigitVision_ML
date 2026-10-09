@@ -460,6 +460,7 @@ if os.path.exists(static_dir):
 figures_dir = os.path.abspath("experiments/figures")
 if os.path.exists(figures_dir):
     app.mount("/figures", StaticFiles(directory=figures_dir), name="figures")
+    app.mount("/experiments/figures", StaticFiles(directory=figures_dir), name="experiments-figures")
 
 failures_dir = os.path.abspath("experiments/failures")
 if os.path.exists(failures_dir):

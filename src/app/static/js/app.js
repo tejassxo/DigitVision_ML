@@ -2,7 +2,7 @@
  * DIGITVISION AI — Production Frontend Controller
  * Apple Pro Design & Engineering Precision Architecture
  */
-import { ELITE_PALETTES, setPalette, toggleThemeMode } from './palette-controller.js';
+import { ELITE_PALETTES, setPalette, toggleThemeMode, initPaletteSystem, updateModeUI } from './palette-controller.js';
 
 class DigitVisionApp {
   constructor() {
@@ -26,7 +26,6 @@ class DigitVisionApp {
     this.checkBackendHealth();
     this.loadBenchmarkData();
     this.loadErrorLabData();
-    this.initPresentationDeck();
   }
 
   initElements() {
@@ -77,8 +76,7 @@ class DigitVisionApp {
     this.tabPanels = {
       recognition: document.getElementById("panel-recognition"),
       experiments: document.getElementById("panel-experiments"),
-      errors: document.getElementById("panel-errors"),
-      presentation: document.getElementById("panel-presentation")
+      errors: document.getElementById("panel-errors")
     };
 
     // Benchmark Table Body
@@ -87,12 +85,6 @@ class DigitVisionApp {
     // Error Lab Containers
     this.matrixContainer = document.getElementById("confusion-matrix-grid");
     this.errorSamplesGrid = document.getElementById("error-gallery-container");
-
-    // Presentation Deck Elements
-    this.deckFrame = document.getElementById("slide-viewport-content");
-    this.deckCounter = document.getElementById("slide-index-indicator");
-    this.btnDeckPrev = document.getElementById("btn-prev-slide");
-    this.btnDeckNext = document.getElementById("btn-next-slide");
   }
 
   initCanvas() {
@@ -158,11 +150,7 @@ class DigitVisionApp {
   }
 
   initThemeEngine() {
-    const savedPalette = localStorage.getItem("dv_palette") || ELITE_PALETTES.OBSIDIAN;
-    const savedMode = localStorage.getItem("dv_mode") || "dark";
-
-    setPalette(savedPalette);
-    document.documentElement.setAttribute("data-mode", savedMode);
+    const { savedPalette, savedMode } = initPaletteSystem();
 
     // Palette item listeners
     const themeItems = document.querySelectorAll(".theme-item");
@@ -212,6 +200,7 @@ class DigitVisionApp {
         setPalette(ELITE_PALETTES.OBSIDIAN);
         document.documentElement.setAttribute("data-mode", "dark");
         localStorage.setItem("dv_mode", "dark");
+        updateModeUI("dark");
         themeItems.forEach((t) => {
           if (t.getAttribute("data-palette-val") === ELITE_PALETTES.OBSIDIAN) t.classList.add("active");
           else t.classList.remove("active");
@@ -312,23 +301,6 @@ class DigitVisionApp {
       });
     });
 
-    // Keyboard navigation for presentation slides
-    document.addEventListener("keydown", (e) => {
-      const presPanel = document.getElementById("panel-presentation");
-      if (presPanel && !presPanel.classList.contains("hidden")) {
-        if (e.key === "ArrowLeft") {
-          if (this.currentSlide > 1) {
-            this.currentSlide--;
-            this.updateSlideView();
-          }
-        } else if (e.key === "ArrowRight") {
-          if (this.currentSlide < this.totalSlides) {
-            this.currentSlide++;
-            this.updateSlideView();
-          }
-        }
-      }
-    });
   }
 
   draw(e) {
@@ -807,44 +779,6 @@ class DigitVisionApp {
     });
   }
 
-  initPresentationDeck() {
-    const viewport = document.getElementById("slide-viewport-content");
-    const btnPrev = document.getElementById("btn-prev-slide");
-    const btnNext = document.getElementById("btn-next-slide");
-
-    if (viewport) {
-      viewport.innerHTML = `<iframe src="/presentation/slides.html" id="slides-iframe" title="Master Scientific Presentation"></iframe>`;
-    }
-
-    if (btnPrev && btnNext) {
-      btnPrev.addEventListener("click", () => {
-        if (this.currentSlide > 1) {
-          this.currentSlide--;
-          this.updateSlideView();
-        }
-      });
-
-      btnNext.addEventListener("click", () => {
-        if (this.currentSlide < this.totalSlides) {
-          this.currentSlide++;
-          this.updateSlideView();
-        }
-      });
-    }
-  }
-
-  updateSlideView() {
-    const indicator = document.getElementById("slide-index-indicator");
-    if (indicator) {
-      indicator.textContent = `Slide ${String(this.currentSlide).padStart(2, "0")} / ${this.totalSlides}`;
-    }
-    const iframe = document.getElementById("slides-iframe");
-    if (iframe && iframe.contentWindow) {
-      try {
-        iframe.contentWindow.postMessage({ action: "gotoSlide", slideIndex: this.currentSlide }, "*");
-      } catch (e) {}
-    }
-  }
 }
 
 // Bootstrap once DOM is ready

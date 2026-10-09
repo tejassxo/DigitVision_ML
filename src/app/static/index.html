@@ -33,7 +33,6 @@
         <button class="nav-tab active" data-tab="recognition" role="tab" aria-selected="true">Recognize</button>
         <button class="nav-tab" data-tab="experiments" role="tab" aria-selected="false">Benchmarks</button>
         <button class="nav-tab" data-tab="errors" role="tab" aria-selected="false">Errors</button>
-        <button class="nav-tab" data-tab="presentation" role="tab" aria-selected="false">Slides</button>
       </nav>
 
       <!-- System Status & Controls -->
@@ -312,16 +311,20 @@
       </div>
     </section>
 
-    <!-- SECTION 2: BENCHMARK LAB (EXPERIMENTS) -->
+    <!-- SECTION 2: BENCHMARK LAB (EXPERIMENTS & VISUALIZATIONS) -->
     <section class="tab-panel hidden" id="panel-experiments">
       <div class="benchmark-container">
         <div class="panel-hero">
-          <div class="hero-tag">BENCHMARKS</div>
-          <h2 class="section-title">Model Comparison</h2>
-          <p class="section-desc">Accuracy, F1, calibration, and latency across all trained architectures on 10K test samples.</p>
+          <div class="hero-tag">EMPIRICAL BENCHMARKS</div>
+          <h2 class="section-title">Model Comparison & Learning Analytics</h2>
+          <p class="section-desc">Performance metrics, learning dynamics, multi-class ROC/PR envelopes, and architecture comparison evaluated on 10,000 isolated test samples.</p>
         </div>
 
+        <!-- Metric Table Card -->
         <div class="card table-card">
+          <div class="card-header">
+            <h3 class="subcard-title">Comprehensive Model Performance Matrix</h3>
+          </div>
           <table class="scientific-table" id="benchmark-table">
             <thead>
               <tr>
@@ -340,6 +343,45 @@
             </tbody>
           </table>
         </div>
+
+        <!-- Dashboard Visual Graphs Grid -->
+        <div class="graphs-grid">
+          <div class="card graph-card">
+            <div class="card-header">
+              <h3 class="subcard-title">Training & Validation Loss Dynamics</h3>
+            </div>
+            <div class="graph-img-wrapper">
+              <img src="/figures/training_validation_loss.png" alt="Training & Validation Loss" class="dashboard-graph-img" onerror="this.src='/experiments/figures/training_validation_loss.png'">
+            </div>
+          </div>
+
+          <div class="card graph-card">
+            <div class="card-header">
+              <h3 class="subcard-title">Training & Validation Accuracy Trajectory</h3>
+            </div>
+            <div class="graph-img-wrapper">
+              <img src="/figures/training_validation_accuracy.png" alt="Training & Validation Accuracy" class="dashboard-graph-img" onerror="this.src='/experiments/figures/training_validation_accuracy.png'">
+            </div>
+          </div>
+
+          <div class="card graph-card">
+            <div class="card-header">
+              <h3 class="subcard-title">Cross-Model Benchmark Comparison</h3>
+            </div>
+            <div class="graph-img-wrapper">
+              <img src="/figures/model_comparison.png" alt="Cross-Model Benchmark Comparison" class="dashboard-graph-img" onerror="this.src='/experiments/figures/model_comparison.png'">
+            </div>
+          </div>
+
+          <div class="card graph-card">
+            <div class="card-header">
+              <h3 class="subcard-title">Multi-Class ROC & Precision-Recall Envelopes</h3>
+            </div>
+            <div class="graph-img-wrapper">
+              <img src="/figures/roc_pr_curves.png" alt="Multi-Class ROC & PR Curves" class="dashboard-graph-img" onerror="this.src='/experiments/figures/roc_pr_curves.png'">
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -347,54 +389,62 @@
     <section class="tab-panel hidden" id="panel-errors">
       <div class="error-container">
         <div class="panel-hero">
-          <div class="hero-tag">ERROR ANALYSIS</div>
-          <h2 class="section-title">Confusion Matrix & Failures</h2>
-          <p class="section-desc">High-confidence misclassifications and per-class confusion breakdown.</p>
+          <div class="hero-tag">ERROR FORENSICS</div>
+          <h2 class="section-title">Confusion Matrices, Calibration & Failures</h2>
+          <p class="section-desc">Interactive confusion grid, calibration curves, robustness scans, and high-confidence misclassifications.</p>
         </div>
+
         <div class="error-grid-wrapper">
           <div class="card matrix-card">
             <div class="card-header">
-              <h3 class="subcard-title">Confusion Matrix</h3>
+              <h3 class="subcard-title">Interactive Normalized Confusion Matrix (10×10)</h3>
             </div>
             <div id="confusion-matrix-grid" class="matrix-canvas-container"></div>
           </div>
+
           <div class="card error-gallery-card">
             <div class="card-header">
-              <h3 class="subcard-title">Failure Gallery</h3>
+              <h3 class="subcard-title">High-Confidence Failure Samples (p > 0.80)</h3>
             </div>
             <div id="error-gallery-container" class="error-samples-grid"></div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- SECTION 4: PRESENTATION VIEWER -->
-    <section class="tab-panel hidden" id="panel-presentation">
-      <div class="presentation-container">
-        <div class="panel-hero">
-          <div class="hero-tag">PRESENTATION</div>
-          <h2 class="section-title">Research Slides</h2>
-          <p class="section-desc">20-slide deck covering architecture, preprocessing, ablations, and explainability.</p>
-        </div>
-        <div class="card slide-viewer-card">
-          <div class="slide-frame">
-            <div class="slide-nav-bar">
-              <button class="btn btn-secondary" id="btn-prev-slide">
-                <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2">
-                  <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
-                <span>Prev</span>
-              </button>
-              <span class="slide-indicator" id="slide-index-indicator">Slide 01 / 20</span>
-              <button class="btn btn-secondary" id="btn-next-slide">
-                <span>Next</span>
-                <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2">
-                  <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-              </button>
+        <!-- Diagnostic Figures Grid -->
+        <div class="graphs-grid">
+          <div class="card graph-card">
+            <div class="card-header">
+              <h3 class="subcard-title">Confusion Matrix Heatmap (DeepConvNet)</h3>
             </div>
-            <div class="slide-viewport" id="slide-viewport-content">
-              <!-- Rendered slide iframe -->
+            <div class="graph-img-wrapper">
+              <img src="/figures/confusion_matrix_convnet.png" alt="Confusion Matrix ConvNet" class="dashboard-graph-img" onerror="this.src='/experiments/figures/confusion_matrix_convnet.png'">
+            </div>
+          </div>
+
+          <div class="card graph-card">
+            <div class="card-header">
+              <h3 class="subcard-title">Temperature Calibration Reliability (ECE Reduction)</h3>
+            </div>
+            <div class="graph-img-wrapper">
+              <img src="/figures/calibration_reliability.png" alt="Temperature Calibration Reliability" class="dashboard-graph-img" onerror="this.src='/experiments/figures/calibration_reliability.png'">
+            </div>
+          </div>
+
+          <div class="card graph-card">
+            <div class="card-header">
+              <h3 class="subcard-title">Out-of-Distribution Noise & Blur Robustness</h3>
+            </div>
+            <div class="graph-img-wrapper">
+              <img src="/figures/robustness_curves.png" alt="Robustness Curves" class="dashboard-graph-img" onerror="this.src='/experiments/figures/robustness_curves.png'">
+            </div>
+          </div>
+
+          <div class="card graph-card">
+            <div class="card-header">
+              <h3 class="subcard-title">Class-Wise Grad-CAM Attribution Gallery</h3>
+            </div>
+            <div class="graph-img-wrapper">
+              <img src="/figures/gradcam_gallery.png" alt="Grad-CAM Gallery" class="dashboard-graph-img" onerror="this.src='/experiments/figures/gradcam_gallery.png'">
             </div>
           </div>
         </div>

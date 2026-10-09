@@ -1,47 +1,14 @@
 /* ==========================================================================
-   DIGITVISION AI — APPLE PRO & CARBON MONOCHROME DESIGN TOKENS
-   Cupertino Precision · Achromatic Depth · Defense-Grade Reliability
+   DIGITVISION AI — APPLE PRO & COLOR PALETTE DESIGN TOKENS
+   Cupertino Precision · Achromatic & Chromatic Depth · Zero Clutter
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
+/* ---------------- Master Default Tokens ---------------- */
 :root {
-  /* ---------------- Apple Pro Light Mode ---------------- */
-  --bg-void: #f5f5f7;
-  --bg-ground: #ffffff;
-  --bg-surface-1: #ffffff;
-  --bg-surface-2: #f2f2f7;
-  --bg-surface-inset: #e5e5ea;
-  --bg-glass: rgba(255, 255, 255, 0.85);
-
-  --border-subtle: rgba(0, 0, 0, 0.06);
-  --border-hairline: rgba(0, 0, 0, 0.12);
-  --border-hover: rgba(0, 0, 0, 0.28);
-  --border-focus: #000000;
-
-  --text-primary: #1d1d1f;
-  --text-secondary: #6e6e73;
-  --text-muted: #86868b;
-  --text-disabled: #aeaeb2;
-
-  --accent-interactive: #000000;
-  --accent-interactive-contrast: #ffffff;
-  --accent-primary: #000000;
-  --accent-muted: rgba(0, 0, 0, 0.05);
-  --accent-hairline: rgba(0, 0, 0, 0.15);
-
-  --telemetry-success: #1db954;
-  --telemetry-amber: #d97706;
-  --telemetry-alert: #ff3333;
-
-  --status-high-conf: #1db954;
-  --status-mod-conf: #d97706;
-  --status-low-conf: #ff3333;
-  --status-alert: #ff3333;
-
-  /* Typography */
-  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Inter", sans-serif;
+  --font-mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
 
   /* Structural Geometry */
   --radius-xs: 4px;
@@ -49,26 +16,24 @@
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
-  --radius-card: 14px;
-  --radius-control: 8px;
+  --radius-card: 16px;
+  --radius-control: 10px;
   --radius-pill: 9999px;
-
-  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.08);
 }
 
-/* ---------------- Master Apple Pro Dark (Deep Obsidian Default) ---------------- */
+/* ---------------- Dark Mode Defaults (OLED Depth) ---------------- */
+:root,
 [data-mode="dark"] {
   --bg-void: #050608;
   --bg-ground: #0a0c0e;
   --bg-surface-1: #101216;
   --bg-surface-2: #161a20;
   --bg-surface-inset: #0b0d10;
-  --bg-glass: rgba(10, 12, 14, 0.82);
+  --bg-glass: rgba(10, 12, 14, 0.85);
 
   --border-subtle: rgba(255, 255, 255, 0.06);
   --border-hairline: rgba(255, 255, 255, 0.10);
-  --border-hover: rgba(255, 255, 255, 0.24);
+  --border-hover: rgba(255, 255, 255, 0.25);
   --border-focus: #ffffff;
 
   --text-primary: #ffffff;
@@ -76,11 +41,11 @@
   --text-muted: #71717a;
   --text-disabled: #3f3f46;
 
-  --accent-interactive: #ffffff;
+  --accent-interactive: #1db954;
   --accent-interactive-contrast: #000000;
-  --accent-primary: #ffffff;
-  --accent-muted: rgba(255, 255, 255, 0.08);
-  --accent-hairline: rgba(255, 255, 255, 0.18);
+  --accent-primary: #1db954;
+  --accent-muted: rgba(29, 185, 84, 0.14);
+  --accent-hairline: rgba(29, 185, 84, 0.35);
 
   --telemetry-success: #1db954;
   --telemetry-amber: #ffb000;
@@ -93,34 +58,70 @@
 
   --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.45);
   --shadow-modal: 0 24px 48px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  --shadow-glow: 0 0 20px rgba(29, 185, 84, 0.25);
+}
+
+/* ---------------- Apple Pro Light Mode (Clean Cupertino) ---------------- */
+[data-mode="light"] {
+  --bg-void: #f5f5f7;
+  --bg-ground: #ffffff;
+  --bg-surface-1: #ffffff;
+  --bg-surface-2: #f2f2f7;
+  --bg-surface-inset: #e5e5ea;
+  --bg-glass: rgba(255, 255, 255, 0.88);
+
+  --border-subtle: rgba(0, 0, 0, 0.06);
+  --border-hairline: rgba(0, 0, 0, 0.12);
+  --border-hover: rgba(0, 0, 0, 0.28);
+  --border-focus: #0071e3;
+
+  --text-primary: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --text-muted: #86868b;
+  --text-disabled: #aeaeb2;
+
+  --accent-interactive: #0071e3;
+  --accent-interactive-contrast: #ffffff;
+  --accent-primary: #0071e3;
+  --accent-muted: rgba(0, 113, 227, 0.12);
+  --accent-hairline: rgba(0, 113, 227, 0.30);
+
+  --telemetry-success: #34c759;
+  --telemetry-amber: #ff9500;
+  --telemetry-alert: #ff3b30;
+
+  --status-high-conf: #34c759;
+  --status-mod-conf: #ff9500;
+  --status-low-conf: #ff3b30;
+  --status-alert: #ff3b30;
+
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  --shadow-glow: 0 0 20px rgba(0, 113, 227, 0.20);
 }
 
 /* ==========================================================================
-   THE 6 BATTLE-TESTED COLOR PALETTES
+   COLOR PALETTES — DARK MODE TINTS
    ========================================================================== */
 
-/* Palette 1: Studio Obsidian (Deepest OLED + Spotify Emerald Indicator - Default) */
-[data-palette="studio-obsidian"] {
+/* Palette 1: Studio Obsidian (Dark) */
+[data-mode="dark"][data-palette="studio-obsidian"],
+:root[data-palette="studio-obsidian"] {
   --bg-void: #050608;
   --bg-ground: #0a0c0e;
   --bg-surface-1: #101216;
   --bg-surface-2: #161a20;
   --bg-surface-inset: #0b0d10;
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --border-hairline: rgba(255, 255, 255, 0.10);
-  --border-hover: rgba(255, 255, 255, 0.24);
-  --text-primary: #ffffff;
-  --text-secondary: #a1a1aa;
-  --text-muted: #71717a;
   --accent-interactive: #1db954;
   --accent-interactive-contrast: #000000;
   --accent-primary: #1db954;
   --accent-muted: rgba(29, 185, 84, 0.14);
   --accent-hairline: rgba(29, 185, 84, 0.35);
+  --shadow-glow: 0 0 20px rgba(29, 185, 84, 0.25);
 }
 
-/* Palette 2: Cyber Azure (Apple Pro Electric Blue) */
-[data-palette="cyber-azure"] {
+/* Palette 2: Cyber Azure (Dark) */
+[data-mode="dark"][data-palette="cyber-azure"] {
   --bg-void: #040810;
   --bg-ground: #080f1d;
   --bg-surface-1: #0e172a;
@@ -137,10 +138,11 @@
   --accent-primary: #0a84ff;
   --accent-muted: rgba(10, 132, 255, 0.15);
   --accent-hairline: rgba(10, 132, 255, 0.40);
+  --shadow-glow: 0 0 20px rgba(10, 132, 255, 0.25);
 }
 
-/* Palette 3: Electric Violet (Apple Neon Purple) */
-[data-palette="electric-violet"] {
+/* Palette 3: Electric Violet (Dark) */
+[data-mode="dark"][data-palette="electric-violet"] {
   --bg-void: #080510;
   --bg-ground: #0f0a1c;
   --bg-surface-1: #17102a;
@@ -157,10 +159,11 @@
   --accent-primary: #bf5af2;
   --accent-muted: rgba(191, 90, 242, 0.15);
   --accent-hairline: rgba(191, 90, 242, 0.40);
+  --shadow-glow: 0 0 20px rgba(191, 90, 242, 0.25);
 }
 
-/* Palette 4: Tactical Aviation (Bloomberg / Defense Charcoal + Monospace Amber) */
-[data-palette="tactical-aviation"] {
+/* Palette 4: Tactical Aviation (Dark) */
+[data-mode="dark"][data-palette="tactical-aviation"] {
   --bg-void: #0b0d0e;
   --bg-ground: #0f1214;
   --bg-surface-1: #14181b;
@@ -177,10 +180,11 @@
   --accent-primary: #ff9f0a;
   --accent-muted: rgba(255, 159, 10, 0.14);
   --accent-hairline: rgba(255, 159, 10, 0.35);
+  --shadow-glow: 0 0 20px rgba(255, 159, 10, 0.25);
 }
 
-/* Palette 5: Zinc Neutral (Linear / Vercel Pro Monochrome) */
-[data-palette="zinc-neutral"] {
+/* Palette 5: Zinc Neutral (Dark) */
+[data-mode="dark"][data-palette="zinc-neutral"] {
   --bg-void: #09090b;
   --bg-ground: #121215;
   --bg-surface-1: #18181b;
@@ -197,10 +201,11 @@
   --accent-primary: #ffffff;
   --accent-muted: rgba(255, 255, 255, 0.08);
   --accent-hairline: rgba(255, 255, 255, 0.20);
+  --shadow-glow: 0 0 20px rgba(255, 255, 255, 0.15);
 }
 
-/* Palette 6: Titanium Minimalist (Leica Hardware Warm Achromatic) */
-[data-palette="titanium-minimalist"] {
+/* Palette 6: Titanium Minimalist (Dark) */
+[data-mode="dark"][data-palette="titanium-minimalist"] {
   --bg-void: #0c0c0c;
   --bg-ground: #111111;
   --bg-surface-1: #161616;
@@ -217,4 +222,75 @@
   --accent-primary: #e5e5e5;
   --accent-muted: rgba(229, 229, 229, 0.10);
   --accent-hairline: #4a4a4a;
+  --shadow-glow: 0 0 20px rgba(229, 229, 229, 0.15);
+}
+
+/* ==========================================================================
+   COLOR PALETTES — LIGHT MODE ACCENTS
+   ========================================================================== */
+
+/* Palette 1: Studio Obsidian (Light - Emerald Accent) */
+[data-mode="light"][data-palette="studio-obsidian"] {
+  --accent-interactive: #109c42;
+  --accent-interactive-contrast: #ffffff;
+  --accent-primary: #109c42;
+  --accent-muted: rgba(16, 156, 66, 0.12);
+  --accent-hairline: rgba(16, 156, 66, 0.30);
+  --border-focus: #109c42;
+  --shadow-glow: 0 0 20px rgba(16, 156, 66, 0.20);
+}
+
+/* Palette 2: Cyber Azure (Light - Apple Pro Blue) */
+[data-mode="light"][data-palette="cyber-azure"] {
+  --accent-interactive: #0071e3;
+  --accent-interactive-contrast: #ffffff;
+  --accent-primary: #0071e3;
+  --accent-muted: rgba(0, 113, 227, 0.12);
+  --accent-hairline: rgba(0, 113, 227, 0.30);
+  --border-focus: #0071e3;
+  --shadow-glow: 0 0 20px rgba(0, 113, 227, 0.20);
+}
+
+/* Palette 3: Electric Violet (Light - Purple) */
+[data-mode="light"][data-palette="electric-violet"] {
+  --accent-interactive: #9333ea;
+  --accent-interactive-contrast: #ffffff;
+  --accent-primary: #9333ea;
+  --accent-muted: rgba(147, 51, 234, 0.12);
+  --accent-hairline: rgba(147, 51, 234, 0.30);
+  --border-focus: #9333ea;
+  --shadow-glow: 0 0 20px rgba(147, 51, 234, 0.20);
+}
+
+/* Palette 4: Tactical Aviation (Light - Amber) */
+[data-mode="light"][data-palette="tactical-aviation"] {
+  --accent-interactive: #d97706;
+  --accent-interactive-contrast: #ffffff;
+  --accent-primary: #d97706;
+  --accent-muted: rgba(217, 119, 6, 0.12);
+  --accent-hairline: rgba(217, 119, 6, 0.30);
+  --border-focus: #d97706;
+  --shadow-glow: 0 0 20px rgba(217, 119, 6, 0.20);
+}
+
+/* Palette 5: Zinc Neutral (Light - Deep Zinc) */
+[data-mode="light"][data-palette="zinc-neutral"] {
+  --accent-interactive: #18181b;
+  --accent-interactive-contrast: #ffffff;
+  --accent-primary: #18181b;
+  --accent-muted: rgba(24, 24, 27, 0.10);
+  --accent-hairline: rgba(24, 24, 27, 0.25);
+  --border-focus: #18181b;
+  --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.10);
+}
+
+/* Palette 6: Titanium Minimalist (Light - Graphite) */
+[data-mode="light"][data-palette="titanium-minimalist"] {
+  --accent-interactive: #374151;
+  --accent-interactive-contrast: #ffffff;
+  --accent-primary: #374151;
+  --accent-muted: rgba(55, 65, 81, 0.10);
+  --accent-hairline: rgba(55, 65, 81, 0.25);
+  --border-focus: #374151;
+  --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.10);
 }

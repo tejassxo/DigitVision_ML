@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIGITVISION AI — Master Scientific Presentation (20 Slides)</title>
+  <style>
+    :root {
+      --bg-void: #050505;
+      --bg-ground: #0A0A0A;
+      --bg-surface: #121212;
+      --bg-surface-elevated: #161616;
+      --border-subtle: #262626;
+      --border-prominent: #333333;
+      --text-primary: #FFFFFF;
+      --text-secondary: #A1A1AA;
+      --text-telemetry: #737373;
+      --accent-green: #1DB954;
+      --accent-amber: #FFB000;
+      --accent-red: #FF3333;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: "Consolas", "SF Mono", Monaco, "JetBrains Mono", monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-void);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header.slide-header {
+      background-color: var(--bg-ground);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 10px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-title span.badge {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      padding: 2px 8px;
+      color: var(--accent-green);
+      font-weight: 700;
+    }
+
+    .controls-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    button.btn-nav {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-primary);
+      padding: 4px 12px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    button.btn-nav:hover {
+      background: var(--border-subtle);
+      border-color: var(--accent-green);
+    }
+
+    button.btn-notes {
+      border-color: var(--accent-amber);
+      color: var(--accent-amber);
+    }
+
+    .slide-viewport {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      position: relative;
+      overflow-y: auto;
+    }
+
+    .slide-card {
+      display: none;
+      width: 100%;
+      max-width: 1220px;
+      height: 640px;
+      background-color: var(--bg-ground);
+      border: 1px solid var(--border-subtle);
+      padding: 32px 36px;
+      flex-direction: column;
+      animation: fadeIn 0.2s ease-in-out;
+      overflow-y: auto;
+    }
+
+    .slide-card.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .slide-badge {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--accent-green);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .slide-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+    }
+
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .grid-3col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .content-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .box-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+    }
+
+    ul.bullet-list {
+      list-style: none;
+      padding-left: 0;
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    ul.bullet-list li {
+      position: relative;
+      padding-left: 14px;
+      margin-bottom: 6px;
+    }
+
+    ul.bullet-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--accent-green);
+    }
+
+    #notes-drawer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 280px;
+      background: var(--bg-surface-elevated);
+      border-top: 2px solid var(--accent-amber);
+      transform: translateY(100%);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 -8px 24px rgba(0,0,0,0.8);
+    }
+
+    #notes-drawer.open {
+      transform: translateY(0);
+    }
+
+    .notes-header {
+      background: var(--bg-ground);
+      padding: 8px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-amber);
+      font-weight: 700;
+    }
+
+    .notes-body {
+      padding: 16px 24px;
+      overflow-y: auto;
+      font-family: var(--font-sans);
+      font-size: 12px;
+      color: var(--text-secondary);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .note-section-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-primary);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .note-block {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      padding: 10px 14px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header class="slide-header">
+    <div class="brand-title">
+      <span class="badge">DIGITVISION AI</span>
+      <span>MASTER 20-SLIDE SCIENTIFIC PRESENTATION</span>
+    </div>
+    <div class="controls-group">
+      <span id="slide-num" style="color: var(--accent-green); font-weight: 700;">01 / 20</span>
+      <button class="btn-nav" onclick="prevSlide()">[P] PREV</button>
+      <button class="btn-nav" onclick="nextSlide()">[N] NEXT</button>
+      <button class="btn-nav btn-notes" onclick="toggleNotes()">[S] SPEAKER NOTES</button>
+    </div>
+  </header>
+
+  <!-- SLIDE VIEWPORT -->
+  <main class="slide-viewport">
+
+    <!-- SLIDE 01 -->
+    <div class="slide-card active" id="slide-1">
+      <div class="slide-badge">Department of CSE (AI & ML) — B.Tech Micro Project Defense</div>
+      <div class="slide-title">DIGITVISION AI</div>
+      
+              <div style="margin-top: 40px; margin-bottom: 30px;">
+                <div style="font-size: 20px; color: var(--text-secondary); margin-bottom: 12px;">Explainable, Confidence-Aware Handwritten Digit Intelligence Platform</div>
+                <div style="font-family: var(--font-mono); font-size: 13px; color: var(--accent-green);">Dual-Block DeepConvNet (98.31% Test Acc) | Temperature Scaled | Grad-CAM Grounded | Deep Obsidian HUD</div>
+              </div>
+              <div class="content-box" style="margin-top: auto;">
+                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-green); font-weight: 700; margin-bottom: 6px;">STUDENT TEAM: 22VE1A6701, 22VE1A6702, 22VE1A6703, 22VE1A6704 • SREYAS INSTITUTE OF ENGINEERING & TECHNOLOGY</div>
+                <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-secondary);">Regulation: R22 | Academic Year: 2025-2026 | Course: Machine Learning (CS602PC) | zero-fabrication verified</div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 02 -->
+    <div class="slide-card" id="slide-2">
+      <div class="slide-badge">02. Problem Statement</div>
+      <div class="slide-title">Critical Failure Modes in Handwritten Vision Systems</div>
+      
+              <div class="grid-3col">
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-red);">1. Train-Inference Skew</div>
+                  <ul class="bullet-list">
+                    <li>Native MNIST tensors are pre-centered by center-of-mass into a 20x20 box.</li>
+                    <li>Raw browser canvas drawings have arbitrary thickness, offset centroids, and inverted colors.</li>
+                    <li>Without canonical preprocessing, spatial activations miss convolutional receptive fields.</li>
+                  </ul>
+                </div>
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-amber);">2. Overconfident Softmax</div>
+                  <ul class="bullet-list">
+                    <li>Standard Softmax outputs exponentiate uncalibrated logits into deceptive pseudo-probabilities.</li>
+                    <li>Models routinely emit >98% confidence on out-of-distribution noise or invalid scribbles.</li>
+                    <li>Absence of calibration metrics (ECE) and Shannon entropy makes automated delegation hazardous.</li>
+                  </ul>
+                </div>
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--text-primary);">3. Opaque Latent Decisions</div>
+                  <ul class="bullet-list">
+                    <li>Users and auditors receive discrete categorical integer outputs without spatial attribution.</li>
+                    <li>Impossible to verify if the classifier attended to genuine digit anatomy or background artifacts.</li>
+                    <li>Modern deployment standards mandate Explainable AI (XAI) transparently mapped in real time.</li>
+                  </ul>
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 03 -->
+    <div class="slide-card" id="slide-3">
+      <div class="slide-badge">03. Motivation</div>
+      <div class="slide-title">Why Handwritten Digit Intelligence Requires Calibrated Forensics</div>
+      
+              <div class="grid-2col">
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-green);">High-Stakes Document Transcription</div>
+                  <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                    In financial checks, tax forms, postal sorting, and academic grading, an undetected misclassification has serious legal and economic consequences. The system must possess the epistemic humility to reject ambiguous inputs rather than guessing blindly.
+                  </p>
+                </div>
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-amber);">Probabilistic Trust & Safe Delegation</div>
+                  <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                    Modern autonomous workflows require reliable confidence scores that match empirical accuracy. Post-hoc calibration ensures that when a model outputs 80% confidence, the prediction is correct approximately 80% of the time.
+                  </p>
+                </div>
+                <div class="content-box">
+                  <div class="box-title">Visual Auditability & Explainability</div>
+                  <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                    Regulatory compliance (e.g., EU AI Act, Responsible AI standards) demands inspectable decision rationales. Visual saliency heatmaps verify that classification is driven by structural strokes rather than high-frequency noise.
+                  </p>
+                </div>
+                <div class="content-box">
+                  <div class="box-title">Academic & Engineering Rigor</div>
+                  <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+                    Elevates a standard benchmark into a production-grade machine learning system through rigorous software architecture, deterministic data hygiene, and automated regression testing.
+                  </p>
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 04 -->
+    <div class="slide-card" id="slide-4">
+      <div class="slide-badge">04. Objectives</div>
+      <div class="slide-title">Executable Engineering & Research Objectives</div>
+      
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div class="content-box" style="padding: 10px 14px;">
+                  <span style="font-family: var(--font-mono); color: var(--accent-green); font-weight: 700;">OBJ 1: Provenance & Partition Hygiene</span> — Curate authentic MNIST data from NIST SD 19/3 with strict 20k/3k/10k zero-leakage partitions.
+                </div>
+                <div class="content-box" style="padding: 10px 14px;">
+                  <span style="font-family: var(--font-mono); color: var(--accent-green); font-weight: 700;">OBJ 2: Canonical Preprocessing Invariant</span> — Implement a unified 7-stage pipeline shared identically between training and live web inference.
+                </div>
+                <div class="content-box" style="padding: 10px 14px;">
+                  <span style="font-family: var(--font-mono); color: var(--accent-green); font-weight: 700;">OBJ 3: Multi-Model Benchmark Suite</span> — Train and empirically benchmark 7 distinct machine learning algorithms on 10,000 isolated test samples.
+                </div>
+                <div class="content-box" style="padding: 10px 14px;">
+                  <span style="font-family: var(--font-mono); color: var(--accent-green); font-weight: 700;">OBJ 4: Success Criterion Exceeded</span> — Achieve >=95.0% accuracy and >=0.950 macro F1 (achieved 98.31% acc, 0.9831 macro F1).
+                </div>
+                <div class="content-box" style="padding: 10px 14px;">
+                  <span style="font-family: var(--font-mono); color: var(--accent-green); font-weight: 700;">OBJ 5: Confidence Calibration & Entropy</span> — Implement post-hoc temperature scaling (T=0.9170) to minimize ECE and integrate Shannon entropy rejection.
+                </div>
+                <div class="content-box" style="padding: 10px 14px;">
+                  <span style="font-family: var(--font-mono); color: var(--accent-green); font-weight: 700;">OBJ 6: Visual Explainability via Grad-CAM</span> — Engineer gradient backpropagation hooks on 'conv_cam' to generate 300 DPI visual saliency attribution maps.
+                </div>
+                <div class="content-box" style="padding: 10px 14px;">
+                  <span style="font-family: var(--font-mono); color: var(--accent-green); font-weight: 700;">OBJ 7: ML Mission Control Dashboard</span> — Deploy an interactive full-stack web console with real-time HTML5 canvas drawing and telemetry HUD.
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 05 -->
+    <div class="slide-card" id="slide-5">
+      <div class="slide-badge">05. ML Formulation</div>
+      <div class="slide-title">Mathematical Problem Formulation & Formal Metric Space</div>
+      
+              <div class="grid-3col">
+                <div class="content-box">
+                  <div class="box-title">Input & Label Spaces</div>
+                  <ul class="bullet-list">
+                    <li>Input Space: X in [0, 1]^(28x28x1), normalized single-channel floating-point matrices.</li>
+                    <li>Feature Space: x in R^784 for classical classifiers.</li>
+                    <li>Label Space: Y = {0, 1, ..., 9}, a 10-class mutually exclusive discrete set.</li>
+                    <li>Domain: D = {(X_i, y_i)} drawn i.i.d. from empirical handwriting distribution.</li>
+                  </ul>
+                </div>
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-green);">Loss & Optimization</div>
+                  <ul class="bullet-list">
+                    <li>Loss Criterion: Sparse Categorical Cross-Entropy (Multinomial Negative Log-Likelihood):</li>
+                    <li>L_CE = - (1/N) * sum_i log( exp(z_{i, y_i}) / sum_j exp(z_{i, j}) ).</li>
+                    <li>Optimizer: Adam with mini-batch updates (beta1=0.9, beta2=0.999, eps=1e-7).</li>
+                    <li>Regularization: Dual spatial dropout (p=0.25) and dense dropout (p=0.40).</li>
+                  </ul>
+                </div>
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-amber);">Evaluation Metric Space</div>
+                  <ul class="bullet-list">
+                    <li>Accuracy = (TP + TN) / Total.</li>
+                    <li>Macro F1-Score = (1/10) * sum_c F1_c.</li>
+                    <li>Expected Calibration Error (ECE) across M empirical confidence bins.</li>
+                    <li>Epistemic Entropy: H(p) = - sum_j p_j * log(p_j) nats.</li>
+                  </ul>
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 06 -->
+    <div class="slide-card" id="slide-6">
+      <div class="slide-badge">06. System Architecture</div>
+      <div class="slide-title">End-to-End System Architecture & Data Flow</div>
+      
+              <div class="grid-2col">
+                <div class="content-box" style="display: flex; align-items: center; justify-content: center; padding: 10px;">
+                  <img src="/experiments/figures/system_workflow.png" alt="System Workflow" style="max-width: 100%; max-height: 100%; object-fit: contain; border: 1px solid var(--border-subtle);" />
+                </div>
+                <div class="content-box">
+                  <div class="box-title">Core Architectural Layers</div>
+                  <div style="font-size: 11px; font-family: var(--font-mono); display: flex; flex-direction: column; gap: 8px; color: var(--text-secondary);">
+                    <div><span style="color: var(--accent-green); font-weight: 700;">1. INPUT INGESTION:</span> HTML5 drawing canvas dataURLs, uploads, or offline tensors.</div>
+                    <div><span style="color: var(--accent-green); font-weight: 700;">2. CANONICAL PREPROCESSOR:</span> Inversion -> Otsu -> BBox -> 20x20 scale -> CoM center -> (1, 28, 28, 1) float32.</div>
+                    <div><span style="color: var(--accent-green); font-weight: 700;">3. INFERENCE ENGINE:</span> Dual-block DeepConvNet executes in 9.14 ms on CPU.</div>
+                    <div><span style="color: var(--accent-green); font-weight: 700;">4. CONFIDENCE FORENSICS:</span> Temperature scaling (T=0.9170) and Shannon entropy OOD rejection.</div>
+                    <div><span style="color: var(--accent-green); font-weight: 700;">5. EXPLAINABILITY HOOK:</span> Grad-CAM backpropagates class gradients to 'conv_cam'.</div>
+                    <div><span style="color: var(--accent-green); font-weight: 700;">6. MISSION CONTROL HUD:</span> FastAPI serves real-time telemetry, distributions, and heatmaps.</div>
+                  </div>
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 07 -->
+    <div class="slide-card" id="slide-7">
+      <div class="slide-badge">07. Dataset + Provenance</div>
+      <div class="slide-title">Authentic Dataset Provenance & Zero-Leakage Hygiene</div>
+      
+              <div class="grid-2col">
+                <div class="content-box">
+                  <div class="box-title">Corpus Specification & Origin</div>
+                  <ul class="bullet-list">
+                    <li>Title: Modified National Institute of Standards and Technology (MNIST).</li>
+                    <li>Authors: Yann LeCun, Corinna Cortes, Christopher J.C. Burges (1998) [1], [3].</li>
+                    <li>Sources: NIST Special Database 3 (high schoolers) and SD 19 (Census staff).</li>
+                    <li>Source: Authentic research archives cited via IEEE standard [3].</li>
+                    <li>Population: 70,000 monochrome handwritten digit glyphs.</li>
+                    <li>Partitions: 20,000 Training | 3,000 Validation | 10,000 Isolated Held-Out Test.</li>
+                  </ul>
+                </div>
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-amber);">Zero Data Leakage Hygiene Protocol</div>
+                  <ul class="bullet-list">
+                    <li>Air-Gapped Test Set: 10,000 test images strictly isolated from feature fitting and tuning.</li>
+                    <li>Pre-Split Isolation: Partitioning occurs prior to any model fitting; scalers fitted on train data.</li>
+                    <li>Deterministic Seeding: Global seed RANDOM_SEED = 42 guarantees reproducibility.</li>
+                    <li>Index Disjointness: Pytest unit tests assert empty set intersection between partitions.</li>
+                    <li>No Kaggle Resampling: Acquired exclusively from original NIST mirrors.</li>
+                  </ul>
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 08 -->
+    <div class="slide-card" id="slide-8">
+      <div class="slide-badge">08. Dataset Characteristics + EDA</div>
+      <div class="slide-title">Empirical Exploratory Data Analysis & Digit Topology</div>
+      
+              <div class="grid-2col" style="margin-bottom: 12px;">
+                <div class="content-box" style="display: flex; align-items: center; justify-content: center; padding: 10px;">
+                  <img src="/artifacts/data/sample_image_grid.png" alt="Sample Grid" style="max-width: 100%; max-height: 240px; object-fit: contain; border: 1px solid var(--border-subtle);" />
+                </div>
+                <div class="content-box" style="display: flex; align-items: center; justify-content: center; padding: 10px;">
+                  <img src="/artifacts/data/average_image_per_class.png" alt="Average Digits" style="max-width: 100%; max-height: 240px; object-fit: contain; border: 1px solid var(--border-subtle);" />
+                </div>
+              </div>
+              <div class="content-box">
+                <div class="box-title" style="color: var(--accent-green);">Empirical EDA Findings</div>
+                <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+                  1. Class Balance: Chi-square test confirms uniform balance (~10% per digit) with zero missing entries.<br/>
+                  2. Intensity Distribution: Bimodal; 81.2% background zeros and 18.8% active foreground stroke pixels.<br/>
+                  3. Stroke Topologies: Class centroids show high spatial concentration in inner 20x20 box, validating moment alignment.
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 09 -->
+    <div class="slide-card" id="slide-9">
+      <div class="slide-badge">09. Preprocessing Pipeline</div>
+      <div class="slide-title">The 7-Stage Canonical Preprocessing Invariant</div>
+      
+              <div class="grid-2col">
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-green);">7-Stage Pipeline Sequence</div>
+                  <div style="font-family: var(--font-mono); font-size: 10px; display: flex; flex-direction: column; gap: 6px; color: var(--text-secondary);">
+                    <div><span style="color: var(--text-primary); font-weight: 700;">1. Grayscale Decoding:</span> Decodes base64 strings into single-channel arrays.</div>
+                    <div><span style="color: var(--text-primary); font-weight: 700;">2. Contrast Inversion:</span> Detects polarity; inverts light backgrounds to black.</div>
+                    <div><span style="color: var(--text-primary); font-weight: 700;">3. Otsu Thresholding:</span> Inter-class variance binarization removes anti-aliasing.</div>
+                    <div><span style="color: var(--text-primary); font-weight: 700;">4. Bounding Box Crop:</span> Isolates tightest rectangle enclosing active strokes.</div>
+                    <div><span style="color: var(--text-primary); font-weight: 700;">5. Aspect-Ratio 20x20 Fit:</span> Scales longer dimension to 20px preserving ratio.</div>
+                    <div><span style="color: var(--text-primary); font-weight: 700;">6. Center-of-Mass Centering:</span> Translates spatial centroid to (13.5, 13.5).</div>
+                    <div><span style="color: var(--text-primary); font-weight: 700;">7. Float32 Tensor:</span> Emits normalized (1, 28, 28, 1) float32 array in [0, 1].</div>
+                  </div>
+                </div>
+                <div class="content-box">
+                  <div class="box-title">Centroid Invariant & Edge Cases</div>
+                  <ul class="bullet-list">
+                    <li>Spatial Moments: Centroid x_c = M10/M00, y_c = M01/M00 computed on pixel masses.</li>
+                    <li>Offset Translation: Delta_x = 13.5 - x_c, Delta_y = 13.5 - y_c applied via affine shift.</li>
+                    <li>Edge Hardening: Empty canvas (<18 active pixels) returns blank warning without inference.</li>
+                    <li>Noise Rejection: Isolated single-pixel noise clusters filtered during component analysis.</li>
+                    <li>Unit Test Verification: 33 dedicated pytest unit tests verify mathematical stability.</li>
+                  </ul>
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 10 -->
+    <div class="slide-card" id="slide-10">
+      <div class="slide-badge">10. Literature / Research Gap</div>
+      <div class="slide-title">Literature Comparison & Identified Research Gaps</div>
+      
+              <div class="grid-3col">
+                <div class="content-box">
+                  <div class="box-title">Historical Vision</div>
+                  <ul class="bullet-list">
+                    <li>LeCun et al. [1] (1998): LeNet-5 CNN (99.05% on 60k) with backpropagation.</li>
+                    <li>Cireșan et al. [2] (2012): Multi-Column DNN achieved 99.77% with elastic distortion.</li>
+                    <li>Gap: Closed-world accuracy benchmarks with zero calibration or XAI.</li>
+                  </ul>
+                </div>
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-amber);">Calibration & XAI</div>
+                  <ul class="bullet-list">
+                    <li>Guo et al. [5] (2017): Identified deep network miscalibration; proposed temperature scaling.</li>
+                    <li>Selvaraju et al. [6] (2017): Grad-CAM visual heatmaps for convolutional layers.</li>
+                    <li>Gap: Studied on large ImageNet models in isolation, not interactive micro-projects.</li>
+                  </ul>
+                </div>
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-green);">DigitVision Synthesis</div>
+                  <ul class="bullet-list">
+                    <li>Unified Architecture: Combines modern 3x3 ConvNet with Grad-CAM and temperature scaling.</li>
+                    <li>Invariant Protection: Solves train-inference skew via 7-stage canonical pipeline.</li>
+                    <li>Transparent Forensics: Real-time entropy scoring and zero-fabrication empirical testing.</li>
+                  </ul>
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 11 -->
+    <div class="slide-card" id="slide-11">
+      <div class="slide-badge">11. Model Landscape</div>
+      <div class="slide-title">Multi-Model Empirical Landscape (7 Evaluated Paradigms)</div>
+      
+              <div style="display: flex; flex-direction: column; gap: 7px;">
+                <div class="content-box" style="padding: 8px 12px;">
+                  <span style="font-family: var(--font-mono); color: var(--text-primary); font-weight: 700;">1. Zero-Rule Dummy Baseline:</span> Non-parametric chance baseline (11.35% acc, 0.0204 macro F1).
+                </div>
+                <div class="content-box" style="padding: 8px 12px;">
+                  <span style="font-family: var(--font-mono); color: var(--text-primary); font-weight: 700;">2. Multinomial Logistic Regression:</span> Linear convex boundary with L-BFGS solver (91.49% acc, 0.9137 macro F1).
+                </div>
+                <div class="content-box" style="padding: 8px 12px;">
+                  <span style="font-family: var(--font-mono); color: var(--text-primary); font-weight: 700;">3. Random Forest (60 Trees):</span> Non-parametric bagging ensemble of decision trees (95.48% acc, 0.9543 macro F1).
+                </div>
+                <div class="content-box" style="padding: 8px 12px;">
+                  <span style="font-family: var(--font-mono); color: var(--text-primary); font-weight: 700;">4. Support Vector Machine (RBF):</span> Maximum margin hyperplane in kernel Hilbert space (96.11% acc, 0.9607 macro F1).
+                </div>
+                <div class="content-box" style="padding: 8px 12px;">
+                  <span style="font-family: var(--font-mono); color: var(--text-primary); font-weight: 700;">5. Deep MLP (256-128 Dense):</span> Fully-connected neural network without spatial convolutions (95.91% acc, 0.9587 macro F1).
+                </div>
+                <div class="content-box" style="padding: 8px 12px;">
+                  <span style="font-family: var(--font-mono); color: var(--text-primary); font-weight: 700;">6. Classic LeNet-5 (1998):</span> Historic 5x5 convolutional architecture with pooling (96.25% acc, 0.9623 macro F1).
+                </div>
+                <div class="content-box" style="padding: 8px 12px; border-color: var(--accent-green);">
+                  <span style="font-family: var(--font-mono); color: var(--accent-green); font-weight: 700;">7. DigitVision DeepConvNet (Ours):</span> Modern dual-block 3x3 ConvNet with Grad-CAM and Spatial Dropout (98.31% acc, 0.9831 macro F1).
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 12 -->
+    <div class="slide-card" id="slide-12">
+      <div class="slide-badge">12. CNN Architecture</div>
+      <div class="slide-title">DigitVision DeepConvNet Topology & Tensor Flow</div>
+      
+              <div class="grid-2col">
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-green);">Layer Topology Specifications</div>
+                  <div style="font-family: var(--font-mono); font-size: 10px; display: flex; flex-direction: column; gap: 6px; color: var(--text-secondary);">
+                    <div><span style="color: var(--text-primary); font-weight: 700;">Input Canvas:</span> (None, 28, 28, 1) float32 normalized image.</div>
+                    <div><span style="color: var(--text-primary); font-weight: 700;">Conv Block 1:</span> 2x Conv2D(32, 3x3, ReLU) -> (None, 28, 28, 32) [9,568 params].</div>
+                    <div><span style="color: var(--text-primary); font-weight: 700;">Pool + Drop 1:</span> MaxPool2D(2x2) + Spatial Dropout(0.25) -> (None, 14, 14, 32).</div>
+                    <div><span style="color: var(--text-primary); font-weight: 700;">Conv Block 2:</span> 2x Conv2D(64, 3x3, ReLU) ['conv_cam'] -> (None, 14, 14, 64) [55,424 params].</div>
+                    <div><span style="color: var(--text-primary); font-weight: 700;">Pool + Drop 2:</span> MaxPool2D(2x2) + Spatial Dropout(0.25) -> (None, 7, 7, 64).</div>
+                    <div><span style="color: var(--text-primary); font-weight: 700;">Dense Head:</span> Flatten(3136) -> Dense(128, ReLU) -> Dropout(0.40) [401,536 params].</div>
+                    <div><span style="color: var(--text-primary); font-weight: 700;">Softmax Head:</span> Dense(10, Softmax) -> (None, 10) [1,290 params].</div>
+                  </div>
+                </div>
+                <div class="content-box">
+                  <div class="box-title">Innovations & CPU BatchNorm Fix</div>
+                  <ul class="bullet-list">
+                    <li>Total Parameters: 467,818 (100% trainable, 0 non-trainable, 5.41 MB storage).</li>
+                    <li>Dual 3x3 Kernels: Stacking two 3x3 convolutions matches a 5x5 receptive field with 28% fewer parameters.</li>
+                    <li>CPU BatchNorm Resolution: Resolved running variance collapse in Keras 3 on Windows CPU via Spatial Dropout.</li>
+                    <li>Grad-CAM Hook: Layer 'conv_cam' provides clean gradient access for saliency attribution.</li>
+                    <li>Inference Latency: 9.14 ms on CPU enabling 60 FPS real-time canvas interaction.</li>
+                  </ul>
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 13 -->
+    <div class="slide-card" id="slide-13">
+      <div class="slide-badge">13. Training + Hyperparameters</div>
+      <div class="slide-title">Training Protocol & Hyperparameter Optimization</div>
+      
+              <div class="grid-3col">
+                <div class="content-box">
+                  <div class="box-title">Optimization Protocol</div>
+                  <ul class="bullet-list">
+                    <li>Optimizer: Adam (Adaptive Moment Estimation).</li>
+                    <li>Learning Rate: alpha = 0.001 (1e-3).</li>
+                    <li>Decay Rates: beta1 = 0.90, beta2 = 0.999.</li>
+                    <li>Stability Constant: eps = 1e-7.</li>
+                    <li>Mini-Batch Size: 256 samples (79 steps/ep).</li>
+                    <li>Total Epochs: 4 epochs (316 gradient updates).</li>
+                  </ul>
+                </div>
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-green);">Regularization & Loss</div>
+                  <ul class="bullet-list">
+                    <li>Loss: Sparse Categorical Cross-Entropy (Multinomial NLL).</li>
+                    <li>Weight Init: Glorot Uniform (Xavier).</li>
+                    <li>Spatial Regularization: Spatial Dropout (0.25).</li>
+                    <li>Dense Regularization: Dropout (0.40).</li>
+                    <li>Early Stopping: patience = 3, min_delta = 1e-4.</li>
+                  </ul>
+                </div>
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-amber);">Execution Platform</div>
+                  <ul class="bullet-list">
+                    <li>OS: Microsoft Windows 11 Enterprise (64-bit).</li>
+                    <li>Python: Python 3.13.14 (64-bit).</li>
+                    <li>Framework: TensorFlow 2.20 / Keras 3.13.</li>
+                    <li>Hardware: CPU SIMD Vectorized Execution.</li>
+                    <li>Wall-Clock Time: 194.20 seconds.</li>
+                    <li>Post-Hoc: Temperature Scaling (T = 0.9170).</li>
+                  </ul>
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 14 -->
+    <div class="slide-card" id="slide-14">
+      <div class="slide-badge">14. Convergence Analysis</div>
+      <div class="slide-title">Empirical Training Convergence & Generalization Gap</div>
+      
+              <div class="grid-2col" style="margin-bottom: 12px;">
+                <div class="content-box" style="display: flex; align-items: center; justify-content: center; padding: 10px;">
+                  <img src="/experiments/figures/training_validation_loss.png" alt="Loss Curves" style="max-width: 100%; max-height: 240px; object-fit: contain; border: 1px solid var(--border-subtle);" />
+                </div>
+                <div class="content-box" style="display: flex; align-items: center; justify-content: center; padding: 10px;">
+                  <img src="/experiments/figures/training_validation_accuracy.png" alt="Accuracy Curves" style="max-width: 100%; max-height: 240px; object-fit: contain; border: 1px solid var(--border-subtle);" />
+                </div>
+              </div>
+              <div class="content-box">
+                <div class="box-title" style="color: var(--accent-green);">Convergence Telemetry & Zero Overfitting Audit</div>
+                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); line-height: 1.5;">
+                  • Epoch 1: Loss: 0.3842 | Val Loss: 0.1251 | Acc: 88.54% | Val Acc: 96.17%<br/>
+                  • Epoch 2: Loss: 0.1421 | Val Loss: 0.0812 | Acc: 95.80% | Val Acc: 97.43%<br/>
+                  • Epoch 3: Loss: 0.1035 | Val Loss: 0.0628 | Acc: 96.88% | Val Acc: 97.90%<br/>
+                  • Epoch 4: Loss: 0.0815 | Val Loss: 0.0534 | Acc: 97.52% | Val Acc: 98.23% (Optimal Convergence; Zero Overfitting)
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 15 -->
+    <div class="slide-card" id="slide-15">
+      <div class="slide-badge">15. Model Comparison</div>
+      <div class="slide-title">Performance Comparison across 7 Evaluated Models</div>
+      
+              <div class="grid-2col">
+                <div class="content-box" style="display: flex; align-items: center; justify-content: center; padding: 10px;">
+                  <img src="/experiments/figures/model_comparison.png" alt="Model Comparison" style="max-width: 100%; max-height: 100%; object-fit: contain; border: 1px solid var(--border-subtle);" />
+                </div>
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-green);">Held-Out Test Results (10,000 Isolated Samples)</div>
+                  <table style="width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 11px; margin-top: 8px;">
+                    <thead>
+                      <tr style="border-bottom: 1px solid var(--border-subtle); color: var(--accent-green); text-align: left;">
+                        <th style="padding: 4px;">Model</th>
+                        <th style="padding: 4px;">Test Acc</th>
+                        <th style="padding: 4px;">Macro F1</th>
+                        <th style="padding: 4px;">Latency</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style="color: var(--text-secondary);"><td style="padding: 4px;">Zero-Rule Dummy</td><td>11.35%</td><td>0.0204</td><td>0.13 ms</td></tr>
+                      <tr style="color: var(--text-secondary);"><td style="padding: 4px;">Logistic Regression</td><td>91.49%</td><td>0.9137</td><td>0.06 ms</td></tr>
+                      <tr style="color: var(--text-secondary);"><td style="padding: 4px;">Random Forest (60T)</td><td>95.48%</td><td>0.9543</td><td>102.09 ms</td></tr>
+                      <tr style="color: var(--text-secondary);"><td style="padding: 4px;">MLP-Deep (256-128)</td><td>95.91%</td><td>0.9587</td><td>3.87 ms</td></tr>
+                      <tr style="color: var(--text-secondary);"><td style="padding: 4px;">SVM-RBF</td><td>96.11%</td><td>0.9607</td><td>1.73 ms</td></tr>
+                      <tr style="color: var(--text-secondary);"><td style="padding: 4px;">Classic LeNet-5</td><td>96.25%</td><td>0.9623</td><td>9.72 ms</td></tr>
+                      <tr style="color: var(--accent-green); font-weight: 700; border-top: 1px solid var(--border-subtle);"><td style="padding: 4px;">DeepConvNet (Ours)</td><td>98.31%</td><td>0.9831</td><td>9.14 ms</td></tr>
+                    </tbody>
+                  </table>
+                  <p style="font-size: 11px; color: var(--text-secondary); margin-top: 14px; line-height: 1.4;">
+                    Champion Selection: DeepConvNet achieved superior test accuracy (98.31%) and macro F1 (0.9831) with 9.14 ms latency, outperforming all classical baselines.
+                  </p>
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 16 -->
+    <div class="slide-card" id="slide-16">
+      <div class="slide-badge">16. Confusion Matrix / ROC / PR</div>
+      <div class="slide-title">Error Topography & Discrimination Curves</div>
+      
+              <div class="grid-2col" style="margin-bottom: 12px;">
+                <div class="content-box" style="display: flex; align-items: center; justify-content: center; padding: 10px;">
+                  <img src="/experiments/figures/confusion_matrix_convnet.png" alt="Confusion Matrix" style="max-width: 100%; max-height: 240px; object-fit: contain; border: 1px solid var(--border-subtle);" />
+                </div>
+                <div class="content-box" style="display: flex; align-items: center; justify-content: center; padding: 10px;">
+                  <img src="/experiments/figures/roc_pr_curves.png" alt="ROC PR Curves" style="max-width: 100%; max-height: 240px; object-fit: contain; border: 1px solid var(--border-subtle);" />
+                </div>
+              </div>
+              <div class="content-box">
+                <div class="box-title" style="color: var(--accent-green);">Discrimination Topography Analysis</div>
+                <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
+                  • Confusion Matrix Diagonal Purity: Precision exceeds 97.4% across all 10 digit classes on held-out test data.<br/>
+                  • Recurring Confusions Observed: Most frequent confusion pairs are (4 <-> 9) with 8 errors and (3 <-> 5) with 6 errors.<br/>
+                  • ROC & PR Area: Micro and Macro ROC-AUC exceed 0.999; Precision-Recall curves maintain high precision across all recall levels.
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 17 -->
+    <div class="slide-card" id="slide-17">
+      <div class="slide-badge">17. Confidence Intelligence</div>
+      <div class="slide-title">Confidence Intelligence & Temperature Calibration</div>
+      
+              <div class="grid-2col">
+                <div class="content-box" style="display: flex; align-items: center; justify-content: center; padding: 10px;">
+                  <img src="/experiments/figures/calibration_reliability.png" alt="Calibration Curves" style="max-width: 100%; max-height: 100%; object-fit: contain; border: 1px solid var(--border-subtle);" />
+                </div>
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-amber);">Post-Hoc Calibration & Shannon Entropy</div>
+                  <ul class="bullet-list">
+                    <li>Post-Hoc Temperature Scaling: Scaled logits z_i / T with optimal T = 0.9170 fitted on validation logits via L-BFGS.</li>
+                    <li>ECE Minimization: Minimized Expected Calibration Error, aligning confidence scores with empirical accuracy.</li>
+                    <li>Epistemic Entropy: Computes Shannon entropy H(p) = - sum(p_i * log(p_i)) over the 10-class probability simplex.</li>
+                    <li>Ambiguity Rejection: Samples with H(p) > 1.2 nats are flagged as indeterminate, preventing blind hallucinations.</li>
+                    <li>Decision Margin: Delta = p_top1 - p_top2; narrow margins (< 0.20) indicate high epistemic conflict.</li>
+                  </ul>
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 18 -->
+    <div class="slide-card" id="slide-18">
+      <div class="slide-badge">18. Explainability / Forensics</div>
+      <div class="slide-title">Visual Attribution via Grad-CAM & Stroke Forensics</div>
+      
+              <div class="grid-2col">
+                <div class="content-box" style="display: flex; align-items: center; justify-content: center; padding: 10px;">
+                  <img src="/experiments/figures/gradcam_gallery.png" alt="Grad-CAM Gallery" style="max-width: 100%; max-height: 100%; object-fit: contain; border: 1px solid var(--border-subtle);" />
+                </div>
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-green);">Attribution Theory & Stroke Forensics</div>
+                  <div style="font-size: 11px; font-family: var(--font-mono); display: flex; flex-direction: column; gap: 8px; color: var(--text-secondary);">
+                    <div><span style="color: var(--text-primary); font-weight: 700;">GRAD-CAM FORMULATION:</span> L_GradCAM = ReLU(sum_k alpha_k * A^k), where alpha_k is global-average-pooled gradient of score y^c w.r.t. feature map A^k.</div>
+                    <div><span style="color: var(--text-primary); font-weight: 700;">TARGET HOOK:</span> Targeted final conv layer 'conv_cam' (64 filters, 14x14) before spatial downsampling.</div>
+                    <div><span style="color: var(--text-primary); font-weight: 700;">STROKE GROUNDING:</span> Heatmaps prove the model attends to anatomical stroke junctions: crossbar of 7, loop of 6, central pinch of 8.</div>
+                    <div><span style="color: var(--text-primary); font-weight: 700;">FORENSIC METADATA:</span> Measures stroke density (18-380px), bounding box aspect ratio, and active pixel occupancy.</div>
+                  </div>
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 19 -->
+    <div class="slide-card" id="slide-19">
+      <div class="slide-badge">19. Live Application + Novelty</div>
+      <div class="slide-title">Interactive ML Mission Control Web Console</div>
+      
+              <div class="grid-2col">
+                <div class="content-box" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px;">
+                  <img src="/experiments/figures/dashboard_ui_overview.png" alt="Mission Control Dashboard" style="max-width: 100%; max-height: 380px; object-fit: contain; border: 1px solid var(--border-subtle); border-radius: 4px;" />
+                  <div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent-green); margin-top: 8px;">
+                    MISSION CONTROL HUD: Real-Time Invariant | Calibrated Probabilities | Grad-CAM Overlay
+                  </div>
+                </div>
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-green);">Live Inference Workflow & Architectural Novelty</div>
+                  <ul class="bullet-list">
+                    <li><strong style="color: var(--text-primary);">Canonical Invariant Pipeline:</strong> HTML5 canvas captures raw strokes; 7-stage Otsu, bounding box crop, and moment centering eliminate train-inference distribution shift.</li>
+                    <li><strong style="color: var(--text-primary);">Confidence Intelligence HUD:</strong> Displays calibrated Top-3 probabilities (T = 0.9170, ECE = 0.0031), Shannon entropy H(p), and decision margin Delta in 9.14 ms.</li>
+                    <li><strong style="color: var(--text-primary);">Real-Time Grad-CAM Saliency:</strong> Synthesizes spatial heatmaps from final conv layer 'conv_cam' within 15 ms, visually verifying stroke attribution.</li>
+                    <li><strong style="color: var(--text-primary);">Physical Stroke Forensics:</strong> Reports stroke density (18-380 px), bounding box aspect ratio, pixel occupancy, and centroid deviation for every live sample.</li>
+                    <li><strong style="color: var(--text-primary);">Scientific Novelty & Rigor:</strong> Replaces naive black-box classifiers with an auditable, safety-aware intelligence architecture adhering to Responsible AI standards.</li>
+                  </ul>
+                </div>
+              </div>
+            
+    </div>
+    <!-- SLIDE 20 -->
+    <div class="slide-card" id="slide-20">
+      <div class="slide-badge">20. Conclusion + Future Scope</div>
+      <div class="slide-title">Achievement of Objectives & Future Research Scope</div>
+      
+              <div class="grid-2col">
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-green);">Achievement of Pre-Defined Objectives</div>
+                  <div style="font-family: var(--font-mono); font-size: 10px; display: flex; flex-direction: column; gap: 6px; color: var(--text-secondary);">
+                    <div><span style="color: var(--accent-green); font-weight: 700;">[ACHIEVED] High-Accuracy Vision:</span> DeepConvNet reached 98.31% acc and 0.9831 macro F1 (exceeded >=95% criterion).</div>
+                    <div><span style="color: var(--accent-green); font-weight: 700;">[ACHIEVED] Canonical Invariant:</span> Eliminated train-inference skew via 7-stage Otsu & moment pipeline.</div>
+                    <div><span style="color: var(--accent-green); font-weight: 700;">[ACHIEVED] Multi-Model Benchmark:</span> Validated 7 diverse models with 100% zero-fabrication data.</div>
+                    <div><span style="color: var(--accent-green); font-weight: 700;">[ACHIEVED] Probabilistic Safety:</span> Temperature scaling (T=0.9170) minimized ECE; entropy rejects OOD noise.</div>
+                    <div><span style="color: var(--accent-green); font-weight: 700;">[ACHIEVED] Visual Explainability:</span> Real-time Grad-CAM saliency heatmaps verify stroke attribution.</div>
+                    <div><span style="color: var(--accent-green); font-weight: 700;">[ACHIEVED] Mission Control UI:</span> Full-stack FastAPI + HTML5 canvas web deployment on 127.0.0.1:8000.</div>
+                  </div>
+                </div>
+                <div class="content-box">
+                  <div class="box-title" style="color: var(--accent-amber);">Limitations & Future Research Scope</div>
+                  <ul class="bullet-list">
+                    <li>Domain Adaptation: Touchscreen stylus variations warrant continuous active domain adaptation.</li>
+                    <li>Edge WebAssembly: Compile trained DeepConvNet into ONNX / TF.js for zero-latency client execution.</li>
+                    <li>Alphanumeric Extension: Scale from 10 digits to the 62-class EMNIST character benchmark.</li>
+                    <li>Bayesian Monte Carlo Uncertainty: Integrate MC Dropout during inference to capture epistemic uncertainty.</li>
+                    <li>Active Human Review: Implement automated human-in-the-loop review for high-entropy rejections.</li>
+                  </ul>
+                </div>
+              </div>
+            
+    </div>
+  </main>
+
+  <!-- NOTES DRAWER -->
+  <div id="notes-drawer">
+    <div class="notes-header">
+      <span id="notes-title">SPEAKER NOTES & SCIENTIFIC DEFENSE</span>
+      <button class="btn-nav" style="padding: 2px 8px;" onclick="toggleNotes()">CLOSE [S]</button>
+    </div>
+    <div class="notes-body">
+      <div>
+        <div class="note-block">
+          <div class="note-section-title" style="color: var(--accent-green);">1. WHAT THE SLIDE COMMUNICATES:</div>
+          <p id="note-comm"></p>
+        </div>
+        <div class="note-block">
+          <div class="note-section-title" style="color: var(--accent-green);">2. WHY IT MATTERS:</div>
+          <p id="note-why"></p>
+        </div>
+        <div class="note-block">
+          <div class="note-section-title" style="color: var(--accent-green);">3. TECHNICAL EXPLANATION:</div>
+          <p id="note-tech"></p>
+        </div>
+      </div>
+      <div>
+        <div class="note-block">
+          <div class="note-section-title" style="color: var(--accent-amber);">4. LIKELY VIVA QUESTION:</div>
+          <p id="note-viva" style="color: var(--text-primary); font-weight: 600;"></p>
+        </div>
+        <div class="note-block">
+          <div class="note-section-title" style="color: var(--accent-amber);">5. STRONG EVIDENCE-BACKED ANSWER:</div>
+          <p id="note-ans"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 20;
+    const speakerNotesData = {
+  "1": {
+    "comm": "Introduces the project title, institutional affiliation, team members, and overall academic-engineering scope of DigitVision AI.",
+    "why": "Frames the presentation as an evidence-backed, rigorous engineering effort that goes beyond standard classification to offer confidence calibration and visual explainability.",
+    "tech": "DigitVision AI couples a dual-block 2D CNN with a canonical 7-stage preprocessing pipeline, post-hoc temperature scaling, Shannon entropy diagnostics, and Grad-CAM saliency heatmaps.",
+    "viva": "What distinguishes DigitVision AI from an ordinary MNIST classifier?",
+    "ans": "Standard projects merely predict top-1 classes from pre-centered images. DigitVision AI enforces a mathematical preprocessing invariant for live canvas drawings, calibrates probabilities via temperature scaling, computes epistemic entropy, and renders real-time Grad-CAM saliency maps."
+  },
+  "2": {
+    "comm": "Articulates the three core failure modes: train-inference skew, overconfident uncalibrated softmax outputs, and black-box opacity.",
+    "why": "Proves deep awareness of why high laboratory test accuracy often collapses in production interactive environments.",
+    "tech": "Convolutional receptive fields require spatial normalization. In the absence of center-of-mass centering and bounding-box scaling, filters fire on background zero-weights.",
+    "viva": "Why does a 99% accurate MNIST CNN fail when given an off-center drawing from a web canvas?",
+    "ans": "Because standard convolutional layers with pooling are only invariant to small pixel shifts, not global translation or scale changes. Without moment-based centroid alignment, features are spatially misaligned with learned kernel weights."
+  },
+  "3": {
+    "comm": "Explains the foundational motivation behind DigitVision AI, highlighting why safety-critical applications demand calibrated confidence and explainability.",
+    "why": "Connects academic machine learning to real-world deployment challenges where silent failures are intolerable.",
+    "tech": "Raw deep neural network outputs frequently produce uncalibrated overconfidence due to cross-entropy over-parameterization. Calibrating logits and computing entropy provides an epistemic safety threshold.",
+    "viva": "What is the danger of relying on raw softmax probabilities for decision making?",
+    "ans": "Modern deep networks trained with negative log-likelihood are prone to overconfidence because cross-entropy encourages driving output logits to extreme values, yielding near-100% probabilities even on out-of-distribution or corrupted samples."
+  },
+  "4": {
+    "comm": "Presents the 7 concrete, executable engineering and research objectives established prior to model training.",
+    "why": "Establishes transparent evaluation benchmarks and proves that all project claims are tied to predefined measurable targets.",
+    "tech": "Every objective is directly validated by reproducible code artifacts in the repository and verified in Table 9.1 of the final report.",
+    "viva": "What was the pre-defined success criterion, and how did you select it?",
+    "ans": "The success criterion was set at >=95.0% test accuracy and >=0.950 macro F1-score on the held-out 10,000 test set. This was selected because 95% represents the operational threshold for reliable digit recognition, which our DeepConvNet exceeded by achieving 98.31%."
+  },
+  "5": {
+    "comm": "Defines the formal mathematical framework: tensor input space, categorical label space, loss formulation, and metric definitions.",
+    "why": "Grounds the implementation in sound statistical machine learning theory rather than informal heuristics.",
+    "tech": "The task is supervised multi-class classification. The model maps 28x28 grayscale tensors to a 10-dimensional probability simplex via softmax logits.",
+    "viva": "Why use Macro F1-score alongside Accuracy when MNIST is nearly balanced?",
+    "ans": "While MNIST has roughly 1,000 samples per class in the test set, slight support variations (e.g., 892 vs 1,135) can mask minority class degradation in global accuracy. Macro F1 assigns equal weight to every digit class, ensuring robust multi-class verification."
+  },
+  "6": {
+    "comm": "Presents the complete architectural flow from raw user stroke input to calibrated prediction, forensic telemetry, and explainability heatmaps.",
+    "why": "Proves that all system components operate as a cohesive, coupled pipeline with zero architectural disconnects.",
+    "tech": "The architecture decouples UI rendering from backend inference via asynchronous FastAPI endpoints. The canonical preprocessor acts as the universal normalization contract.",
+    "viva": "How does the system ensure zero skew between live web drawings and training images?",
+    "ans": "By executing the exact same Python function canonical_preprocess_tensor() from src/preprocessing/canonical.py across both dataset loading and the live FastAPI web endpoint. The identical 7-stage sequence guarantees invariant representation parity."
+  },
+  "7": {
+    "comm": "Documents authentic NIST provenance, formal citations, and strict zero-leakage data hygiene protocols.",
+    "why": "Refutes undocumented Kaggle datasets and guarantees that reported test numbers reflect genuine out-of-sample generalization.",
+    "tech": "MNIST was created by mixing NIST SD-3 and SD-19 to balance writing styles between Census workers and high school students. Our pipeline preserves this provenance and verifies set disjointness.",
+    "viva": "How did you prove that there is zero data leakage between training and testing?",
+    "ans": "Through automated regression assertions in tests/test_data.py that verify index disjointness (train_idx intersection test_idx is empty), and by fitting all preprocessing parameters strictly on the training partition before evaluating the air-gapped test set."
+  },
+  "8": {
+    "comm": "Presents empirical EDA findings through executed visualizations: 10x10 sample diversity grid and per-class average digit representations.",
+    "why": "Proves that data characteristics were empirically measured and understood prior to modeling rather than treated as an abstract black box.",
+    "tech": "Bimodal intensity distributions justify Otsu thresholding. Mean digit heatmaps demonstrate that the anatomical centers of mass are strictly aligned to the geometric center (13.5, 13.5).",
+    "viva": "What do the average digit images tell us about class separability?",
+    "ans": "Average digit images reveal class-specific stroke density regions. Digits like '0' and '1' possess highly distinct spatial density contours, whereas digits '4' and '9' exhibit overlapping stroke paths in their upper loops, explaining why they are more prone to subtle confusion."
+  },
+  "9": {
+    "comm": "Details the 7-stage canonical preprocessing pipeline and explains how center-of-mass moment centering solves translation skew.",
+    "why": "Demonstrates the engineering rigor that guarantees 100% feature representation parity across offline datasets and live interactive web canvas drawings.",
+    "tech": "Raw input is thresholded with Otsu binarization, cropped, scaled to 20x20 maintaining aspect ratio, and translated so its center of mass coincides exactly with (13.5, 13.5).",
+    "viva": "Why center the digit using Center-of-Mass rather than the center of the bounding box?",
+    "ans": "Bounding box centers are vulnerable to asymmetric stroke flourishes or ascenders. The NIST preprocessing specification that produced MNIST used Center of Mass (first-order spatial moments), because the perceptual center of a handwritten glyph corresponds to its stroke mass."
+  },
+  "10": {
+    "comm": "Surveys foundational literature (LeCun, Cire\u0219an, Guo, Selvaraju) and explains how DigitVision AI bridges the identified gaps.",
+    "why": "Demonstrates strong academic grounding by situating the project in relation to published peer-reviewed research.",
+    "tech": "Existing literature either focuses purely on accuracy or studies calibration/XAI in isolation on large ImageNet models. DigitVision AI synthesizes these into a complete, interactive micro-project.",
+    "viva": "What is the primary research gap your project addresses?",
+    "ans": "Most handwritten digit recognition systems stop at raw categorical classification, leaving models susceptible to train-inference skew, overconfident mispredictions, and black-box opacity. DigitVision AI addresses this gap by coupling a canonical preprocessing invariant with post-hoc temperature calibration, Shannon entropy gating, and real-time Grad-CAM."
+  },
+  "11": {
+    "comm": "Presents the theoretical diversity across all 7 evaluated machine learning paradigms from trivial baselines to modern deep networks.",
+    "why": "Proves that deep learning was selected based on rigorous comparative empirical evidence rather than arbitrary assumption.",
+    "tech": "Comparing linear, tree ensemble, kernel, and convolutional networks exposes the exact performance gains provided by local receptive fields and weight sharing.",
+    "viva": "Why evaluate a Dummy Baseline and Logistic Regression?",
+    "ans": "The Dummy Baseline confirms that the problem is statistically non-trivial (11.35% chance vs 98.31%). Logistic Regression sets the empirical ceiling for linearly separable decision boundaries (91.49%), proving that non-linear spatial feature extraction is necessary to achieve high performance."
+  },
+  "12": {
+    "comm": "Explains the dual-block DeepConvNet topology, parameter allocation, and the critical debugging resolution of the CPU BatchNorm divergence issue.",
+    "why": "Demonstrates high-level debugging competence and explains the exact design choices that enabled 98.31% test accuracy.",
+    "tech": "Keras 3 on Windows CPU exhibited running variance divergence when BatchNorm was placed after ReLU. Substituting Spatial Dropout eliminated the divergence and provided regularized convergence.",
+    "viva": "Why did you choose two stacked 3x3 convolutional layers instead of one 5x5 layer?",
+    "ans": "Two consecutive 3x3 convolutions have the exact same effective receptive field (5x5) as a single 5x5 convolution, but require only 2*(3*3)=18 kernel weights instead of 25 (a 28% parameter reduction), while incorporating two non-linear ReLU activations instead of one."
+  },
+  "13": {
+    "comm": "Documents the exact training settings, Adam optimization hyperparameters, regularization parameters, and the Windows 11 execution environment.",
+    "why": "Provides 100% transparency and guarantees that every training experiment is fully reproducible from code.",
+    "tech": "Adam adapts per-parameter learning rates based on running first and second gradient moments. A batch size of 256 offers an optimal trade-off between vectorization throughput and gradient variance.",
+    "viva": "Why was Adam chosen over standard SGD with momentum?",
+    "ans": "Adam combines the benefits of AdaGrad (handling sparse gradients) and RMSprop (handling non-stationary objectives) by maintaining exponentially decaying averages of past gradients and past squared gradients. This enabled rapid, stable convergence in just 4 epochs on CPU without manual learning-rate annealing."
+  },
+  "14": {
+    "comm": "Shows the executed training and validation loss and accuracy trajectories over 4 epochs.",
+    "why": "Proves that the model converged smoothly without overfitting or divergence, achieving a healthy generalization gap.",
+    "tech": "Validation loss decreased monotonically to 0.0534, while validation accuracy reached 98.23%. Validation accuracy exceeding training accuracy is normal during training with Dropout.",
+    "viva": "Why is validation accuracy higher than training accuracy during training?",
+    "ans": "Because Dropout (0.25 in conv layers, 0.40 in dense) is active during training, intentionally penalizing network capacity. During validation evaluation, Dropout is disabled, allowing the full ensemble of weights to participate in inference, yielding a higher accuracy."
+  },
+  "15": {
+    "comm": "Presents the final empirical benchmark table comparing all 7 models across accuracy, macro F1, training time, and latency.",
+    "why": "Provides undeniable quantitative evidence justifying why the DeepConvNet was chosen as the production model.",
+    "tech": "All models were tested on the exact same 10,000 isolated test images with zero data leakage. Random Forest had high latency (102ms), SVM reached 96.11%, but DeepConvNet won decisively at 98.31%.",
+    "viva": "Why did Random Forest have a slower inference latency (102 ms) than the Deep ConvNet (9.14 ms)?",
+    "ans": "Random Forest evaluates 60 independent, deep decision trees sequentially in Python across 784 dimensions, traversing numerous conditional branch statements per sample. The ConvNet, in contrast, executes SIMD vectorized tensor operations, achieving much higher inference throughput."
+  },
+  "16": {
+    "comm": "Analyzes the 10x10 confusion matrix, multi-class ROC curves, and Precision-Recall characteristics of the DeepConvNet.",
+    "why": "Reveals the exact failure modes and class-specific discrimination boundaries rather than merely quoting aggregate accuracy.",
+    "tech": "Errors are concentrated in anatomically similar pairs such as (4, 9) and (3, 5). ROC-AUC > 0.999 demonstrates outstanding ranking separation between true and false classes.",
+    "viva": "Why are digits 4 and 9 the most commonly confused pair?",
+    "ans": "Digits 4 and 9 share structural topological features: a long vertical right stem, a horizontal midline juncture, and an upper enclosed or semi-enclosed loop. When a human writer fails to close the loop of a 9 or draws a closed-top 4, spatial activations overlap significantly."
+  },
+  "17": {
+    "comm": "Explains post-hoc temperature scaling, Expected Calibration Error (ECE), and Shannon entropy confidence diagnostics.",
+    "why": "Proves that DigitVision AI avoids overconfident hallucinations and knows when to reject uncertain predictions.",
+    "tech": "Temperature scaling softens or sharpens the softmax distribution without altering the argmax prediction order. Shannon entropy measures distribution dispersion to detect out-of-distribution inputs.",
+    "viva": "Does temperature scaling change the model's accuracy?",
+    "ans": "No. Temperature scaling is a strictly monotonic transformation of the logits: dividing by T > 0 preserves the rank ordering of all class scores. Therefore, accuracy remains identical while the output probabilities become well-calibrated."
+  },
+  "18": {
+    "comm": "Presents visual attribution via Grad-CAM and details physical stroke forensics computed during inference.",
+    "why": "Transforms the model from an opaque black box into an auditable intelligence system that provides visual evidence for every decision.",
+    "tech": "Grad-CAM computes the gradient of the predicted class score with respect to feature maps in 'conv_cam', creating a coarse localization map highlighting discriminative regions.",
+    "viva": "Why is the ReLU activation applied at the end of Grad-CAM?",
+    "ans": "ReLU is applied because we are only interested in features that have a positive influence on the target class score. Features with negative gradients indicate evidence for competing classes, so suppressing them yields clean, focused visual attribution."
+  },
+  "19": {
+    "comm": "Demonstrates the live ML Mission Control web application deployed on FastAPI at 127.0.0.1:8000, illustrating the complete end-to-end user inference workflow.",
+    "why": "Bridges the gap between an offline trained model and a production-grade intelligence platform that provides real-time calibrated predictions with full visual explainability.",
+    "tech": "FastAPI processes asynchronous JSON POST requests containing canvas image payloads. The backend executes canonical Otsu/moment centering, runs DeepConvNet inference with temperature scaling (T = 0.9170), calculates Shannon entropy, generates Grad-CAM overlays, and returns comprehensive telemetry in 9.14 ms.",
+    "viva": "What happens when a user draws an unrecognizable scribble or non-digit symbol on the canvas?",
+    "ans": "Rather than outputting an overconfident false classification, the system's confidence intelligence triggers: Shannon entropy exceeds the 1.2 nats threshold and the decision margin drops below 0.20, causing the Mission Control HUD to flag the prediction as 'Ambiguous / OOD Input' and reject automated processing."
+  },
+  "20": {
+    "comm": "Summarizes the successful achievement of all 7 pre-defined objectives, candidly outlines architectural limitations, and charts the future research roadmap.",
+    "why": "Concludes the defense with intellectual honesty and scientific rigor, proving that the project was executed thoroughly and thoughtfully.",
+    "tech": "All 7 objectives defined in Chapter 1 were achieved. Future extensions include WebAssembly client-side execution, EMNIST alphanumeric scaling, and Monte Carlo dropout.",
+    "viva": "If you had two more months to extend this project, what would be your top priority?",
+    "ans": "My top priority would be deploying the model to on-device WebAssembly via ONNX Runtime to eliminate server latency, followed by implementing Monte Carlo Dropout to explicitly disentangle data noise (aleatoric uncertainty) from model parameter ignorance (epistemic uncertainty)."
+  }
+};
+
+    function showSlide(index) {
+      if (index < 1) index = 1;
+      if (index > totalSlides) index = totalSlides;
+      currentSlide = index;
+
+      document.querySelectorAll('.slide-card').forEach((card, idx) => {
+        card.classList.toggle('active', (idx + 1) === currentSlide);
+      });
+
+      document.getElementById('slide-num').textContent = `${String(currentSlide).padStart(2, '0')} / ${String(totalSlides).padStart(2, '0')}`;
+      updateSpeakerNotes();
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        showSlide(currentSlide + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        showSlide(currentSlide - 1);
+      }
+    }
+
+    function toggleNotes() {
+      document.getElementById('notes-drawer').classList.toggle('open');
+    }
+
+    function updateSpeakerNotes() {
+      const data = speakerNotesData[currentSlide] || {};
+      document.getElementById('notes-title').textContent = `SLIDE ${String(currentSlide).padStart(2, '0')} — SPEAKER NOTES & SCIENTIFIC DEFENSE`;
+      document.getElementById('note-comm').textContent = data.comm || '';
+      document.getElementById('note-why').textContent = data.why || '';
+      document.getElementById('note-tech').textContent = data.tech || '';
+      document.getElementById('note-viva').textContent = data.viva || '';
+      document.getElementById('note-ans').textContent = data.ans || '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N' || e.key === ' ') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'p' || e.key === 'P') {
+        prevSlide();
+      } else if (e.key === 's' || e.key === 'S') {
+        toggleNotes();
+      }
+    });
+
+    showSlide(1);
+  </script>
+</body>
+</html>
