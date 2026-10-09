@@ -4,9 +4,11 @@
  */
 
 export const ELITE_PALETTES = {
-  ZINC: "zinc-neutral",
   OBSIDIAN: "studio-obsidian",
+  AZURE: "cyber-azure",
+  VIOLET: "electric-violet",
   AVIATION: "tactical-aviation",
+  ZINC: "zinc-neutral",
   TITANIUM: "titanium-minimalist"
 };
 

@@ -96,7 +96,7 @@
 }
 
 /* ==========================================================================
-   THE 4 BATTLE-TESTED ELITE DARK PALETTES
+   THE 6 BATTLE-TESTED COLOR PALETTES
    ========================================================================== */
 
 /* Palette 1: Studio Obsidian (Deepest OLED + Spotify Emerald Indicator - Default) */
@@ -115,11 +115,71 @@
   --accent-interactive: #1db954;
   --accent-interactive-contrast: #000000;
   --accent-primary: #1db954;
-  --accent-muted: rgba(29, 185, 84, 0.12);
-  --accent-hairline: rgba(29, 185, 84, 0.28);
+  --accent-muted: rgba(29, 185, 84, 0.14);
+  --accent-hairline: rgba(29, 185, 84, 0.35);
 }
 
-/* Palette 2: Zinc Neutral (Linear / Vercel Pro Monochrome) */
+/* Palette 2: Cyber Azure (Apple Pro Electric Blue) */
+[data-palette="cyber-azure"] {
+  --bg-void: #040810;
+  --bg-ground: #080f1d;
+  --bg-surface-1: #0e172a;
+  --bg-surface-2: #172544;
+  --bg-surface-inset: #091020;
+  --border-subtle: rgba(10, 132, 255, 0.10);
+  --border-hairline: rgba(10, 132, 255, 0.20);
+  --border-hover: rgba(10, 132, 255, 0.40);
+  --text-primary: #f0f6fc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent-interactive: #0a84ff;
+  --accent-interactive-contrast: #ffffff;
+  --accent-primary: #0a84ff;
+  --accent-muted: rgba(10, 132, 255, 0.15);
+  --accent-hairline: rgba(10, 132, 255, 0.40);
+}
+
+/* Palette 3: Electric Violet (Apple Neon Purple) */
+[data-palette="electric-violet"] {
+  --bg-void: #080510;
+  --bg-ground: #0f0a1c;
+  --bg-surface-1: #17102a;
+  --bg-surface-2: #241940;
+  --bg-surface-inset: #0d0818;
+  --border-subtle: rgba(191, 90, 242, 0.10);
+  --border-hairline: rgba(191, 90, 242, 0.20);
+  --border-hover: rgba(191, 90, 242, 0.40);
+  --text-primary: #f8fafc;
+  --text-secondary: #a8a29e;
+  --text-muted: #78716c;
+  --accent-interactive: #bf5af2;
+  --accent-interactive-contrast: #ffffff;
+  --accent-primary: #bf5af2;
+  --accent-muted: rgba(191, 90, 242, 0.15);
+  --accent-hairline: rgba(191, 90, 242, 0.40);
+}
+
+/* Palette 4: Tactical Aviation (Bloomberg / Defense Charcoal + Monospace Amber) */
+[data-palette="tactical-aviation"] {
+  --bg-void: #0b0d0e;
+  --bg-ground: #0f1214;
+  --bg-surface-1: #14181b;
+  --bg-surface-2: #1c2227;
+  --bg-surface-inset: #0e1113;
+  --border-subtle: #1d252b;
+  --border-hairline: #28333b;
+  --border-hover: #3d4c57;
+  --text-primary: #ededed;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent-interactive: #ff9f0a;
+  --accent-interactive-contrast: #000000;
+  --accent-primary: #ff9f0a;
+  --accent-muted: rgba(255, 159, 10, 0.14);
+  --accent-hairline: rgba(255, 159, 10, 0.35);
+}
+
+/* Palette 5: Zinc Neutral (Linear / Vercel Pro Monochrome) */
 [data-palette="zinc-neutral"] {
   --bg-void: #09090b;
   --bg-ground: #121215;
@@ -139,27 +199,7 @@
   --accent-hairline: rgba(255, 255, 255, 0.20);
 }
 
-/* Palette 3: Tactical Aviation (Bloomberg / Defense Charcoal + Monospace Amber) */
-[data-palette="tactical-aviation"] {
-  --bg-void: #0b0d0e;
-  --bg-ground: #0f1214;
-  --bg-surface-1: #14181b;
-  --bg-surface-2: #1c2227;
-  --bg-surface-inset: #0e1113;
-  --border-subtle: #1d252b;
-  --border-hairline: #28333b;
-  --border-hover: #3d4c57;
-  --text-primary: #ededed;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --accent-interactive: #d97706;
-  --accent-interactive-contrast: #000000;
-  --accent-primary: #d97706;
-  --accent-muted: rgba(217, 119, 6, 0.14);
-  --accent-hairline: rgba(217, 119, 6, 0.32);
-}
-
-/* Palette 4: Titanium Minimalist (Leica Hardware Warm Achromatic) */
+/* Palette 6: Titanium Minimalist (Leica Hardware Warm Achromatic) */
 [data-palette="titanium-minimalist"] {
   --bg-void: #0c0c0c;
   --bg-ground: #111111;

@@ -292,10 +292,14 @@ body {
 }
 
 .theme-item.active {
-  background: var(--bg-surface-2);
-  color: var(--text-primary);
+  background: var(--accent-muted);
+  color: var(--accent-interactive);
   font-weight: 700;
-  outline: 1px solid var(--border-hairline);
+  outline: 1px solid var(--accent-hairline);
+}
+
+.theme-item.active .swatch {
+  box-shadow: 0 0 6px var(--accent-interactive);
 }
 
 .theme-item .swatch {
