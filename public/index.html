@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DigitVision AI — Explainable Handwritten Digit Intelligence Platform</title>
+  <title>DigitVision AI</title>
   <link rel="stylesheet" href="/css/tokens.css">
   <link rel="stylesheet" href="/css/app.css">
   <!-- GSAP for restrained telemetry reveals -->
@@ -11,24 +11,32 @@
   <script type="module" src="/js/app.js" defer></script>
 </head>
 <body class="antialiased">
-  <!-- Application Navigation Header -->
+  <!-- Apple Pro Navigation Header -->
   <header class="app-header">
     <div class="header-inner">
       <div class="brand-group">
-        <span class="brand-badge">PRO-ML</span>
-        <h1 class="brand-title">DIGITVISION AI</h1>
-        <span class="brand-version">v1.2.0</span>
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">DIGITVISION AI</h1>
+          <span class="brand-badge">PRO ML</span>
+        </div>
       </div>
 
-      <!-- Navigation Tabs -->
-      <nav class="nav-tabs" role="tablist">
-        <button class="nav-tab active" data-tab="recognition" role="tab" aria-selected="true">Input Studio</button>
+      <!-- Apple Segmented Navigation Tabs -->
+      <nav class="nav-segmented" role="tablist">
+        <button class="nav-tab active" data-tab="recognition" role="tab" aria-selected="true">Recognize</button>
         <button class="nav-tab" data-tab="experiments" role="tab" aria-selected="false">Benchmarks</button>
-        <button class="nav-tab" data-tab="errors" role="tab" aria-selected="false">Error Lab</button>
-        <button class="nav-tab" data-tab="presentation" role="tab" aria-selected="false">Presentation</button>
+        <button class="nav-tab" data-tab="errors" role="tab" aria-selected="false">Errors</button>
+        <button class="nav-tab" data-tab="presentation" role="tab" aria-selected="false">Slides</button>
       </nav>
 
-      <!-- System Telemetry & Theme Selectors -->
+      <!-- System Status & Controls -->
       <div class="header-actions">
         <div class="status-pill" id="backend-status-pill">
           <span class="status-dot"></span>
@@ -36,18 +44,21 @@
         </div>
 
         <!-- Mode Toggle (Dark / Light) -->
-        <button class="btn-icon" id="mode-toggle-btn" aria-label="Toggle Dark/Light Mode" title="Toggle Dark/Light Mode">
-          <svg class="icon" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2">
+        <button class="btn-icon" id="mode-toggle-btn" aria-label="Toggle Dark/Light Mode" title="Toggle Appearance">
+          <svg class="icon-sun" viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" fill="none" stroke-width="2">
             <circle cx="12" cy="12" r="5"></circle>
             <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
           </svg>
         </button>
 
-        <!-- Palette Picker Popover Trigger -->
+        <!-- Palette Picker Popover -->
         <div class="theme-dropdown-wrapper">
-          <button class="btn-theme-picker" id="theme-menu-btn" aria-label="Select Elite Palette" title="Palette System">
+          <button class="btn-palette-picker" id="theme-menu-btn" aria-label="Select Elite Palette" title="Palette Settings">
             <span class="current-swatch"></span>
             <span class="theme-name-label">Palette</span>
+            <svg class="chevron-icon" viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" stroke-width="2">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
           </button>
           <div class="theme-popover hidden" id="theme-popover">
             <div class="theme-popover-header">Elite Dark Palettes</div>
@@ -87,11 +98,15 @@
         <div class="card region-input-studio">
           <div class="card-header">
             <div class="card-title-group">
-              <span class="card-tag">INPUT STUDIO</span>
-              <h2 class="card-title">Handwritten Canvas</h2>
+              <span class="card-tag">INPUT</span>
+              <h2 class="card-title">Canvas</h2>
             </div>
-            <div class="model-select-wrapper">
-              <label for="model-selector" class="sr-only">Active Model</label>
+          </div>
+
+          <!-- Model Selector Row -->
+          <div class="model-select-container">
+            <label for="model-selector" class="model-select-label">Model</label>
+            <div class="select-wrapper">
               <select id="model-selector" class="select-dropdown" title="Select Model Architecture">
                 <option value="DigitVision-DeepConvNet" selected>DigitVision DeepConvNet (CNN + GAP)</option>
                 <option value="LeNet-5">Classic LeNet-5 (Yann LeCun)</option>
@@ -100,42 +115,59 @@
                 <option value="Random-Forest">Random Forest Ensemble</option>
                 <option value="Logistic-Regression">Logistic Regression (L2)</option>
               </select>
+              <svg class="select-arrow" viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
             </div>
           </div>
 
+          <!-- Drawing Canvas -->
           <div class="canvas-viewport-wrapper">
             <canvas id="drawing-canvas" width="280" height="280" class="drawing-surface" aria-label="Drawing canvas for handwritten digits"></canvas>
             <div class="canvas-crosshair"></div>
           </div>
 
+          <!-- Brush and Actions Toolbar -->
           <div class="stroke-controls">
             <div class="slider-group">
-              <label for="brush-size" class="telemetry-label">STROKE: <span id="brush-size-val">18px</span></label>
+              <span class="telemetry-label">STROKE</span>
+              <span class="slider-val-badge" id="brush-size-val">18px</span>
               <input type="range" id="brush-size" min="6" max="36" value="18" class="range-slider" aria-label="Brush Stroke Thickness">
             </div>
             <div class="btn-action-group">
-              <button id="btn-clear" class="btn btn-secondary">Clear</button>
-              <button id="btn-recognize" class="btn btn-primary">
-                <span class="btn-text">Execute Inference</span>
+              <button id="btn-clear" class="btn btn-secondary" title="Clear Canvas">
+                <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>Clear</span>
+              </button>
+              <button id="btn-recognize" class="btn btn-primary" title="Recognize Digit">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.2">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+                <span class="btn-text">Recognize</span>
                 <span class="spinner hidden" id="infer-spinner"></span>
               </button>
             </div>
           </div>
 
-          <!-- Presets Grid -->
+          <!-- In-Distribution Presets (0-9) -->
           <div class="presets-section">
-            <span class="telemetry-label">IN-DISTRIBUTION PRESETS:</span>
+            <div class="presets-header">
+              <span class="telemetry-label">PRESETS</span>
+            </div>
             <div class="presets-row">
-              <button class="btn-preset" data-digit="0" title="Draw 0">0</button>
-              <button class="btn-preset" data-digit="1" title="Draw 1">1</button>
-              <button class="btn-preset" data-digit="2" title="Draw 2">2</button>
-              <button class="btn-preset" data-digit="3" title="Draw 3">3</button>
-              <button class="btn-preset" data-digit="4" title="Draw 4">4</button>
-              <button class="btn-preset" data-digit="5" title="Draw 5">5</button>
-              <button class="btn-preset" data-digit="6" title="Draw 6">6</button>
-              <button class="btn-preset" data-digit="7" title="Draw 7">7</button>
-              <button class="btn-preset" data-digit="8" title="Draw 8">8</button>
-              <button class="btn-preset" data-digit="9" title="Draw 9">9</button>
+              <button class="btn-preset" data-digit="0" title="Load Preset 0">0</button>
+              <button class="btn-preset" data-digit="1" title="Load Preset 1">1</button>
+              <button class="btn-preset" data-digit="2" title="Load Preset 2">2</button>
+              <button class="btn-preset" data-digit="3" title="Load Preset 3">3</button>
+              <button class="btn-preset" data-digit="4" title="Load Preset 4">4</button>
+              <button class="btn-preset" data-digit="5" title="Load Preset 5">5</button>
+              <button class="btn-preset" data-digit="6" title="Load Preset 6">6</button>
+              <button class="btn-preset" data-digit="7" title="Load Preset 7">7</button>
+              <button class="btn-preset" data-digit="8" title="Load Preset 8">8</button>
+              <button class="btn-preset" data-digit="9" title="Load Preset 9">9</button>
             </div>
           </div>
         </div>
@@ -144,12 +176,13 @@
         <div class="card region-intelligence">
           <div class="card-header">
             <div class="card-title-group">
-              <span class="card-tag">TELEMETRY</span>
-              <h2 class="card-title">Prediction Intelligence</h2>
+              <span class="card-tag">OUTPUT</span>
+              <h2 class="card-title">Prediction</h2>
             </div>
             <span class="status-badge" id="confidence-badge">IDLE</span>
           </div>
 
+          <!-- Hero Prediction Card -->
           <div class="prediction-hero-card">
             <div class="digit-big-display">
               <span class="digit-sub">PREDICTED DIGIT</span>
@@ -207,8 +240,8 @@
         <div class="card region-forensics">
           <div class="card-header">
             <div class="card-title-group">
-              <span class="card-tag">EXPLAINABILITY</span>
-              <h2 class="card-title">Digit Forensics</h2>
+              <span class="card-tag">XAI</span>
+              <h2 class="card-title">Forensics</h2>
             </div>
             <div class="forensics-controls-bar">
               <button class="btn-xai-toggle active" id="btn-toggle-gradcam" data-mode="gradcam">Grad-CAM</button>
@@ -264,7 +297,7 @@
               <line x1="12" y1="16" x2="12" y2="12"></line>
               <line x1="12" y1="8" x2="12.01" y2="8"></line>
             </svg>
-            <span>Grad-CAM highlights receptive-field activations in the final conv layer. Saliency maps show raw gradient sensitivity.</span>
+            <span>Grad-CAM highlights receptive-field activations in final conv layer. Saliency shows pixel gradients.</span>
           </div>
         </div>
 
@@ -275,20 +308,23 @@
     <section class="tab-panel hidden" id="panel-experiments">
       <div class="benchmark-container">
         <div class="panel-hero">
-          <h2 class="section-title">Model Architecture & Benchmark Intelligence</h2>
-          <p class="section-desc">Empirical comparison across linear baselines, non-linear kernel representations, multi-layer perceptrons, and the primary convolutional neural network on identical 10,000 isolated test samples.</p>
+          <div class="hero-tag">BENCHMARKS</div>
+          <h2 class="section-title">Model Comparison</h2>
+          <p class="section-desc">Accuracy, F1, calibration, and latency across all trained architectures on 10K test samples.</p>
         </div>
-        <div class="table-card">
-          <table class="scientific-table" id="benchmark-results-table">
+
+        <div class="card table-card">
+          <table class="scientific-table" id="benchmark-table">
             <thead>
               <tr>
                 <th>Model Architecture</th>
+                <th>Type</th>
                 <th>Parameters</th>
-                <th>Inference Latency</th>
-                <th>Validation Loss</th>
                 <th>Test Accuracy</th>
                 <th>Macro F1</th>
                 <th>Weighted F1</th>
+                <th>ECE (Calibration)</th>
+                <th>Inference Latency</th>
               </tr>
             </thead>
             <tbody id="benchmark-table-body">
@@ -303,16 +339,21 @@
     <section class="tab-panel hidden" id="panel-errors">
       <div class="error-container">
         <div class="panel-hero">
-          <h2 class="section-title">Confusion Intelligence & Failure Forensics</h2>
-          <p class="section-desc">Systematic failure diagnostics: isolating high-confidence errors ($p > 0.80$) to uncover boundary morphologies and distribution-shift limits.</p>
+          <div class="hero-tag">ERROR ANALYSIS</div>
+          <h2 class="section-title">Confusion Matrix & Failures</h2>
+          <p class="section-desc">High-confidence misclassifications and per-class confusion breakdown.</p>
         </div>
         <div class="error-grid-wrapper">
           <div class="card matrix-card">
-            <h3 class="subcard-title">Normalized Confusion Matrix (DeepConvNet)</h3>
+            <div class="card-header">
+              <h3 class="subcard-title">Confusion Matrix</h3>
+            </div>
             <div id="confusion-matrix-grid" class="matrix-canvas-container"></div>
           </div>
           <div class="card error-gallery-card">
-            <h3 class="subcard-title">Representative High-Confidence Failure Cases</h3>
+            <div class="card-header">
+              <h3 class="subcard-title">Failure Gallery</h3>
+            </div>
             <div id="error-gallery-container" class="error-samples-grid"></div>
           </div>
         </div>
@@ -323,15 +364,26 @@
     <section class="tab-panel hidden" id="panel-presentation">
       <div class="presentation-container">
         <div class="panel-hero">
-          <h2 class="section-title">Master Scientific Presentation Deck</h2>
-          <p class="section-desc">20-Slide academic defense covering problem formulation, preprocessing invariant, convolutional ablations, Bayesian entropy, and real-world robustness.</p>
+          <div class="hero-tag">PRESENTATION</div>
+          <h2 class="section-title">Research Slides</h2>
+          <p class="section-desc">20-slide deck covering architecture, preprocessing, ablations, and explainability.</p>
         </div>
         <div class="card slide-viewer-card">
           <div class="slide-frame">
             <div class="slide-nav-bar">
-              <button class="btn btn-secondary" id="btn-prev-slide">Previous Slide</button>
+              <button class="btn btn-secondary" id="btn-prev-slide">
+                <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                <span>Prev</span>
+              </button>
               <span class="slide-indicator" id="slide-index-indicator">Slide 01 / 20</span>
-              <button class="btn btn-secondary" id="btn-next-slide">Next Slide</button>
+              <button class="btn btn-secondary" id="btn-next-slide">
+                <span>Next</span>
+                <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
             </div>
             <div class="slide-viewport" id="slide-viewport-content">
               <!-- Rendered slide iframe -->

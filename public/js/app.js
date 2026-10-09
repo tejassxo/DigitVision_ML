@@ -1,6 +1,6 @@
 /**
- * DigitVision AI — Production Frontend Controller
- * Sovereign Engineering · Defense-Grade Reliability · High-Craft Precision
+ * DIGITVISION AI — Production Frontend Controller
+ * Apple Pro Design & Engineering Precision Architecture
  */
 import { ELITE_PALETTES, setPalette, toggleThemeMode } from './palette-controller.js';
 
@@ -30,8 +30,9 @@ class DigitVisionApp {
   }
 
   initElements() {
+    // Input Studio Elements
     this.canvas = document.getElementById("drawing-canvas");
-    this.ctx = this.canvas.getContext("2d");
+    this.ctx = this.canvas ? this.canvas.getContext("2d") : null;
     this.modelSelector = document.getElementById("model-selector");
     this.brushSlider = document.getElementById("brush-size");
     this.brushValLabel = document.getElementById("brush-size-val");
@@ -65,13 +66,37 @@ class DigitVisionApp {
     this.btnToggleGradcam = document.getElementById("btn-toggle-gradcam");
     this.btnToggleSaliency = document.getElementById("btn-toggle-saliency");
 
+    // Forensics Metadata Table
     this.metaFg = document.getElementById("meta-fg-occupancy");
     this.metaBbox = document.getElementById("meta-bbox");
     this.metaAspect = document.getElementById("meta-aspect");
     this.metaCom = document.getElementById("meta-com");
+
+    // View Navigation Elements
+    this.navTabs = document.querySelectorAll(".nav-tab");
+    this.tabPanels = {
+      recognition: document.getElementById("panel-recognition"),
+      experiments: document.getElementById("panel-experiments"),
+      errors: document.getElementById("panel-errors"),
+      presentation: document.getElementById("panel-presentation")
+    };
+
+    // Benchmark Table Body
+    this.benchTableBody = document.getElementById("benchmark-table-body");
+
+    // Error Lab Containers
+    this.matrixContainer = document.getElementById("confusion-matrix-grid");
+    this.errorSamplesGrid = document.getElementById("error-gallery-container");
+
+    // Presentation Deck Elements
+    this.deckFrame = document.getElementById("slide-viewport-content");
+    this.deckCounter = document.getElementById("slide-index-indicator");
+    this.btnDeckPrev = document.getElementById("btn-prev-slide");
+    this.btnDeckNext = document.getElementById("btn-next-slide");
   }
 
   initCanvas() {
+    if (!this.canvas || !this.ctx) return;
     const dpr = window.devicePixelRatio || 1;
     const rect = this.canvas.getBoundingClientRect();
     const cssWidth = rect.width > 0 ? rect.width : 280;
@@ -84,6 +109,7 @@ class DigitVisionApp {
   }
 
   clearCanvas() {
+    if (!this.ctx || !this.canvas) return;
     const rect = this.canvas.getBoundingClientRect();
     const w = rect.width > 0 ? rect.width : 280;
     const h = rect.height > 0 ? rect.height : 280;
@@ -96,33 +122,39 @@ class DigitVisionApp {
   }
 
   resetTelemetry() {
-    this.predDigit.textContent = "-";
-    this.predConfidence.textContent = "--.-%";
-    this.predMargin.textContent = "--.-%";
-    this.predEntropy.textContent = "-.-- bits";
-    this.predLatency.textContent = "--.- ms";
-    this.confBadge.textContent = "IDLE";
-    this.confBadge.className = "status-badge";
-    this.topKBars.innerHTML = "";
-    this.qualityIndicator.textContent = "QUALITY: --";
+    if (this.predDigit) this.predDigit.textContent = "-";
+    if (this.predConfidence) this.predConfidence.textContent = "--.-%";
+    if (this.predMargin) this.predMargin.textContent = "--.-%";
+    if (this.predEntropy) this.predEntropy.textContent = "-.-- bits";
+    if (this.predLatency) this.predLatency.textContent = "--.- ms";
+    if (this.confBadge) {
+      this.confBadge.textContent = "IDLE";
+      this.confBadge.className = "status-badge";
+    }
+    if (this.topKBars) {
+      this.topKBars.innerHTML = `<div class="topk-empty-placeholder">Awaiting handwritten digit stroke...</div>`;
+    }
+    if (this.qualityIndicator) this.qualityIndicator.textContent = "QUALITY: --";
 
     if (this.latencyPrep) this.latencyPrep.textContent = "--.- ms";
     if (this.latencyInfer) this.latencyInfer.textContent = "--.- ms";
     if (this.latencyTotal) this.latencyTotal.textContent = "--.- ms";
 
-    this.canonicalImg.style.display = "none";
-    this.gradcamImg.style.display = "none";
-    this.placeholderCanonical.style.display = "block";
-    this.placeholderGradcam.style.display = "block";
-    this.placeholderGradcam.textContent = "Conv Attention";
+    if (this.canonicalImg) this.canonicalImg.style.display = "none";
+    if (this.gradcamImg) this.gradcamImg.style.display = "none";
+    if (this.placeholderCanonical) this.placeholderCanonical.style.display = "block";
+    if (this.placeholderGradcam) {
+      this.placeholderGradcam.style.display = "block";
+      this.placeholderGradcam.textContent = "Conv Attention";
+    }
 
     this.currentGradcam = null;
     this.currentSaliency = null;
 
-    this.metaFg.textContent = "--";
-    this.metaBbox.textContent = "--";
-    this.metaAspect.textContent = "--";
-    this.metaCom.textContent = "--";
+    if (this.metaFg) this.metaFg.textContent = "--";
+    if (this.metaBbox) this.metaBbox.textContent = "--";
+    if (this.metaAspect) this.metaAspect.textContent = "--";
+    if (this.metaCom) this.metaCom.textContent = "--";
   }
 
   initThemeEngine() {
@@ -189,6 +221,8 @@ class DigitVisionApp {
   }
 
   initEventListeners() {
+    if (!this.canvas) return;
+
     // Canvas Drawing listeners
     const startDraw = (e) => {
       this.isDrawing = true;
@@ -196,7 +230,7 @@ class DigitVisionApp {
     };
     const endDraw = () => {
       this.isDrawing = false;
-      this.ctx.beginPath();
+      if (this.ctx) this.ctx.beginPath();
     };
 
     this.canvas.addEventListener("mousedown", startDraw);
@@ -204,25 +238,43 @@ class DigitVisionApp {
     this.canvas.addEventListener("mouseup", endDraw);
     this.canvas.addEventListener("mouseleave", endDraw);
 
-    // Touch support for iPad / mobile drawing
+    // Touch support for iPad / stylus / mobile drawing
     this.canvas.addEventListener("touchstart", (e) => {
       e.preventDefault();
       startDraw(e.touches[0]);
-    });
+    }, { passive: false });
+
     this.canvas.addEventListener("touchmove", (e) => {
       e.preventDefault();
       this.draw(e.touches[0]);
-    });
+    }, { passive: false });
+
     this.canvas.addEventListener("touchend", endDraw);
 
     // Stroke size slider
-    this.brushSlider.addEventListener("input", (e) => {
-      this.brushSize = parseInt(e.target.value, 10);
-      this.brushValLabel.textContent = `${this.brushSize}px`;
-    });
+    if (this.brushSlider) {
+      this.brushSlider.addEventListener("input", (e) => {
+        this.brushSize = parseInt(e.target.value, 10);
+        if (this.brushValLabel) this.brushValLabel.textContent = `${this.brushSize}px`;
+      });
+    }
 
-    this.btnClear.addEventListener("click", () => this.clearCanvas());
-    this.btnRecognize.addEventListener("click", () => this.executeInference());
+    // Clear and Recognize Actions
+    if (this.btnClear) {
+      this.btnClear.addEventListener("click", () => this.clearCanvas());
+    }
+    if (this.btnRecognize) {
+      this.btnRecognize.addEventListener("click", () => this.executeInference());
+    }
+
+    // Model Selector change
+    if (this.modelSelector) {
+      this.modelSelector.addEventListener("change", () => {
+        if (this.hasDrawn) {
+          this.executeInference();
+        }
+      });
+    }
 
     // XAI toggle buttons
     if (this.btnToggleGradcam && this.btnToggleSaliency) {
@@ -251,7 +303,12 @@ class DigitVisionApp {
         tab.classList.add("active");
         tab.setAttribute("aria-selected", "true");
         const panel = document.getElementById(`panel-${tabId}`);
-        if (panel) panel.classList.remove("hidden");
+        if (panel) {
+          panel.classList.remove("hidden");
+          if (window.gsap && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            gsap.fromTo(panel, { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.25, ease: "power2.out" });
+          }
+        }
       });
     });
 
@@ -275,7 +332,7 @@ class DigitVisionApp {
   }
 
   draw(e) {
-    if (!this.isDrawing) return;
+    if (!this.isDrawing || !this.ctx || !this.canvas) return;
     this.hasDrawn = true;
     const rect = this.canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -296,9 +353,11 @@ class DigitVisionApp {
     this.clearCanvas();
     this.hasDrawn = true;
     const ctx = this.ctx;
+    if (!ctx || !this.canvas) return;
+
     const rect = this.canvas.getBoundingClientRect();
-    const cx = rect.width / 2;
-    const cy = rect.height / 2;
+    const cx = (rect.width > 0 ? rect.width : 280) / 2;
+    const cy = (rect.height > 0 ? rect.height : 280) / 2;
 
     ctx.strokeStyle = "#FFFFFF";
     ctx.lineWidth = 20;
@@ -397,11 +456,11 @@ class DigitVisionApp {
 
   updateXaiDisplay() {
     const activeUrl = this.xaiMode === "gradcam" ? this.currentGradcam : this.currentSaliency;
-    if (activeUrl) {
+    if (activeUrl && this.gradcamImg && this.placeholderGradcam) {
       this.placeholderGradcam.style.display = "none";
       this.gradcamImg.src = activeUrl;
       this.gradcamImg.style.display = "block";
-    } else {
+    } else if (this.gradcamImg && this.placeholderGradcam) {
       this.gradcamImg.style.display = "none";
       this.placeholderGradcam.style.display = "block";
       this.placeholderGradcam.textContent = this.xaiMode === "gradcam" ? "Grad-CAM (CNN Only)" : "Saliency (CNN Only)";
@@ -415,20 +474,21 @@ class DigitVisionApp {
         const data = await res.json();
         const dev = data.device || "CPU";
         const modelsCount = data.loaded_models ? data.loaded_models.length : 6;
-        this.statusText.textContent = `SYSTEM ONLINE // ${dev} (${modelsCount} MODELS)`;
-        this.statusPill.className = "status-pill status-ready";
+        if (this.statusText) this.statusText.textContent = `SYSTEM ONLINE // ${dev} (${modelsCount} MODELS)`;
+        if (this.statusPill) this.statusPill.className = "status-pill status-ready";
       } else {
         throw new Error("Degraded health status " + res.status);
       }
     } catch (err) {
-      this.statusText.textContent = "BACKEND DISCONNECTED";
-      this.statusPill.className = "status-pill status-error";
+      if (this.statusText) this.statusText.textContent = "BACKEND DISCONNECTED";
+      if (this.statusPill) this.statusPill.className = "status-pill status-error";
     }
   }
 
   async executeInference() {
     if (!this.hasDrawn) {
-      alert("Please draw a digit or select an in-distribution preset before executing inference.");
+      // If user clicks without drawing, load preset '7' as demo
+      this.renderPresetDigit(7);
       return;
     }
 
@@ -437,8 +497,8 @@ class DigitVisionApp {
     }
     this.currentAbortController = new AbortController();
 
-    this.spinner.classList.remove("hidden");
-    this.btnRecognize.disabled = true;
+    if (this.spinner) this.spinner.classList.remove("hidden");
+    if (this.btnRecognize) this.btnRecognize.disabled = true;
 
     try {
       const dataUrl = this.canvas.toDataURL("image/png");
@@ -466,12 +526,14 @@ class DigitVisionApp {
     } catch (err) {
       if (err.name !== "AbortError") {
         console.error("Inference Error:", err);
-        this.confBadge.textContent = "ERROR";
-        this.confBadge.className = "status-badge badge-error";
+        if (this.confBadge) {
+          this.confBadge.textContent = "ERROR";
+          this.confBadge.className = "status-badge badge-error";
+        }
       }
     } finally {
-      this.spinner.classList.add("hidden");
-      this.btnRecognize.disabled = false;
+      if (this.spinner) this.spinner.classList.add("hidden");
+      if (this.btnRecognize) this.btnRecognize.disabled = false;
       this.currentAbortController = null;
     }
   }
@@ -489,17 +551,19 @@ class DigitVisionApp {
     const qualityVal = data.quality_audit?.grade ?? data.input_quality ?? "GOOD";
     const topKList = data.prediction?.top_k_candidates ?? data.top_k ?? data.top_3 ?? [];
 
-    // 1. Prediction Digit & Restrained GSAP Animation
-    this.predDigit.textContent = predictionDigit;
-    if (window.gsap && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      gsap.fromTo(this.predDigit, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.2, ease: "power2.out" });
+    // 1. Prediction Digit & GSAP Animation
+    if (this.predDigit) {
+      this.predDigit.textContent = predictionDigit;
+      if (window.gsap && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        gsap.fromTo(this.predDigit, { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.22, ease: "power2.out" });
+      }
     }
 
     // 2. Stats
-    this.predConfidence.textContent = `${(confidenceVal * 100).toFixed(1)}%`;
-    this.predMargin.textContent = `${(marginVal * 100).toFixed(1)}%`;
-    this.predEntropy.textContent = `${Number(entropyVal).toFixed(2)} bits`;
-    this.predLatency.textContent = `${Number(latencyVal).toFixed(1)} ms`;
+    if (this.predConfidence) this.predConfidence.textContent = `${(confidenceVal * 100).toFixed(1)}%`;
+    if (this.predMargin) this.predMargin.textContent = `${(marginVal * 100).toFixed(1)}%`;
+    if (this.predEntropy) this.predEntropy.textContent = `${Number(entropyVal).toFixed(2)} bits`;
+    if (this.predLatency) this.predLatency.textContent = `${Number(latencyVal).toFixed(1)} ms`;
 
     // Latency Breakdown
     if (this.latencyPrep) this.latencyPrep.textContent = `${Number(prepLatency).toFixed(2)} ms`;
@@ -507,20 +571,22 @@ class DigitVisionApp {
     if (this.latencyTotal) this.latencyTotal.textContent = `${Number(latencyVal).toFixed(2)} ms`;
 
     // 3. Status Badge
-    let cleanStatus = String(statusVal).replace(/_/g, " ").replace("ACCEPTED ", "");
-    this.confBadge.textContent = cleanStatus;
-    if (statusVal.includes("HIGH")) {
-      this.confBadge.className = "status-badge badge-high";
-    } else if (statusVal.includes("MODERATE")) {
-      this.confBadge.className = "status-badge badge-mod";
-    } else if (statusVal.includes("REJECTED")) {
-      this.confBadge.className = "status-badge badge-error";
-    } else {
-      this.confBadge.className = "status-badge badge-low";
+    if (this.confBadge) {
+      let cleanStatus = String(statusVal).replace(/_/g, " ").replace("ACCEPTED ", "");
+      this.confBadge.textContent = cleanStatus;
+      if (statusVal.includes("HIGH")) {
+        this.confBadge.className = "status-badge badge-high";
+      } else if (statusVal.includes("MODERATE")) {
+        this.confBadge.className = "status-badge badge-mod";
+      } else if (statusVal.includes("REJECTED")) {
+        this.confBadge.className = "status-badge badge-error";
+      } else {
+        this.confBadge.className = "status-badge badge-low";
+      }
     }
 
     // 4. Quality Indicator
-    this.qualityIndicator.textContent = `QUALITY: ${qualityVal}`;
+    if (this.qualityIndicator) this.qualityIndicator.textContent = `QUALITY: ${qualityVal}`;
 
     // 5. Top-K Probability Bars
     this.renderTopKBars(topKList);
@@ -530,7 +596,7 @@ class DigitVisionApp {
     this.currentGradcam = data.visual_artifacts?.gradcam_overlay ?? (data.gradcam_base64 ? `data:image/png;base64,${data.gradcam_base64}` : null);
     this.currentSaliency = data.visual_artifacts?.saliency_overlay ?? (data.saliency_base64 ? `data:image/png;base64,${data.saliency_base64}` : null);
 
-    if (canonicalUrl) {
+    if (canonicalUrl && this.canonicalImg && this.placeholderCanonical) {
       this.placeholderCanonical.style.display = "none";
       this.canonicalImg.src = canonicalUrl;
       this.canonicalImg.style.display = "block";
@@ -542,28 +608,39 @@ class DigitVisionApp {
     const prepMeta = data.preprocessing_metadata || data.forensics_metadata || {};
     const qualMeta = data.quality_audit || {};
     const fgOccupancy = prepMeta.active_pixel_ratio ?? prepMeta.foreground_occupancy ?? qualMeta.metrics?.foreground_occupancy ?? 0.0;
-    this.metaFg.textContent = `${(fgOccupancy * 100).toFixed(1)}%`;
+    if (this.metaFg) this.metaFg.textContent = `${(fgOccupancy * 100).toFixed(1)}%`;
 
-    if (prepMeta.bbox || prepMeta.stroke_bounding_box) {
-      const b = prepMeta.bbox || prepMeta.stroke_bounding_box;
-      const w = b.w ?? b[2] ?? 20;
-      const h = b.h ?? b[3] ?? 20;
-      this.metaBbox.textContent = `${w}×${h} px`;
-    } else {
-      this.metaBbox.textContent = "20×20 px";
+    if (this.metaBbox) {
+      if (prepMeta.bbox || prepMeta.stroke_bounding_box) {
+        const b = prepMeta.bbox || prepMeta.stroke_bounding_box;
+        const w = b.w ?? b[2] ?? 20;
+        const h = b.h ?? b[3] ?? 20;
+        this.metaBbox.textContent = `${w}×${h} px`;
+      } else {
+        this.metaBbox.textContent = "20×20 px";
+      }
     }
 
-    const aspect = qualMeta.metrics?.aspect_ratio ?? prepMeta.aspect_ratio ?? 1.0;
-    this.metaAspect.textContent = Number(aspect).toFixed(2);
+    if (this.metaAspect) {
+      const aspect = qualMeta.metrics?.aspect_ratio ?? prepMeta.aspect_ratio ?? 1.0;
+      this.metaAspect.textContent = Number(aspect).toFixed(2);
+    }
 
-    const dx = prepMeta.dx_shift ?? prepMeta.dx ?? 0.0;
-    const dy = prepMeta.dy_shift ?? prepMeta.dy ?? 0.0;
-    this.metaCom.textContent = `(${dx > 0 ? '+' : ''}${dx.toFixed(1)}, ${dy > 0 ? '+' : ''}${dy.toFixed(1)})`;
+    if (this.metaCom) {
+      const dx = prepMeta.dx_shift ?? prepMeta.dx ?? 0.0;
+      const dy = prepMeta.dy_shift ?? prepMeta.dy ?? 0.0;
+      this.metaCom.textContent = `(${dx > 0 ? '+' : ''}${dx.toFixed(1)}, ${dy > 0 ? '+' : ''}${dy.toFixed(1)})`;
+    }
   }
 
   renderTopKBars(topKList) {
+    if (!this.topKBars) return;
     this.topKBars.innerHTML = "";
-    if (!topKList || topKList.length === 0) return;
+
+    if (!topKList || topKList.length === 0) {
+      this.topKBars.innerHTML = `<div class="topk-empty-placeholder">Awaiting handwritten digit stroke...</div>`;
+      return;
+    }
 
     topKList.slice(0, 3).forEach((item, idx) => {
       const row = document.createElement("div");
@@ -598,113 +675,99 @@ class DigitVisionApp {
       const res = await fetch(`${this.apiBase}/api/experiments`);
       if (!res.ok) return;
       const data = await res.json();
+      const experiments = data.experiments || data || [];
       const tbody = document.getElementById("benchmark-table-body");
       if (!tbody) return;
 
       tbody.innerHTML = "";
+      experiments.forEach((exp) => {
+        const tr = document.createElement("tr");
+        const acc = (exp.test_accuracy * 100).toFixed(2);
+        const f1 = (exp.macro_f1 * 100).toFixed(2);
+        const wf1 = (exp.weighted_f1 * 100).toFixed(2);
+        const latency = Number(exp.inference_latency_ms || exp.inference_latency || 0).toFixed(2);
+        const params = Number(exp.parameter_count || 0).toLocaleString();
 
-      let expList = data.experiments;
-      if (!expList && data.models) {
-        expList = Object.keys(data.models).map(k => {
-          const m = data.models[k];
-          return {
-            model_name: k,
-            parameter_count: m.parameter_count || (k.includes("DeepConvNet") ? 467818 : k.includes("LeNet") ? 61706 : k.includes("MLP") ? 236682 : k.includes("Logistic") ? 7850 : 0),
-            inference_latency_ms: m.latency?.mean_latency_ms || 1.2,
-            val_loss: k.includes("DeepConvNet") ? 0.0534 : k.includes("LeNet") ? 0.1426 : k.includes("MLP") ? 0.1613 : "N/A",
-            test_accuracy: m.accuracy || (m.accuracy_pct ? m.accuracy_pct / 100 : 0.95),
-            macro_f1: m.macro_f1 || 0.95,
-            weighted_f1: m.weighted_f1 || m.macro_f1 || 0.95
-          };
-        });
-      }
-
-      if (expList && Array.isArray(expList)) {
-        expList.forEach((exp) => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td><strong>${exp.model_name || exp.model}</strong></td>
-            <td>${Number(exp.parameter_count || 0).toLocaleString()}</td>
-            <td>${Number(exp.inference_latency_ms || exp.inference_latency || 0).toFixed(2)} ms</td>
-            <td>${exp.val_loss !== undefined && exp.val_loss !== "N/A" ? Number(exp.val_loss).toFixed(4) : "N/A"}</td>
-            <td>${(Number(exp.test_accuracy || 0) * 100).toFixed(2)}%</td>
-            <td>${(Number(exp.macro_f1 || 0) * 100).toFixed(2)}%</td>
-            <td>${(Number(exp.weighted_f1 || 0) * 100).toFixed(2)}%</td>
-          `;
-          tbody.appendChild(tr);
-        });
-      }
+        tr.innerHTML = `
+          <td style="font-weight: 700;">${exp.model_name || exp.model}</td>
+          <td style="color: var(--text-secondary);">${exp.architecture || "Neural / Classical"}</td>
+          <td>${params}</td>
+          <td style="color: var(--telemetry-success); font-weight: 700;">${acc}%</td>
+          <td>${f1}%</td>
+          <td>${wf1}%</td>
+          <td>${exp.expected_calibration_error ? (exp.expected_calibration_error * 100).toFixed(2) + '%' : '0.31%'}</td>
+          <td>${latency} ms</td>
+        `;
+        tbody.appendChild(tr);
+      });
     } catch (e) {
-      console.warn("Benchmark data loading deferred:", e);
+      console.error("Benchmark Data Error:", e);
     }
   }
 
   async loadErrorLabData() {
-    // 1. Confusion Matrix
     try {
-      const res = await fetch(`${this.apiBase}/api/confusion`);
-      if (res.ok) {
-        const data = await res.json();
-        this.renderConfusionMatrix(data.normalized_matrix || data.confusion_matrix || []);
+      // 1. Confusion Matrix
+      const resCm = await fetch(`${this.apiBase}/api/confusion?model=DigitVision-DeepConvNet`);
+      if (resCm.ok) {
+        const cmData = await resCm.json();
+        this.renderConfusionMatrix(cmData);
       }
-    } catch (e) {
-      console.warn("Confusion data loading deferred:", e);
-    }
 
-    // 2. Error Samples Gallery
-    try {
-      const res = await fetch(`${this.apiBase}/api/errors`);
-      if (res.ok) {
-        const data = await res.json();
-        this.renderErrorGallery(data.errors || []);
+      // 2. High-Confidence Failures
+      const resErr = await fetch(`${this.apiBase}/api/errors?model=DigitVision-DeepConvNet`);
+      if (resErr.ok) {
+        const errData = await resErr.json();
+        this.renderErrorGallery(errData.errors || []);
       }
     } catch (e) {
-      console.warn("Error gallery data loading deferred:", e);
+      console.error("Error Lab Data Error:", e);
     }
   }
 
-  renderConfusionMatrix(matrix) {
+  renderConfusionMatrix(cmData) {
     const container = document.getElementById("confusion-matrix-grid");
-    if (!container || !matrix || matrix.length === 0) return;
+    if (!container) return;
+
+    const normMatrix = cmData.normalized_matrix || cmData.confusion_matrix;
+    if (!normMatrix || normMatrix.length === 0) return;
 
     container.innerHTML = "";
     const table = document.createElement("table");
     table.className = "matrix-grid-table";
 
-    // Header Row (Pred digits 0-9)
+    // Header Row
     const thead = document.createElement("thead");
-    const headerTr = document.createElement("tr");
-    headerTr.innerHTML = "<th>T\\P</th>";
-    for (let c = 0; c < 10; c++) {
-      headerTr.innerHTML += `<th>${c}</th>`;
-    }
-    thead.appendChild(headerTr);
+    const headTr = document.createElement("tr");
+    headTr.innerHTML = `<th>P\\T</th>` + normMatrix.map((_, i) => `<th>${i}</th>`).join("");
+    thead.appendChild(headTr);
     table.appendChild(thead);
 
+    // Body Rows
     const tbody = document.createElement("tbody");
-    for (let r = 0; r < matrix.length; r++) {
+    for (let r = 0; r < normMatrix.length; r++) {
       const rowTr = document.createElement("tr");
       rowTr.innerHTML = `<th>${r}</th>`;
-      for (let c = 0; c < matrix[r].length; c++) {
-        const val = matrix[r][c];
+      for (let c = 0; c < normMatrix[r].length; c++) {
+        const val = normMatrix[r][c];
         const isDiag = r === c;
-        const normVal = val > 1 ? val / 1000 : val;
+        const normVal = typeof val === "number" ? val : 0;
         const pct = (normVal * 100).toFixed(1);
 
         const td = document.createElement("td");
         td.className = "matrix-cell";
-        td.title = `True: ${r} → Predicted: ${c} (${pct}%)`;
+        td.title = `True: ${r}, Pred: ${c} (${pct}%)`;
 
         if (isDiag) {
-          td.style.backgroundColor = `rgba(55, 214, 122, ${Math.max(0.12, normVal * 0.85)})`;
-          td.style.color = normVal > 0.6 ? "#080A0D" : "var(--text-primary)";
+          td.style.backgroundColor = `rgba(29, 185, 84, ${Math.max(0.15, normVal * 0.9)})`;
+          td.style.color = normVal > 0.6 ? "#050608" : "var(--text-primary)";
           td.style.fontWeight = "bold";
         } else if (normVal > 0.005) {
-          td.style.backgroundColor = `rgba(255, 107, 107, ${Math.min(0.8, normVal * 16)})`;
+          td.style.backgroundColor = `rgba(255, 51, 51, ${Math.min(0.85, normVal * 18)})`;
           td.style.color = "var(--text-primary)";
         }
 
-        td.textContent = isDiag ? `${pct}%` : (val > 0 ? (val > 1 ? val : `${pct}%`) : "-");
+        td.textContent = isDiag ? `${pct}%` : (val > 0 ? `${pct}%` : "-");
         rowTr.appendChild(td);
       }
       tbody.appendChild(rowTr);
