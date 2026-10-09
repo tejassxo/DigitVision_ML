@@ -1,7 +1,6 @@
 {
   "include": [
     "src",
-    "app",
     "tests",
     "experiments",
     "main.py",
@@ -12,9 +11,14 @@
     ".",
     "src",
     "C:/Users/tejas/AppData/Local/Packages/PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0/LocalCache/local-packages/Python313/site-packages",
-    "C:/Users/tejas/AppData/Roaming/Python/Python313/site-packages",
-    "c:/Users/tejas/venv/Lib/site-packages"
+    "C:/Program Files/WindowsApps/PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0/Lib/site-packages",
+    "C:/Program Files/WindowsApps/PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0/Lib",
+    "C:/Users/tejas/AppData/Roaming/Python/Python313/site-packages"
   ],
-  "reportMissingImports": "none",
+  "pythonPath": "C:/Program Files/WindowsApps/PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0/python.exe",
+  "pythonVersion": "3.13",
+  "pythonPlatform": "Windows",
+  "reportMissingImports": false,
+  "reportMissingModuleSource": false,
   "reportMissingTypeStubs": false
 }

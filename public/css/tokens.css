@@ -1,11 +1,11 @@
 /* ==========================================================================
    DIGITVISION AI — APPLE PRO & COLOR PALETTE DESIGN TOKENS
-   Cupertino Precision · Achromatic & Chromatic Depth · Zero Clutter
+   Cupertino Precision · Strict Light / Dark Separation · Defense-Grade Precision
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
-/* ---------------- Master Default Tokens ---------------- */
+/* ---------------- Master Default Geometry & Fonts ---------------- */
 :root {
   --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "Inter", sans-serif;
   --font-mono: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
@@ -21,7 +21,9 @@
   --radius-pill: 9999px;
 }
 
-/* ---------------- Dark Mode Defaults (OLED Depth) ---------------- */
+/* ==========================================================================
+   1. DARK MODE TOKENS (Default / OLED Depth)
+   ========================================================================== */
 :root,
 [data-mode="dark"] {
   --bg-void: #050608;
@@ -61,24 +63,26 @@
   --shadow-glow: 0 0 20px rgba(29, 185, 84, 0.25);
 }
 
-/* ---------------- Apple Pro Light Mode (Clean Cupertino) ---------------- */
+/* ==========================================================================
+   2. LIGHT MODE TOKENS (Apple Cupertino Light)
+   ========================================================================== */
 [data-mode="light"] {
-  --bg-void: #f5f5f7;
-  --bg-ground: #ffffff;
-  --bg-surface-1: #ffffff;
-  --bg-surface-2: #f2f2f7;
-  --bg-surface-inset: #e5e5ea;
-  --bg-glass: rgba(255, 255, 255, 0.88);
+  --bg-void: #f5f5f7 !important;
+  --bg-ground: #ffffff !important;
+  --bg-surface-1: #ffffff !important;
+  --bg-surface-2: #f2f2f7 !important;
+  --bg-surface-inset: #e5e5ea !important;
+  --bg-glass: rgba(255, 255, 255, 0.88) !important;
 
-  --border-subtle: rgba(0, 0, 0, 0.06);
-  --border-hairline: rgba(0, 0, 0, 0.12);
-  --border-hover: rgba(0, 0, 0, 0.28);
-  --border-focus: #0071e3;
+  --border-subtle: rgba(0, 0, 0, 0.06) !important;
+  --border-hairline: rgba(0, 0, 0, 0.12) !important;
+  --border-hover: rgba(0, 0, 0, 0.28) !important;
+  --border-focus: #0071e3 !important;
 
-  --text-primary: #1d1d1f;
-  --text-secondary: #6e6e73;
-  --text-muted: #86868b;
-  --text-disabled: #aeaeb2;
+  --text-primary: #1d1d1f !important;
+  --text-secondary: #515154 !important;
+  --text-muted: #86868b !important;
+  --text-disabled: #aeaeb2 !important;
 
   --accent-interactive: #0071e3;
   --accent-interactive-contrast: #ffffff;
@@ -95,18 +99,17 @@
   --status-low-conf: #ff3b30;
   --status-alert: #ff3b30;
 
-  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
-  --shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+  --shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.08) !important;
   --shadow-glow: 0 0 20px rgba(0, 113, 227, 0.20);
 }
 
 /* ==========================================================================
-   COLOR PALETTES — DARK MODE TINTS
+   3. COLOR PALETTES — DARK MODE
    ========================================================================== */
 
 /* Palette 1: Studio Obsidian (Dark) */
-[data-mode="dark"][data-palette="studio-obsidian"],
-:root[data-palette="studio-obsidian"] {
+[data-mode="dark"][data-palette="studio-obsidian"] {
   --bg-void: #050608;
   --bg-ground: #0a0c0e;
   --bg-surface-1: #101216;
@@ -226,71 +229,71 @@
 }
 
 /* ==========================================================================
-   COLOR PALETTES — LIGHT MODE ACCENTS
+   4. COLOR PALETTES — LIGHT MODE (ACCENTS ONLY, SURFACES REMAIN BRIGHT)
    ========================================================================== */
 
 /* Palette 1: Studio Obsidian (Light - Emerald Accent) */
 [data-mode="light"][data-palette="studio-obsidian"] {
-  --accent-interactive: #109c42;
-  --accent-interactive-contrast: #ffffff;
-  --accent-primary: #109c42;
-  --accent-muted: rgba(16, 156, 66, 0.12);
-  --accent-hairline: rgba(16, 156, 66, 0.30);
-  --border-focus: #109c42;
-  --shadow-glow: 0 0 20px rgba(16, 156, 66, 0.20);
+  --accent-interactive: #109c42 !important;
+  --accent-interactive-contrast: #ffffff !important;
+  --accent-primary: #109c42 !important;
+  --accent-muted: rgba(16, 156, 66, 0.12) !important;
+  --accent-hairline: rgba(16, 156, 66, 0.30) !important;
+  --border-focus: #109c42 !important;
+  --shadow-glow: 0 0 20px rgba(16, 156, 66, 0.20) !important;
 }
 
 /* Palette 2: Cyber Azure (Light - Apple Pro Blue) */
 [data-mode="light"][data-palette="cyber-azure"] {
-  --accent-interactive: #0071e3;
-  --accent-interactive-contrast: #ffffff;
-  --accent-primary: #0071e3;
-  --accent-muted: rgba(0, 113, 227, 0.12);
-  --accent-hairline: rgba(0, 113, 227, 0.30);
-  --border-focus: #0071e3;
-  --shadow-glow: 0 0 20px rgba(0, 113, 227, 0.20);
+  --accent-interactive: #0071e3 !important;
+  --accent-interactive-contrast: #ffffff !important;
+  --accent-primary: #0071e3 !important;
+  --accent-muted: rgba(0, 113, 227, 0.12) !important;
+  --accent-hairline: rgba(0, 113, 227, 0.30) !important;
+  --border-focus: #0071e3 !important;
+  --shadow-glow: 0 0 20px rgba(0, 113, 227, 0.20) !important;
 }
 
 /* Palette 3: Electric Violet (Light - Purple) */
 [data-mode="light"][data-palette="electric-violet"] {
-  --accent-interactive: #9333ea;
-  --accent-interactive-contrast: #ffffff;
-  --accent-primary: #9333ea;
-  --accent-muted: rgba(147, 51, 234, 0.12);
-  --accent-hairline: rgba(147, 51, 234, 0.30);
-  --border-focus: #9333ea;
-  --shadow-glow: 0 0 20px rgba(147, 51, 234, 0.20);
+  --accent-interactive: #9333ea !important;
+  --accent-interactive-contrast: #ffffff !important;
+  --accent-primary: #9333ea !important;
+  --accent-muted: rgba(147, 51, 234, 0.12) !important;
+  --accent-hairline: rgba(147, 51, 234, 0.30) !important;
+  --border-focus: #9333ea !important;
+  --shadow-glow: 0 0 20px rgba(147, 51, 234, 0.20) !important;
 }
 
 /* Palette 4: Tactical Aviation (Light - Amber) */
 [data-mode="light"][data-palette="tactical-aviation"] {
-  --accent-interactive: #d97706;
-  --accent-interactive-contrast: #ffffff;
-  --accent-primary: #d97706;
-  --accent-muted: rgba(217, 119, 6, 0.12);
-  --accent-hairline: rgba(217, 119, 6, 0.30);
-  --border-focus: #d97706;
-  --shadow-glow: 0 0 20px rgba(217, 119, 6, 0.20);
+  --accent-interactive: #d97706 !important;
+  --accent-interactive-contrast: #ffffff !important;
+  --accent-primary: #d97706 !important;
+  --accent-muted: rgba(217, 119, 6, 0.12) !important;
+  --accent-hairline: rgba(217, 119, 6, 0.30) !important;
+  --border-focus: #d97706 !important;
+  --shadow-glow: 0 0 20px rgba(217, 119, 6, 0.20) !important;
 }
 
 /* Palette 5: Zinc Neutral (Light - Deep Zinc) */
 [data-mode="light"][data-palette="zinc-neutral"] {
-  --accent-interactive: #18181b;
-  --accent-interactive-contrast: #ffffff;
-  --accent-primary: #18181b;
-  --accent-muted: rgba(24, 24, 27, 0.10);
-  --accent-hairline: rgba(24, 24, 27, 0.25);
-  --border-focus: #18181b;
-  --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.10);
+  --accent-interactive: #18181b !important;
+  --accent-interactive-contrast: #ffffff !important;
+  --accent-primary: #18181b !important;
+  --accent-muted: rgba(24, 24, 27, 0.10) !important;
+  --accent-hairline: rgba(24, 24, 27, 0.25) !important;
+  --border-focus: #18181b !important;
+  --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.10) !important;
 }
 
 /* Palette 6: Titanium Minimalist (Light - Graphite) */
 [data-mode="light"][data-palette="titanium-minimalist"] {
-  --accent-interactive: #374151;
-  --accent-interactive-contrast: #ffffff;
-  --accent-primary: #374151;
-  --accent-muted: rgba(55, 65, 81, 0.10);
-  --accent-hairline: rgba(55, 65, 81, 0.25);
-  --border-focus: #374151;
-  --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.10);
+  --accent-interactive: #374151 !important;
+  --accent-interactive-contrast: #ffffff !important;
+  --accent-primary: #374151 !important;
+  --accent-muted: rgba(55, 65, 81, 0.10) !important;
+  --accent-hairline: rgba(55, 65, 81, 0.25) !important;
+  --border-focus: #374151 !important;
+  --shadow-glow: 0 0 20px rgba(0, 0, 0, 0.10) !important;
 }
