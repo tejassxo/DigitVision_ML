@@ -1,0 +1,186 @@
+/* ==========================================================================
+   DIGITVISION AI — CARBON MONOCHROME & APPLE PRO DESIGN SYSTEM
+   Banned: Gradients, Neons, AI SaaS Purples, Glow Effects, Saturated Blues.
+   Surface Invariant: Pure Achromatic Steps (0% Hue Saturation).
+   ========================================================================== */
+
+:root {
+  /* ---------------- Apple Pro Light (Titanium & Crisp White) ---------------- */
+  --bg-void: #f5f5f7;
+  --bg-ground: #ffffff;
+  --bg-surface-1: #ffffff;
+  --bg-surface-2: #f2f2f7;
+  --bg-surface-inset: #e5e5ea;
+
+  --border-subtle: #e5e5ea;
+  --border-hairline: #d1d1d6;
+  --border-hover: #8e8e93;
+  --border-focus: #1d1d1f;
+
+  --text-primary: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --text-muted: #86868b;
+  --text-disabled: #aeaeb2;
+
+  --accent-interactive: #000000;
+  --accent-interactive-contrast: #ffffff;
+  --accent-hairline: #1d1d1f;
+  --accent-primary: #1d1d1f;
+  --accent-muted: rgba(0, 0, 0, 0.06);
+  --accent-contrast: #ffffff;
+
+  /* Tactical & Scientific Indicators (Functional only - no large background fills) */
+  --telemetry-success: #1db954;
+  --telemetry-amber: #d97706;
+  --telemetry-alert: #ff3333;
+
+  --status-high-conf: #1db954;
+  --status-mod-conf: #d97706;
+  --status-low-conf: #ff3333;
+  --status-alert: #ff3333;
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "Menlo", monospace;
+
+  /* Structural Geometry */
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-card: 8px;
+  --radius-control: 6px;
+  --radius-pill: 12px;
+  --hairline: 1px solid var(--border-hairline);
+  --shadow-neutral: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-card: none;
+  --shadow-modal: 0 16px 32px rgba(0, 0, 0, 0.08), 0 0 0 1px var(--border-hairline);
+}
+
+/* ---------------- Master Apple Pro Dark / Deep Obsidian (Default) ---------------- */
+[data-mode="dark"] {
+  --bg-void: #050505;          /* OLED Void Canvas */
+  --bg-ground: #0a0a0a;        /* Section Ground */
+  --bg-surface-1: #121212;      /* Elevated Card Surface */
+  --bg-surface-2: #1a1a1a;      /* Active / Modal Surface */
+  --bg-surface-inset: #0e0e0e;  /* Recessed Terminal Well */
+
+  --border-subtle: #1f1f1f;
+  --border-hairline: #262626;
+  --border-hover: #404040;
+  --border-focus: #737373;
+
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  --text-muted: #737373;
+  --text-disabled: #404040;
+
+  --accent-interactive: #ffffff;
+  --accent-interactive-contrast: #000000;
+  --accent-hairline: #ffffff;
+  --accent-primary: #ffffff;
+  --accent-muted: rgba(255, 255, 255, 0.08);
+  --accent-contrast: #000000;
+
+  --telemetry-success: #1db954;
+  --telemetry-amber: #ffb000;
+  --telemetry-alert: #ff3333;
+
+  --status-high-conf: #1db954;
+  --status-mod-conf: #ffb000;
+  --status-low-conf: #ff3333;
+  --status-alert: #ff3333;
+
+  --shadow-neutral: 0 16px 32px rgba(0, 0, 0, 0.8), 0 0 0 1px #262626;
+  --shadow-card: none;
+  --shadow-modal: 0 16px 32px rgba(0, 0, 0, 0.8), 0 0 0 1px #262626;
+}
+
+/* ==========================================================================
+   THE 4 BATTLE-TESTED ELITE DARK PALETTES (Strictly No Neons / No Gradients)
+   ========================================================================== */
+
+/* Palette 1: Zinc Neutral (Linear / Vercel Standard) */
+[data-palette="zinc-neutral"] {
+  --bg-void: #09090b;
+  --bg-ground: #121215;
+  --bg-surface-1: #18181b;
+  --bg-surface-2: #27272a;
+  --bg-surface-inset: #111114;
+  --border-subtle: #1f1f23;
+  --border-hairline: #27272a;
+  --border-hover: #3f3f46;
+  --border-focus: #a1a1aa;
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
+  --accent-interactive: #ffffff;
+  --accent-interactive-contrast: #000000;
+  --accent-primary: #ffffff;
+  --accent-muted: rgba(255, 255, 255, 0.08);
+  --accent-hairline: #3f3f46;
+}
+
+/* Palette 2: Studio Obsidian (Deepest OLED + Spotify Emerald Indicator - Default) */
+[data-palette="studio-obsidian"] {
+  --bg-void: #050505;
+  --bg-ground: #0a0a0a;
+  --bg-surface-1: #121212;
+  --bg-surface-2: #1e1e1e;
+  --bg-surface-inset: #0e0e0e;
+  --border-subtle: #1a1a1a;
+  --border-hairline: #242424;
+  --border-hover: #404040;
+  --border-focus: #737373;
+  --text-primary: #ffffff;
+  --text-secondary: #b3b3b3;
+  --text-muted: #737373;
+  --accent-interactive: #1db954;
+  --accent-interactive-contrast: #000000;
+  --accent-primary: #1db954;
+  --accent-muted: rgba(29, 185, 84, 0.12);
+  --accent-hairline: rgba(29, 185, 84, 0.28);
+}
+
+/* Palette 3: Tactical Aviation (Defense / Bloomberg Charcoal + Monospace Amber) */
+[data-palette="tactical-aviation"] {
+  --bg-void: #0b0d0e;
+  --bg-ground: #0f1214;
+  --bg-surface-1: #13171a;
+  --bg-surface-2: #1b2126;
+  --bg-surface-inset: #0d1012;
+  --border-subtle: #1a2025;
+  --border-hairline: #262f36;
+  --border-hover: #3b4752;
+  --border-focus: #d97706;
+  --text-primary: #ededed;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent-interactive: #d97706;
+  --accent-interactive-contrast: #000000;
+  --accent-primary: #d97706;
+  --accent-muted: rgba(217, 119, 6, 0.14);
+  --accent-hairline: rgba(217, 119, 6, 0.3);
+}
+
+/* Palette 4: Titanium Minimalist (Leica / Hardware Precision Warm Achromatic) */
+[data-palette="titanium-minimalist"] {
+  --bg-void: #0c0c0c;
+  --bg-ground: #111111;
+  --bg-surface-1: #161616;
+  --bg-surface-2: #222222;
+  --bg-surface-inset: #0e0e0e;
+  --border-subtle: #1f1f1f;
+  --border-hairline: #2e2e2e;
+  --border-hover: #4a4a4a;
+  --border-focus: #e5e5e5;
+  --text-primary: #f2f2f2;
+  --text-secondary: #a8a8a8;
+  --text-muted: #6e6e6e;
+  --accent-interactive: #e5e5e5;
+  --accent-interactive-contrast: #121212;
+  --accent-primary: #e5e5e5;
+  --accent-muted: rgba(229, 229, 229, 0.1);
+  --accent-hairline: #4a4a4a;
+}

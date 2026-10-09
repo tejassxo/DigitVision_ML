@@ -1,0 +1,20 @@
+{
+  "include": [
+    "src",
+    "app",
+    "tests",
+    "experiments",
+    "main.py",
+    "run_app.py",
+    "verify_all.py"
+  ],
+  "extraPaths": [
+    ".",
+    "src",
+    "C:/Users/tejas/AppData/Local/Packages/PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0/LocalCache/local-packages/Python313/site-packages",
+    "C:/Users/tejas/AppData/Roaming/Python/Python313/site-packages",
+    "c:/Users/tejas/venv/Lib/site-packages"
+  ],
+  "reportMissingImports": "none",
+  "reportMissingTypeStubs": false
+}

@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: digitvision-ai-workstation
+    env: python
+    region: oregon
+    plan: starter
+    buildCommand: "pip install --upgrade pip && pip install -r requirements.txt"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 1"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.12
+      - key: ENVIRONMENT
+        value: production
+      - key: MODEL_REGISTRY_PATH
+        value: "experiments/models/digitvision_convnet.keras"
+      - key: CORS_ORIGINS
+        value: "*"
+    healthCheckPath: /api/health
