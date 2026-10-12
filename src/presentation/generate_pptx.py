@@ -176,7 +176,7 @@ def build_full_20_slide_presentation(output_path: str = "src/presentation/DigitV
     sbf1 = sb1.text_frame
     sbf1.word_wrap = True
     sp0 = sbf1.paragraphs[0]
-    sp0.text = "STUDENT TEAM: 22VE1A6701, 22VE1A6702, 22VE1A6703, 22VE1A6704  •  SREYAS INSTITUTE OF ENGINEERING & TECHNOLOGY"
+    sp0.text = "STUDENT TEAM: 24VE1A6695 (M TEJAS YADAV), 24VE1A6692 (K Charan Teja), 24VE1A66C8 (Y Akshay Raj)  •  SREYAS INSTITUTE OF ENGINEERING & TECHNOLOGY"
     sp0.font.name = "Consolas"
     sp0.font.size = Pt(10)
     sp0.font.bold = True
@@ -1129,11 +1129,191 @@ def build_full_20_slide_presentation(output_path: str = "src/presentation/DigitV
         "strong_answer": "My top priority would be deploying the model to on-device WebAssembly via ONNX Runtime to eliminate server latency, followed by implementing Monte Carlo Dropout to explicitly disentangle data noise (aleatoric uncertainty) from model parameter ignorance (epistemic uncertainty)."
     })
 
+    # =========================================================================
+    # SLIDE 21: COURSE OUTCOMES (CO1–CO6) EVIDENCE & ATTAINMENT MATRIX
+    # =========================================================================
+    s21 = prs.slides.add_slide(blank_layout)
+    set_slide_background(s21, COLOR_VOID)
+    add_header(s21, "Course Outcomes (CO1–CO6) Alignment & Project Evidence", "21. Academic Course Outcomes (CO) Audit")
+
+    # Card Left: CO1, CO2, CO3
+    add_card(s21, 0.8, 1.5, 5.7, 5.3, title="CO1, CO2, CO3 — Foundations & Supervised Learning")
+    tb21_l = s21.shapes.add_textbox(Inches(1.0), Inches(2.0), Inches(5.3), Inches(4.6))
+    tf21_l = tb21_l.text_frame
+    tf21_l.word_wrap = True
+
+    co_items_left = [
+        ("CO1 (L3) · Central Tendency & Dispersion",
+         "μ = 0.1307, σ = 0.3081 across 70,000 image tensors; per-class counts and background sparsity (>80%).\nEvidence: src/data/dataset.py, src/data/eda.py\nStatus: Fully Demonstrated [Pending Faculty CIE Assessment]",
+         COLOR_ACCENT_GREEN),
+        ("CO2 (L3) · Scientific Python & EDA",
+         "NumPy 784-D arrays, SciPy spatial metrics, Pandas data dictionaries, Matplotlib & Seaborn plots.\nEvidence: 5 publication EDA figures (10×10 grid, bimodal histograms, stroke spines).\nStatus: Fully Demonstrated [Pending Faculty CIE Assessment]",
+         COLOR_ACCENT_GREEN),
+        ("CO3 (L4) · Supervised Learning Algorithms",
+         "L2 Multinomial Logistic Regression (91.49%) and Random Forest (95.48%) classical baselines.\nRationale: Linear Reg & KNN omitted (discrete 10-class task; latency <10 ms requirement).\nStatus: Substantially Demonstrated [Pending Faculty CIE Assessment]",
+         COLOR_ACCENT_AMBER)
+    ]
+
+    for item_title, item_desc, item_color in co_items_left:
+        p_t = tf21_l.add_paragraph() if tf21_l.paragraphs[0].text else tf21_l.paragraphs[0]
+        p_t.text = item_title.upper()
+        p_t.font.name = "Consolas"
+        p_t.font.size = Pt(10)
+        p_t.font.bold = True
+        p_t.font.color.rgb = item_color
+        p_d = tf21_l.add_paragraph()
+        p_d.text = item_desc + "\n"
+        p_d.font.name = "Segoe UI"
+        p_d.font.size = Pt(8.5)
+        p_d.font.color.rgb = COLOR_TEXT_MUTED
+
+    # Card Right: CO4, CO5, CO6
+    add_card(s21, 6.8, 1.5, 5.7, 5.3, title="CO4, CO5, CO6 — Tuning, Unsupervised & Capstone")
+    tb21_r = s21.shapes.add_textbox(Inches(7.0), Inches(2.0), Inches(5.3), Inches(4.6))
+    tf21_r = tb21_r.text_frame
+    tf21_r.word_wrap = True
+
+    co_items_right = [
+        ("CO4 (L4) · Parameter Tuning & Evaluation",
+         "7 metrics (Acc, Prec, Rec, F1, Loss, ECE, Latency), scikit-learn classification reports, ROC/PR curves.\nTemperature scaling (T = 0.9170, ECE reduced to 0.0031).\nEvidence: src/evaluation/metrics.py, src/evaluation/calibration.py\nStatus: Fully Demonstrated [Pending Faculty CIE Assessment]",
+         COLOR_ACCENT_GREEN),
+        ("CO5 (L4) · Unsupervised Clustering (K-Means)",
+         "K = 10 clustering on 10,000 samples (Inertia: 389,394.88, V-Measure: 0.5017, Purity: 58.87%).\nCentroids: Cluster 4 (digit 0: 92.71% purity), Cluster 3 (digit 6: 89.48%).\nEvidence: src/evaluation/clustering.py, Fig 3.3\nStatus: Fully Demonstrated [Pending Faculty CIE Assessment]",
+         COLOR_ACCENT_GREEN),
+        ("CO6 (L5) · Comparative Classification Capstone",
+         "7-model benchmark (Baseline to DeepConvNet at 98.31% acc); dual-block CNN with GAP & Grad-CAM XAI.\nFastAPI async backend + HTML5 canvas HUD. 33/33 tests passing.\nEvidence: src/evaluation/benchmark.py, main.py\nStatus: Fully Demonstrated [Pending Faculty CIE Assessment]",
+         COLOR_ACCENT_GREEN)
+    ]
+
+    for item_title, item_desc, item_color in co_items_right:
+        p_t = tf21_r.add_paragraph() if tf21_r.paragraphs[0].text else tf21_r.paragraphs[0]
+        p_t.text = item_title.upper()
+        p_t.font.name = "Consolas"
+        p_t.font.size = Pt(10)
+        p_t.font.bold = True
+        p_t.font.color.rgb = item_color
+        p_d = tf21_r.add_paragraph()
+        p_d.text = item_desc + "\n"
+        p_d.font.name = "Segoe UI"
+        p_d.font.size = Pt(8.5)
+        p_d.font.color.rgb = COLOR_TEXT_MUTED
+
+    set_speaker_notes(s21, {
+        "communicates": "Explicit audit of DigitVision AI codebase and experiments against official Machine Learning Lab Course Outcomes (CO1–CO6).",
+        "why_it_matters": "Grounds the micro-project strictly in the academic curriculum requirements and proves genuine empirical completion without fabrication.",
+        "technical_explanation": "CO1 and CO2 are grounded in statistical tensors and visual EDA; CO3 implements classical baselines; CO4 achieves temperature calibration (ECE 0.0031); CO5 executes K-Means clustering on 10,000 samples (58.87% purity); CO6 delivers the 7-model comparative capstone.",
+        "viva_question": "Why is CO3 marked as substantially demonstrated rather than 100% complete across all textbook algorithms?",
+        "strong_answer": "We uphold academic rigor: Linear regression is inappropriate for a discrete 10-class problem, and KNN violates our <10 ms latency requirement. We implemented Logistic Regression and Random Forest to establish rigorous baselines without fabricating unsuited models."
+    })
+
+    # =========================================================================
+    # SLIDE 22: NBA SAR TIER-I CO–PO MAPPING MATRIX & JUSTIFICATION
+    # =========================================================================
+    s22 = prs.slides.add_slide(blank_layout)
+    set_slide_background(s22, COLOR_VOID)
+    add_header(s22, "NBA SAR Tier-I CO–PO Mapping Matrix & Empirical Justification", "22. NBA Outcome Alignment & Correlation Matrix")
+
+    # Top Table Shape: Width 11.7, Height 2.7
+    tbl_shape = s22.shapes.add_table(8, 14, Inches(0.8), Inches(1.4), Inches(11.7), Inches(2.7))
+    tbl = tbl_shape.table
+
+    matrix_rows = [
+        ["CO", "PO1", "PO2", "PO3", "PO4", "PO5", "PO6", "PO7", "PO8", "PO9", "PO10", "PO11", "PSO1", "PSO2"],
+        ["CO1", "3", "2", "—", "2", "3", "—", "—", "—", "—", "—", "—", "3", "2"],
+        ["CO2", "3", "3", "—", "3", "3", "—", "—", "—", "2", "—", "—", "3", "3"],
+        ["CO3", "3", "3", "3", "2", "3", "—", "—", "2", "—", "—", "—", "3", "3"],
+        ["CO4", "3", "3", "—", "3", "3", "—", "2", "—", "2", "—", "—", "3", "3"],
+        ["CO5", "2", "2", "—", "—", "2", "—", "—", "—", "—", "—", "—", "2", "2"],
+        ["CO6", "3", "3", "3", "3", "3", "2", "2", "3", "3", "2", "3", "3", "3"],
+        ["Avg", "2.83", "2.67", "3.00", "2.60", "2.83", "2.00", "2.00", "2.50", "2.33", "2.00", "3.00", "2.83", "2.67"]
+    ]
+
+    for r_idx, row_data in enumerate(matrix_rows):
+        is_hdr = (r_idx == 0)
+        is_avg = (r_idx == 7)
+        for c_idx, val in enumerate(row_data):
+            cell = tbl.cell(r_idx, c_idx)
+            cell.text = val
+            cell.fill.solid()
+            if is_hdr:
+                cell.fill.fore_color.rgb = COLOR_SURFACE_HOVER
+            elif is_avg:
+                cell.fill.fore_color.rgb = COLOR_SURFACE
+            else:
+                cell.fill.fore_color.rgb = COLOR_GROUND
+
+            for p in cell.text_frame.paragraphs:
+                p.alignment = PP_ALIGN.CENTER
+                for r in p.runs:
+                    r.font.name = "Consolas" if not is_hdr else "Segoe UI"
+                    r.font.size = Pt(9.5) if not is_hdr else Pt(9.0)
+                    r.font.bold = (is_hdr or is_avg)
+                    if val == "3":
+                        r.font.color.rgb = COLOR_ACCENT_GREEN
+                    elif val == "2":
+                        r.font.color.rgb = COLOR_ACCENT_AMBER
+                    elif val == "—":
+                        r.font.color.rgb = COLOR_TELEMETRY
+                    elif is_hdr:
+                        r.font.color.rgb = COLOR_TEXT_PRIMARY
+                    elif is_avg:
+                        r.font.color.rgb = COLOR_ACCENT_GREEN
+                    else:
+                        r.font.color.rgb = COLOR_TEXT_PRIMARY
+
+    # Bottom Card: Width 11.7, Height 2.6
+    add_card(s22, 0.8, 4.3, 11.7, 2.7, title="Evidence-Based Justification & Alignment Rationale")
+    tb22_b = s22.shapes.add_textbox(Inches(1.0), Inches(4.7), Inches(11.3), Inches(2.1))
+    tf22_b = tb22_b.text_frame
+    tf22_b.word_wrap = True
+
+    po_justifications = [
+        ("• PO1, PO2, PO5 (Avg 2.83, 2.67, 2.83) — Engineering Knowledge, Problem Analysis & Tool Usage:",
+         "Grounds moments, probability distributions, convex optimization (L-BFGS), convolutional geometry, and modern frameworks (TensorFlow, scikit-learn, OpenCV)."),
+        ("• PO3, PO4 (Avg 3.00, 2.60) — Solution Design & Complex Problem Investigation:",
+         "Architected DeepConvNet with Global Average Pooling; executed controlled 7-model empirical evaluation on 10,000 isolated test samples under identical conditions."),
+        ("• PO6, PO7 (Avg 2.00, 2.00) — Society, Sustainability & Professional Ethics:",
+         "Evaluated banking/postal automation societal impact, CPU energy efficiency; enforced transparency via Grad-CAM XAI and calibrated OOD rejection."),
+        ("• PO8, PO9, PO10, PO11 (Avg 2.50, 2.33, 2.00, 3.00) — Teamwork, Communication, Mgmt & Lifelong Learning:",
+         "Collaborative division across 3 student roles; comprehensive report and 22-slide deck; self-directed mastery of Keras 3, ECE, and Grad-CAM.")
+    ]
+
+    for p_head, p_body in po_justifications:
+        p = tf22_b.add_paragraph() if tf22_b.paragraphs[0].text else tf22_b.paragraphs[0]
+        r_h = p.add_run()
+        r_h.text = p_head + " "
+        r_h.font.name = "Consolas"
+        r_h.font.size = Pt(9.0)
+        r_h.font.bold = True
+        r_h.font.color.rgb = COLOR_ACCENT_GREEN
+        r_b = p.add_run()
+        r_b.text = p_body
+        r_b.font.name = "Segoe UI"
+        r_b.font.size = Pt(9.0)
+        r_b.font.color.rgb = COLOR_TEXT_MUTED
+
+    set_speaker_notes(s22, {
+        "communicates": "Forensic NBA Tier-I CO-PO and PSO mapping matrix with average correlation scores and empirical justifications.",
+        "why_it_matters": "Meets Washington Accord and NBA outcome-based education standards, demonstrating how each engineering graduate attribute was cultivated.",
+        "technical_explanation": "Correlation values (3=High, 2=Moderate, 1=Low, —=None) are assigned strictly when supported by code, tests, or documentation. Zero correlation is preserved where evidence does not exist.",
+        "viva_question": "Why is PO7 (Ethics) mapped with moderate correlation (2) rather than a default 3?",
+        "strong_answer": "We assigned a level 2 to reflect real, concrete ethical actions—specifically visual transparency via Grad-CAM and temperature calibration to prevent overconfident erroneous automation in high-stakes settings like banking—without exaggerating theoretical policy discussions."
+    })
+
     # Save presentation
+    import shutil
     output_dir = Path(output_path).parent
     output_dir.mkdir(parents=True, exist_ok=True)
     prs.save(output_path)
-    print(f"[*] Successfully generated full 20-slide scientific presentation: {output_path}")
+    print(f"[*] Successfully generated full 22-slide scientific presentation: {output_path}")
+
+    # Synchronize to docs and root folder
+    docs_pptx = "docs/DigitVision_AI_Presentation.pptx"
+    root_pptx = "DigitVision_AI_Presentation.pptx"
+    shutil.copyfile(output_path, docs_pptx)
+    shutil.copyfile(output_path, root_pptx)
+    print(f"[*] Synchronized presentation copy to: {docs_pptx}")
+    print(f"[*] Synchronized presentation copy to: {root_pptx}")
 
 
 if __name__ == "__main__":

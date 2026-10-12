@@ -521,7 +521,13 @@ class DigitVisionApp {
 
     const statusVal = data.decision?.status ?? data.status ?? "ACCEPTED_HIGH_CONFIDENCE";
     const qualityVal = data.quality_audit?.grade ?? data.input_quality ?? "GOOD";
-    const topKList = data.prediction?.top_k_candidates ?? data.top_k ?? data.top_3 ?? [];
+
+    const topKList = (Array.isArray(data.top_k) && data.top_k.length > 0 ? data.top_k : null)
+      || (Array.isArray(data.top_3) && data.top_3.length > 0 ? data.top_3 : null)
+      || (Array.isArray(data.top_k_candidates) && data.top_k_candidates.length > 0 ? data.top_k_candidates : null)
+      || (data.prediction && Array.isArray(data.prediction.top_k) && data.prediction.top_k.length > 0 ? data.prediction.top_k : null)
+      || (data.prediction && Array.isArray(data.prediction.top_k_candidates) && data.prediction.top_k_candidates.length > 0 ? data.prediction.top_k_candidates : null)
+      || [];
 
     // 1. Prediction Digit & GSAP Animation
     if (this.predDigit) {

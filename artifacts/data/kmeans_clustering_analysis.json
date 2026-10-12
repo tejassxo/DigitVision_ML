@@ -1,0 +1,75 @@
+{
+  "algorithm": "K-Means Clustering",
+  "library": "scikit-learn (sklearn.cluster.KMeans)",
+  "num_clusters": 10,
+  "sample_count": 10000,
+  "dimension": 784,
+  "inertia": 389394.88,
+  "homogeneity_score": 0.5002,
+  "completeness_score": 0.5031,
+  "v_measure": 0.5017,
+  "adjusted_rand_index": 0.3791,
+  "overall_cluster_purity": 0.5887,
+  "cluster_mappings": {
+    "0": {
+      "assigned_digit": 8,
+      "majority_count": 550,
+      "cluster_size": 1190,
+      "purity": 0.4622
+    },
+    "1": {
+      "assigned_digit": 1,
+      "majority_count": 485,
+      "cluster_size": 736,
+      "purity": 0.659
+    },
+    "2": {
+      "assigned_digit": 7,
+      "majority_count": 337,
+      "cluster_size": 1082,
+      "purity": 0.3115
+    },
+    "3": {
+      "assigned_digit": 6,
+      "majority_count": 791,
+      "cluster_size": 884,
+      "purity": 0.8948
+    },
+    "4": {
+      "assigned_digit": 0,
+      "majority_count": 814,
+      "cluster_size": 878,
+      "purity": 0.9271
+    },
+    "5": {
+      "assigned_digit": 3,
+      "majority_count": 676,
+      "cluster_size": 1287,
+      "purity": 0.5253
+    },
+    "6": {
+      "assigned_digit": 2,
+      "majority_count": 692,
+      "cluster_size": 792,
+      "purity": 0.8737
+    },
+    "7": {
+      "assigned_digit": 4,
+      "majority_count": 423,
+      "cluster_size": 998,
+      "purity": 0.4238
+    },
+    "8": {
+      "assigned_digit": 7,
+      "majority_count": 475,
+      "cluster_size": 1192,
+      "purity": 0.3985
+    },
+    "9": {
+      "assigned_digit": 1,
+      "majority_count": 644,
+      "cluster_size": 961,
+      "purity": 0.6701
+    }
+  }
+}

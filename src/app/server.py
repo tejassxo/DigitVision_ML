@@ -269,7 +269,7 @@ def predict_digit(req: PredictionRequest):
         quality_obj = telemetry.get("quality_audit", {})
         prep_meta = telemetry.get("preprocessing_metadata", {})
 
-        top_k_candidates = pred_obj.get("top_k_candidates", [])
+        top_k_candidates = pred_obj.get("top_k", pred_obj.get("top_k_candidates", []))
 
         # Build clean base64 image strings without prefix if requested
         canonical_b64 = visual_obj.get("canonical_preview", "")
@@ -307,6 +307,7 @@ def predict_digit(req: PredictionRequest):
             "status": clean_status,
             "top_3": top_k_candidates[:3],
             "top_k": top_k_candidates,
+            "top_k_candidates": top_k_candidates,
             "entropy": pred_obj.get("entropy_bits", 0.0),
             "margin": pred_obj.get("margin", 0.0),
             "input_quality": quality_obj.get("grade", "GOOD"),

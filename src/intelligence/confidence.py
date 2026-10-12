@@ -154,5 +154,6 @@ def analyze_prediction_confidence(
         "entropy_bits": round(entropy_bits, 4),
         "normalized_entropy": round(norm_entropy, 4),
         "top_k": top_k_list,
+        "top_k_candidates": top_k_list,
         "all_probabilities": [round(float(p), 4) for p in calibrated_probs]
     }
