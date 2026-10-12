@@ -19,9 +19,8 @@ Color Palette (Deep Obsidian):
 import os
 import json
 from typing import Optional
-import pathlib
+from pathlib import Path
 
-Path = pathlib.Path
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
@@ -1276,10 +1275,10 @@ def build_full_20_slide_presentation(output_path: str = "src/presentation/DigitV
          "Grounds moments, probability distributions, convex optimization (L-BFGS), convolutional geometry, and modern frameworks (TensorFlow, scikit-learn, OpenCV)."),
         ("• PO3, PO4 (Avg 3.00, 2.60) — Solution Design & Complex Problem Investigation:",
          "Architected DeepConvNet with Global Average Pooling; executed controlled 7-model empirical evaluation on 10,000 isolated test samples under identical conditions."),
-        ("• PO6, PO7 (Avg 2.00, 2.00) — Society, Sustainability & Professional Ethics:",
-         "Evaluated banking/postal automation societal impact, CPU energy efficiency; enforced transparency via Grad-CAM XAI and calibrated OOD rejection."),
-        ("• PO8, PO9, PO10, PO11 (Avg 2.50, 2.33, 2.00, 3.00) — Teamwork, Communication, Mgmt & Lifelong Learning:",
-         "Collaborative division across 3 student roles; comprehensive report and 22-slide deck; self-directed mastery of Keras 3, ECE, and Grad-CAM.")
+        ("• PO6, PO7, PO8–PO11 (Avg 2.00 to 3.00) — Society, Ethics, Teamwork, Communication & Lifelong Learning:",
+         "Analyzed societal impact, CPU carbon footprint, and Grad-CAM ethics; 3-engineer git collaboration, technical documentation, and mastery of Keras 3 & XAI."),
+        ("• PSO1, PSO2 (Avg 2.83, 2.67) — AI/ML Solutions & Deep Learning / Data Analytics Competency:",
+         "PSO1: Applied mathematical moments, L-BFGS, & DeepConvNet to optimize real-world sketch recognition. PSO2: Demonstrated competency in Keras 3, EDA, Grad-CAM, & FastAPI backend.")
     ]
 
     for p_head, p_body in po_justifications:
@@ -1287,21 +1286,21 @@ def build_full_20_slide_presentation(output_path: str = "src/presentation/DigitV
         r_h = p.add_run()
         r_h.text = p_head + " "
         r_h.font.name = "Consolas"
-        r_h.font.size = Pt(9.0)
+        r_h.font.size = Pt(8.5)
         r_h.font.bold = True
         r_h.font.color.rgb = COLOR_ACCENT_GREEN
         r_b = p.add_run()
         r_b.text = p_body
         r_b.font.name = "Segoe UI"
-        r_b.font.size = Pt(9.0)
+        r_b.font.size = Pt(8.5)
         r_b.font.color.rgb = COLOR_TEXT_MUTED
 
     set_speaker_notes(s22, {
-        "communicates": "Forensic NBA Tier-I CO-PO and PSO mapping matrix with average correlation scores and empirical justifications.",
-        "why_it_matters": "Meets Washington Accord and NBA outcome-based education standards, demonstrating how each engineering graduate attribute was cultivated.",
-        "technical_explanation": "Correlation values (3=High, 2=Moderate, 1=Low, —=None) are assigned strictly when supported by code, tests, or documentation. Zero correlation is preserved where evidence does not exist.",
-        "viva_question": "Why is PO7 (Ethics) mapped with moderate correlation (2) rather than a default 3?",
-        "strong_answer": "We assigned a level 2 to reflect real, concrete ethical actions—specifically visual transparency via Grad-CAM and temperature calibration to prevent overconfident erroneous automation in high-stakes settings like banking—without exaggerating theoretical policy discussions."
+        "communicates": "Forensic NBA Tier-I CO-PO and PSO mapping matrix with average correlation scores and empirical justifications for all POs and PSOs (PSO1, PSO2).",
+        "why_it_matters": "Meets Washington Accord and NBA outcome-based education standards, demonstrating how each engineering graduate attribute and department specific outcome was cultivated.",
+        "technical_explanation": "Correlation values (3=High, 2=Moderate, 1=Low, —=None) are assigned strictly when supported by code, tests, or documentation. Zero correlation is preserved where evidence does not exist. PSO1 (AI/ML Solutions) scores 2.83 avg, and PSO2 (Deep Learning & Data Analytics Competency) scores 2.67 avg.",
+        "viva_question": "How does DigitVision AI specifically fulfill PSO1 and PSO2?",
+        "strong_answer": "For PSO1, we applied mathematical concepts (moments, L-BFGS, cross-entropy) and software skills to design and optimize an AI system solving real-world canvas domain shift. For PSO2, we demonstrated competency in Deep Learning (Keras 3 CNN, Grad-CAM XAI) and Data Analytics (70k EDA, K-Means clustering, calibration analysis) to build an intelligent, defense-grade system."
     })
 
     # Save presentation

@@ -11,11 +11,10 @@ FORMAL MATHEMATICAL DEFINITION:
 """
 
 import hashlib
-import pathlib
+from pathlib import Path
 from typing import Tuple, Dict, Any, Optional
 import numpy as np
 
-Path = pathlib.Path
 from keras.datasets import mnist
 from src.config import (
     RANDOM_SEED,

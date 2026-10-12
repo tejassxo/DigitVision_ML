@@ -301,7 +301,7 @@ def generate_full_report():
         ("CO3 — PO3, PO5, PO11", "3", "Designs dual-block ConvNet architectures with spatial dropout and monitors gradient convergence and loss decay over training epochs."),
         ("CO4 — PO4, PO8, PSO1", "3", "Conducts empirical evaluations across 7 metrics, computes Grad-CAM activation maps, and quantifies predictive calibration via temperature scaling."),
         ("CO — PO6, PO7", "2", "Evaluates societal impact on cheque/mail automation, documents demographic data limitations, and analyzes environmental CPU compute efficiency."),
-        ("CO — PSO1, PSO2", "3", "Demonstrates end-to-end AI system deployment with integrated FastAPI backend, interactive canvas, and real-time telemetry console.")
+        ("CO — PSO1, PSO2", "3", "PSO1 (3): Applies programming and mathematical concepts (moments, L-BFGS, cross-entropy) to design and optimize AI/ML solutions for real-world sketch recognition. PSO2 (3): Demonstrates competency in Deep Learning (Keras 3 ConvNet, Grad-CAM) and Data Analytics (70k EDA, K-Means clustering, calibration analysis) to build intelligent systems.")
     ]
     for r_idx, (m_id, lvl, just) in enumerate(just_data, start=1):
         if r_idx < len(t7.rows):

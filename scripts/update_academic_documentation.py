@@ -240,9 +240,13 @@ def update_documentation():
          "• PO10 (2): Applied project lifecycle management, CPU hardware cost optimization, and runtime latency budgets.\n"
          "• PO11 (3): Self-directed mastery of modern deep learning frameworks (Keras 3 multi-backend), XAI formulations, and RESTful telemetry serving."),
 
-        ("CO → PSO1, PSO2", "3 (PSO1, PSO2)",
-         "• PSO1 (3): Demonstrates end-to-end design, training, and deployment of machine learning and computer vision architectures on real-world sensory inputs.\n"
-         "• PSO2 (3): Implements defense-grade software engineering: asynchronous FastAPI backend, interactive canvas HUD, 33/33 passing unit tests, and production REST APIs.")
+        ("CO → PSO1", "3 (High)",
+         "• PSO1 Statement: Apply programming skills and mathematical concepts to design, develop, and optimize AI and machine learning solutions for real-world problems.\n"
+         "• Empirical Justification (Level 3): Applied mathematical foundations (pixel moments μ=0.1307, σ=0.3081, center-of-mass translation, convex L-BFGS multinomial logistic regression, RBF SVM Gram matrix complexity control, cross-entropy loss, and post-hoc temperature scaling calibration at T=0.9170 reducing ECE to 0.0031) and software engineering skills (Python 3.13, NumPy array vectorization, OpenCV Otsu binarization, scikit-learn, Keras 3, 35/35 automated unit tests) to design, develop, and optimize DigitVision DeepConvNet (98.31% test accuracy, 0.9831 Macro-F1) solving real-world canvas domain shift and uncalibrated classification in automated cheque/postal processing."),
+
+        ("CO → PSO2", "3 (High)",
+         "• PSO2 Statement: Demonstrate competency in Deep Learning, and Data Analytics tools and technologies to build intelligent systems and pursue careers in industry, research, or higher education.\n"
+         "• Empirical Justification (Level 3): Demonstrated technical mastery in Deep Learning (custom dual-block CNN with Batch Normalization, SpatialDropout, Global Average Pooling, and Grad-CAM spatial explainability on conv_cam layer) and Data Analytics tools (70,000-sample EDA, bimodal pixel distributions, 10-cluster unsupervised K-Means geometry discovering 58.87% cluster purity, and calibration reliability analysis across 7 empirical metrics). Delivered a production-grade intelligent system with asynchronous FastAPI backend, sub-10 ms CPU inference, interactive canvas HUD, and telemetry logging, preparing students for AI research and industry engineering roles.")
     ]
 
     while len(t7.rows) < len(justifications) + 1:
@@ -409,6 +413,61 @@ def update_documentation():
         format_cell_text(row.cells[0], p_id, bold=True, size_pt=9.5, align=WD_ALIGN_PARAGRAPH.CENTER)
         format_cell_text(row.cells[1], p_name, bold=True, size_pt=9.5)
         format_cell_text(row.cells[2], p_desc, size_pt=9.0)
+
+    # -------------------------------------------------------------
+    # 5.1. TABLE 10: PROGRAMME SPECIFIC OUTCOMES (PSOs - CSE AI & ML)
+    # -------------------------------------------------------------
+    print("Updating Table 10: Official Programme Specific Outcomes (PSO1, PSO2)...")
+    pso_tables = [t for t in doc.tables if len(t.rows) > 0 and len(t.columns) == 2 and ("PSO" in t.rows[0].cells[0].text or "Programme Specific" in t.rows[0].cells[1].text)]
+    if pso_tables:
+        t_pso = pso_tables[0]
+
+        # Ensure Heading 2 exists before PSO table
+        prev_p = t_pso._tbl.getprevious()
+        if prev_p is not None and prev_p.tag.endswith('p'):
+            p_elem = docx.text.paragraph.Paragraph(prev_p, doc)
+            if not p_elem.text.strip() or "Programme Specific Outcomes" in p_elem.text:
+                p_elem.text = "Programme Specific Outcomes (PSOs) — Department of CSE (AI & ML)"
+                try:
+                    p_elem.style = "Heading 2"
+                except Exception:
+                    pass
+                if len(p_elem.runs) > 0:
+                    p_elem.runs[0].font.name = "Times New Roman"
+                    p_elem.runs[0].font.bold = True
+                    p_elem.runs[0].font.size = Pt(13)
+
+        # Header formatting
+        format_cell_text(t_pso.rows[0].cells[0], "PSO", bold=True, size_pt=10, align=WD_ALIGN_PARAGRAPH.CENTER)
+        set_cell_shading(t_pso.rows[0].cells[0], "E8E8E8")
+        format_cell_text(t_pso.rows[0].cells[1], "Approved Department Statement & DigitVision AI Project Alignment", bold=True, size_pt=10, align=WD_ALIGN_PARAGRAPH.LEFT)
+        set_cell_shading(t_pso.rows[0].cells[1], "E8E8E8")
+
+        pso_data = [
+            ("PSO1",
+             "Apply programming skills and mathematical concepts to design, develop, and optimize AI and machine learning solutions for real-world problems.\n\n"
+             "• DigitVision AI Empirical Alignment & Implementation Evidence:\n"
+             "  1. Mathematical Concepts: Formulated statistical moments (μ=0.1307, σ=0.3081), center-of-mass translation coordinates, convex L2-regularized multinomial logistic regression via L-BFGS, RBF SVM Gram matrix complexity bounding (O(N²) space constraint), categorical cross-entropy loss, and post-hoc temperature scaling calibration (T=0.9170) to optimize Expected Calibration Error (ECE) from 0.0152 down to 0.0031.\n"
+             "  2. Programming Skills: Engineered an end-to-end modular pipeline in Python 3.13, utilizing NumPy vectorization, OpenCV image manipulation (Otsu adaptive thresholding, aspect-preserving bounding box scaling), scikit-learn, Keras 3 multi-backend deep learning, and an automated test suite (35/35 passing unit tests).\n"
+             "  3. Real-World Optimization: Solved severe domain shift and inverted background discrepancies inherent in user-drawn web canvas sketches, delivering a high-accuracy (98.31%), sub-10 ms CPU inference pipeline for automated postal sortation and banking cheque recognition."),
+
+            ("PSO2",
+             "Demonstrate competency in Deep Learning, and Data Analytics tools and technologies to build intelligent systems and pursue careers in industry, research, or higher education.\n\n"
+             "• DigitVision AI Empirical Alignment & Implementation Evidence:\n"
+             "  1. Deep Learning Competency: Architected and benchmarked DigitVision DeepConvNet featuring dual convolutional blocks (32 and 64 filters), Batch Normalization, SpatialDropout (p=0.25), and Global Average Pooling; benchmarked against historical LeNet-5; implemented Gradient-weighted Class Activation Mapping (Grad-CAM on conv_cam layer) to provide visual spatial explainability of learned biological strokes.\n"
+             "  2. Data Analytics Tools & Technologies: Conducted exhaustive Exploratory Data Analysis (EDA) on the 70,000-instance MNIST population, modeled bimodal pixel distributions, performed unsupervised K-Means clustering (K=10, 58.87% purity) to uncover morphological cluster overlap, and evaluated 7 models across 7 performance metrics (Accuracy, Precision, Recall, Macro-F1, Weighted-F1, Latency, Storage).\n"
+             "  3. Intelligent Systems & Career Readiness: Built a production-grade, asynchronous FastAPI backend serving live inference, real-time telemetry HUD, and interactive drawing canvas with sub-10 ms latency, cultivating industry-grade engineering practices, reproducible workflows, and research rigor.")
+        ]
+
+        while len(t_pso.rows) < len(pso_data) + 1:
+            t_pso.add_row()
+        while len(t_pso.rows) > len(pso_data) + 1:
+            remove_row(t_pso, len(t_pso.rows) - 1)
+
+        for i, (pso_id, pso_desc) in enumerate(pso_data):
+            row = t_pso.rows[i + 1]
+            format_cell_text(row.cells[0], pso_id, bold=True, size_pt=9.5, align=WD_ALIGN_PARAGRAPH.CENTER)
+            format_cell_text(row.cells[1], pso_desc, size_pt=9.0)
 
     # -------------------------------------------------------------
     # 5.5. INSERT SECTION 3.5.1 K-MEANS EXPERIMENT INTO CHAPTER 3

@@ -156,3 +156,53 @@ From our empirical error analysis on the 10,000 test images, the top confusion p
 | **13** | Which layer does Grad-CAM hook into? | The final convolutional layer (`conv_cam`), capturing high-level spatial semantic features before dense pooling. |
 | **14** | How fast is inference? | 9.14 ms average latency on CPU, enabling real-time interactive drawing at >100 frames per second. |
 | **15** | What are the student contributions? | Tejas (45% - Deep Learning & Architecture), Charan (35% - Preprocessing & Classical ML), Akshay (20% - Full-Stack & Telemetry). |
+
+---
+
+## 11. NBA Program Specific Outcomes (PSOs) — Department Alignment & Viva Defense
+
+If an external examiner or faculty review panel asks: *"What are your department's Program Specific Outcomes (PSOs) and how does DigitVision AI specifically address them?"*, here is your structured, comprehensive answer:
+
+### Approved Department PSOs (Department of CSE - AI & ML)
+
+| Outcome | Official Department Statement | Correlation Level with DigitVision AI |
+| :---: | :--- | :---: |
+| **PSO1** | **Apply programming skills and mathematical concepts to design, develop, and optimize AI and machine learning solutions for real-world problems.** | **Level 3 (High / Substantial)**<br>*(Average: 2.83 across COs)* |
+| **PSO2** | **Demonstrate competency in Deep Learning, and Data Analytics tools and technologies to build intelligent systems and pursue careers in industry, research, or higher education.** | **Level 3 (High / Substantial)**<br>*(Average: 2.67 across COs)* |
+
+---
+
+### How DigitVision AI Fulfills PSO1 (Level 3 — Substantial):
+1. **Mathematical Concepts Applied:**
+   - **Statistical Pixel Moments:** Computed mean pixel intensity ($\mu = 0.1307$), standard deviation ($\sigma = 0.3081$), and variance across 70,000 images (`compute_dataset_statistics()`).
+   - **Center-of-Mass Spatial Moments:** Calculated translation coordinates $(\bar{x}, \bar{y})$ using raw image moments $M_{10}/M_{00}$ and $M_{01}/M_{00}$ to center digits into a $28 \times 28$ matrix.
+   - **Convex & Kernel Optimization:** Formulated convex L2-regularized multinomial logistic regression via L-BFGS, and bounded RBF Support Vector Machine Kernel Gram matrix complexity ($\mathcal{O}(N^2)$ space bounding at $N=20,000$ to prevent RAM thrashing).
+   - **Loss Minimization & Post-Hoc Calibration:** Optimized categorical cross-entropy loss, and derived scalar temperature scaling ($T = 0.9170$) via validation log-likelihood to minimize Expected Calibration Error (ECE) from $0.0152$ down to $0.0031$.
+2. **Programming Skills Demonstrated:**
+   - Engineered modular, reproducible Python 3.13 architecture utilizing NumPy vectorized operations, SciPy, OpenCV adaptive thresholding (Otsu method), scikit-learn classifiers, and Keras 3 multi-backend engine.
+   - Validated code integrity with **35/35 automated unit tests** (`pytest`) ensuring zero data leakage, buffer isolation, and sub-millisecond tensor preprocessing.
+3. **Real-World Problem Solved:**
+   - Tackled the severe **interactive domain shift** (varying stroke widths, off-center sketches, inverted contrasts) that causes ordinary MNIST models to fail when humans draw on live screens, providing a reliable OCR backbone for automated postal sortation and banking cheque recognition.
+
+---
+
+### How DigitVision AI Fulfills PSO2 (Level 3 — Substantial):
+1. **Deep Learning Competency:**
+   - **Custom Architecture Design:** Designed and trained **DigitVision DeepConvNet** (dual $3 \times 3$ convolutional blocks, Batch Normalization, SpatialDropout $p=0.25$, and Global Average Pooling) achieving **98.31% test accuracy** and **0.9831 Macro-F1** on the 10,000-sample air-gapped test set.
+   - **Architectural Benchmarking:** Compared modern deep CNNs against classical baselines and historical **LeNet-5 (1998)** to isolate the impact of modern regularizers.
+   - **Explainable AI (Grad-CAM):** Implemented Gradient-weighted Class Activation Mapping hooked directly to the final `conv_cam` feature maps, visually attributing predictions to actual stroke anatomy.
+2. **Data Analytics Tools & Technologies:**
+   - **Exploratory Data Analysis (EDA):** Analyzed 70,000 image tensors, stroke spine density, and class distributions across all 4 data partitions.
+   - **Unsupervised Geometry (K-Means Clustering):** Applied $K=10$ K-Means clustering in 784-dimensional space, discovering an overall cluster purity of $58.87\%$ and diagnosing intrinsic morphological overlap between classes (e.g., '4' vs '9').
+   - **Uncertainty Analytics:** Computed Shannon Entropy ($H(p)$) and margin confidence to detect ambiguous out-of-distribution inputs.
+3. **Intelligent Systems & Career Preparation:**
+   - Delivered a complete, production-grade intelligence platform: asynchronous FastAPI backend, sub-10 ms CPU inference latency, interactive drawing canvas HUD, and real-time telemetry console.
+   - Developed defense-grade software engineering habits (git versioning, cryptographic data verification, reproducible benchmarks) equipping team members for demanding roles in AI research, data analytics, and software engineering.
+
+---
+
+### Quick Faculty Viva Q&A on PSOs:
+* **Q: Which PSO is mapped to your DeepConvNet model?**  
+  * **A:** Both PSO1 and PSO2. PSO1 because DeepConvNet represents the mathematical formulation and programming optimization of an AI solution for real-world digit recognition; PSO2 because it demonstrates deep learning competency (CNN architecture, Grad-CAM XAI) and data analytics tooling.
+* **Q: What data analytics tools did you use for PSO2?**  
+  * **A:** We used NumPy, SciPy, Matplotlib, and scikit-learn to perform statistical moment profiling, bimodal pixel histogram analysis, unsupervised K-Means cluster geometry, confusion matrix error diagnostics, and Expected Calibration Error (ECE) reliability diagrams.

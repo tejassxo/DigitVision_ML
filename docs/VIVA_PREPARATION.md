@@ -207,3 +207,19 @@
      - Developed interactive HTML5 drawing canvas and Apple Pro design system.
      - Integrated real-time inference telemetry HUD, top-K probability distribution charts, and error matrix inspection.
      - Executed and maintained comprehensive automated test suite (35/35 passing unit tests).
+
+---
+
+## 19. NBA Program Specific Outcomes (PSOs) Mapping & Empirical Defense
+* **Question**: What are the Program Specific Outcomes (PSOs) for your program (CSE AI & ML), and how does DigitVision AI satisfy them?
+* **Answer**:
+  Our department defines two specific PSOs, both addressed by DigitVision AI at **Level 3 (Substantial Correlation)**:
+  1. **PSO1**: *"Apply programming skills and mathematical concepts to design, develop, and optimize AI and machine learning solutions for real-world problems."* (Matrix Average: **2.83**)
+     - **Mathematical Concepts**: Formulated continuous statistical moments ($\mu=0.1307, \sigma=0.3081$), center-of-mass translation vectors, convex L2-regularized multinomial logistic regression via L-BFGS, RBF SVM Kernel Gram matrix complexity control ($\mathcal{O}(N^2)$), cross-entropy optimization, and temperature scaling calibration ($T=0.9170$) reducing Expected Calibration Error (ECE) to $0.0031$.
+     - **Programming Skills**: Built in Python 3.13 using NumPy vectorization, OpenCV Otsu thresholding, scikit-learn, Keras 3, and 35 automated unit tests (`pytest`).
+     - **Real-World Problem**: Solves user sketch domain shift (stroke width variation, inverted canvas contrast, off-center placement) for automated postal routing and banking cheque OCR.
+  2. **PSO2**: *"Demonstrate competency in Deep Learning, and Data Analytics tools and technologies to build intelligent systems and pursue careers in industry, research, or higher education."* (Matrix Average: **2.67**)
+     - **Deep Learning Competency**: Designed and benchmarked **DigitVision DeepConvNet** (dual conv blocks, Batch Normalization, SpatialDropout, Global Average Pooling) achieving **98.31% test accuracy** and **0.9831 Macro-F1** on 10,000 isolated test samples; integrated Gradient-weighted Class Activation Mapping (Grad-CAM on `conv_cam` layer) for visual spatial explainability.
+     - **Data Analytics Tools**: Conducted exhaustive exploratory data analysis on 70,000 images, bimodal pixel histogram analysis, unsupervised K-Means clustering ($K=10$, cluster purity $58.87\%$), and multi-metric benchmarking across 7 algorithms.
+     - **Intelligent System**: Delivered an asynchronous FastAPI backend, sub-10 ms CPU inference, live interactive drawing HUD, and structured logging, establishing industry-grade development practices for advanced AI careers.
+

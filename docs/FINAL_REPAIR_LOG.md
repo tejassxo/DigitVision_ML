@@ -100,6 +100,36 @@ No models were retrained, no datasets were modified, and zero PowerPoint present
 
 ---
 
+### DEFECT-06: Unpopulated Department Program Specific Outcomes (PSOs) in Table 10
+* **Classification:** Institutional Compliance & Outcome Mapping Defect
+* **Affected Artifacts:** `ML-Project Documentation.docx` (Table 10), `docs/DigitVision_AI_Micro_Project_Report_Final.docx`, `docs/FACULTY_EXPLANATION.md`, `docs/VIVA_PREPARATION.md`
+* **Inspection & Reproduction:**
+  Table 10 contained empty string rows for PSO1 and PSO2 (`['PSO1', '']`, `['PSO2', '']`) with a placeholder prompt to copy from the department's approved PSOs.
+* **Root Cause:**
+  Official Department of CSE (AI & ML) PSOs (PSO1 & PSO2) had not yet been integrated into the compilation script.
+* **Minimal Surgical Fix:**
+  1. Updated `scripts/update_academic_documentation.py` to populate Table 10 with approved statements for PSO1 and PSO2 alongside detailed empirical project alignment.
+  2. Updated Table 7 justifications for `CO → PSO1` and `CO → PSO2` with Level 3 (High) correlation.
+  3. Added Section 11 to `docs/FACULTY_EXPLANATION.md` and Section 19 to `docs/VIVA_PREPARATION.md` providing comprehensive viva defense scripts.
+* **Verification Evidence:**
+  Recompiled institutional reports (`python scripts/update_academic_documentation.py`). Table 10 verified populated; Word COM page count confirmed at 54 pages.
+
+---
+
+### DEFECT-07: Pathlib Import Syntax Error in dataset.py and generate_pptx.py
+* **Classification:** Linter & Static Analysis Defect
+* **Affected Artifacts:** `src/data/dataset.py` (L18), `src/presentation/generate_pptx.py` (L24)
+* **Inspection & Reproduction:**
+  Static analysis reported `No attribute Path in module pathlib` due to alias assignment `Path = pathlib.Path`.
+* **Root Cause:**
+  Non-idiomatic import pattern causing type stub errors.
+* **Minimal Surgical Fix:**
+  Replaced `import pathlib; Path = pathlib.Path` with idiomatic `from pathlib import Path`.
+* **Verification Evidence:**
+  Linter errors completely resolved; test suite `python -m pytest` passes 35/35.
+
+---
+
 ## 3. Summary of Remediations
 
 | Defect ID | Severity | File Modified | Verification Test | Result |
@@ -109,3 +139,5 @@ No models were retrained, no datasets were modified, and zero PowerPoint present
 | **DEFECT-03** | Medium | `DATASET_AUDIT.md`, `docs/DATASET.md` | Epistemic boundary review | **PASS (Documented)** |
 | **DEFECT-04** | Medium | `docs/VIVA_PREPARATION.md` | Cross-reference with JSON metrics | **PASS (Synchronized)**|
 | **DEFECT-05** | Low | `scripts/update_academic_documentation.py` | `python -m pytest` | **PASS (35/35 pass)** |
+| **DEFECT-06** | High | `scripts/update_academic_documentation.py`, `docs/*` | Word COM & Table 10 inspection | **PASS (54 pages)** |
+| **DEFECT-07** | Medium | `src/data/dataset.py`, `src/presentation/generate_pptx.py` | Static analysis & test execution | **PASS (Clean)** |
