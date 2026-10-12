@@ -15,7 +15,11 @@ RANDOM_SEED: int = 42
 
 # 2. DATASET SPECIFICATIONS
 DATASET_NAME: str = "MNIST"
-DATASET_SOURCE: str = "Yann LeCun, Corinna Cortes, Christopher Burges (NIST Special Database 19/3)"
+DATASET_AUTHORS: str = "Yann LeCun (Courant Institute, NYU), Corinna Cortes (Google Research)"
+DATASET_SOURCE: str = "NIST Special Database 3 and Special Database 19"
+DATASET_LICENSE: str = "Creative Commons Attribution-Share Alike 3.0 (CC BY-SA 3.0)"
+DATASET_UPSTREAM_URL: str = "https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz"
+MNIST_SHA256: str = "731c5ac602752760c8e48fbffcf8c3b850d9dc2a2aedcf2cc48468fc17b673d1"
 TOTAL_MNIST_SAMPLES: int = 70000
 RAW_TRAIN_SAMPLES: int = 60000
 RAW_TEST_SAMPLES: int = 10000
@@ -23,6 +27,7 @@ RAW_TEST_SAMPLES: int = 10000
 # Partitions
 DEFAULT_TRAIN_SAMPLES: int = 20000
 DEFAULT_VAL_SAMPLES: int = 3000
+RESERVED_TRAIN_SAMPLES: int = 37000
 ISOLATED_TEST_SAMPLES: int = 10000
 
 # Classes
@@ -64,6 +69,7 @@ MODERATE_CONFIDENCE_MARGIN: float = 0.20
 PROJECT_ROOT: Path = Path(__file__).resolve().parent.parent
 DATA_DIR: Path = PROJECT_ROOT / "data"
 RAW_DATA_DIR: Path = DATA_DIR / "raw"
+MNIST_RAW_FILE: Path = RAW_DATA_DIR / "mnist.npz"
 PROCESSED_DATA_DIR: Path = DATA_DIR / "processed"
 
 ARTIFACTS_DIR: Path = PROJECT_ROOT / "artifacts"

@@ -121,3 +121,28 @@ def test_dataset_statistics_moments(pipeline):
     assert len(tr_stats["class_counts"]) == 10
     # MNIST images have substantial black background (>70% zero pixels)
     assert tr_stats["sparsity"]["pure_zero_ratio"] > 0.70
+    assert "reserved_partition" in stats
+
+
+def test_sha256_integrity_verification():
+    """Verify SHA-256 cryptographic checksum and CC BY-SA 3.0 license verification."""
+    integrity = MNISTPipeline.verify_integrity()
+    assert integrity["exists"] is True
+    assert integrity["verified"] is True
+    assert integrity["sha256"] == "731c5ac602752760c8e48fbffcf8c3b850d9dc2a2aedcf2cc48468fc17b673d1"
+    assert "Creative Commons" in integrity["license"]
+
+
+def test_reserved_training_pool_hygiene(pipeline):
+    """Verify that the 37,000 unused training samples are accounted for and strictly disjoint."""
+    x_unused, y_unused = pipeline.get_reserved_pool(n_train=20000, n_val=3000)
+    assert len(x_unused) == 37000
+    assert len(y_unused) == 37000
+    assert x_unused.shape == (37000, 28, 28)
+    assert x_unused.dtype == np.float32
+
+    # Check test set isolation
+    (x_tr, _), (x_val, _), (x_te, _) = pipeline.get_partitions(n_train=20000, n_val=3000)
+    assert np.shares_memory(x_unused, x_te) is False
+    assert np.shares_memory(x_unused, x_tr) is False
+    assert np.shares_memory(x_unused, x_val) is False
