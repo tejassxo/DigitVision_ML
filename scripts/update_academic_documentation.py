@@ -621,12 +621,45 @@ def update_documentation():
                 "• K Charan Teja (Roll No. 24VE1A6692, 35% contribution — ML Engineer):\n"
                 "  Implemented the 7-stage canonical invariant preprocessing pipeline (Otsu adaptive thresholding, aspect-preserving bounding box scaling, center-of-mass translation); trained and benchmarked classical machine learning baselines (Logistic Regression, Random Forest, SVM-RBF); executed temperature scaling calibration (ECE minimization); conducted exploratory K-Means clustering analysis.\n\n"
                 "• Y Akshay Raj (Roll No. 24VE1A66C8, 20% contribution — Full-Stack & Telemetry Engineer):\n"
-                "  Architected the asynchronous FastAPI backend server; developed the interactive HTML5 drawing canvas and Apple Pro design system; integrated real-time inference telemetry HUD, top-K probability distribution charts, and error matrix inspection; executed comprehensive automated test suite (33/33 passing tests)."
+                "  Architected the asynchronous FastAPI backend server; developed the interactive HTML5 drawing canvas and Apple Pro design system; integrated real-time inference telemetry HUD, top-K probability distribution charts, and error matrix inspection; executed comprehensive automated test suite (35/35 passing tests)."
             )
             # Reformat runs to Times New Roman
             for run in p.runs:
                 run.font.name = "Times New Roman"
                 run.font.size = Pt(11)
+
+    # Table 36: Individual Contributions Table
+    t36 = doc.tables[36]
+    print(f"Updating Table 36: Module Description and Individual Contribution ({len(t36.rows)} rows)...")
+    # Table headers
+    format_cell_text(t36.rows[0].cells[0], "S.No", bold=True, size_pt=10, align=WD_ALIGN_PARAGRAPH.CENTER)
+    format_cell_text(t36.rows[0].cells[1], "Student Name & Roll No.", bold=True, size_pt=10, align=WD_ALIGN_PARAGRAPH.CENTER)
+    format_cell_text(t36.rows[0].cells[2], "Module Responsibilities & Description", bold=True, size_pt=10, align=WD_ALIGN_PARAGRAPH.CENTER)
+    format_cell_text(t36.rows[0].cells[3], "Contribution (%)", bold=True, size_pt=10, align=WD_ALIGN_PARAGRAPH.CENTER)
+    for c in t36.rows[0].cells:
+        set_cell_shading(c, "E8E8E8")
+
+    # Row 1: Tejas
+    format_cell_text(t36.rows[1].cells[0], "1", size_pt=9.5, align=WD_ALIGN_PARAGRAPH.CENTER)
+    format_cell_text(t36.rows[1].cells[1], "M TEJAS YADAV\n(24VE1A6695)", bold=True, size_pt=9.5, align=WD_ALIGN_PARAGRAPH.CENTER)
+    format_cell_text(t36.rows[1].cells[2], "Lead Architect & Deep Learning Engineer:\nFormulated end-to-end mathematical and system architecture; designed DigitVision DeepConvNet with Global Average Pooling; engineered Keras 3 training and convergence pipeline; implemented Grad-CAM and saliency visual explainability modules; coordinated technical report formulation and NBA outcome mapping.", size_pt=9.5)
+    format_cell_text(t36.rows[1].cells[3], "45%", bold=True, size_pt=10, align=WD_ALIGN_PARAGRAPH.CENTER)
+
+    # Row 2: Charan
+    format_cell_text(t36.rows[2].cells[0], "2", size_pt=9.5, align=WD_ALIGN_PARAGRAPH.CENTER)
+    format_cell_text(t36.rows[2].cells[1], "K Charan Teja\n(24VE1A6692)", bold=True, size_pt=9.5, align=WD_ALIGN_PARAGRAPH.CENTER)
+    format_cell_text(t36.rows[2].cells[2], "ML Engineer & Statistical Analyst:\nImplemented the 7-stage canonical invariant preprocessing pipeline (Otsu adaptive thresholding, aspect-preserving bounding box scaling, center-of-mass translation); trained and benchmarked classical machine learning baselines (Logistic Regression, Random Forest, SVM-RBF); executed temperature scaling calibration (ECE minimization); conducted exploratory K-Means clustering analysis.", size_pt=9.5)
+    format_cell_text(t36.rows[2].cells[3], "35%", bold=True, size_pt=10, align=WD_ALIGN_PARAGRAPH.CENTER)
+
+    # Row 3: Akshay
+    format_cell_text(t36.rows[3].cells[0], "3", size_pt=9.5, align=WD_ALIGN_PARAGRAPH.CENTER)
+    format_cell_text(t36.rows[3].cells[1], "Y Akshay Raj\n(24VE1A66C8)", bold=True, size_pt=9.5, align=WD_ALIGN_PARAGRAPH.CENTER)
+    format_cell_text(t36.rows[3].cells[2], "Full-Stack & Telemetry Engineer:\nArchitected the asynchronous FastAPI backend server; developed interactive HTML5 drawing canvas and Apple Pro design system; integrated real-time inference telemetry HUD, top-K probability distribution charts, and error matrix inspection; executed comprehensive automated test suite (35/35 passing tests).", size_pt=9.5)
+    format_cell_text(t36.rows[3].cells[3], "20%", bold=True, size_pt=10, align=WD_ALIGN_PARAGRAPH.CENTER)
+
+    # Remove extra row 4 if present
+    while len(t36.rows) > 4:
+        remove_row(t36, len(t36.rows) - 1)
 
     # -------------------------------------------------------------
     # 7. UPDATE APPENDIX B & C (STUDENT DETAILS & RUBRIC TABLE)
@@ -670,13 +703,17 @@ def update_documentation():
         while len(t_rubric.rows) > 4:
             remove_row(t_rubric, len(t_rubric.rows) - 1)
 
-    # Save to ML-Project Documentation.docx and docs/DigitVision_AI_Micro_Project_Report_Updated.docx
+    # Save to ML-Project Documentation.docx, docs/DigitVision_AI_Micro_Project_Report_Updated.docx,
+    # and docs/DigitVision_AI_Micro_Project_Report_Final.docx
     output_master = "ML-Project Documentation.docx"
     output_docs = "docs/DigitVision_AI_Micro_Project_Report_Updated.docx"
+    output_final = "docs/DigitVision_AI_Micro_Project_Report_Final.docx"
     doc.save(output_master)
     print(f"Master documentation saved to: {output_master}")
     shutil.copyfile(output_master, output_docs)
     print(f"Copy also saved to: {output_docs}")
+    shutil.copyfile(output_master, output_final)
+    print(f"Final institutional report saved to: {output_final}")
 
 
 if __name__ == "__main__":

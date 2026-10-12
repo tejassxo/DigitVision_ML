@@ -90,6 +90,30 @@ To guarantee zero data leakage beyond mere index separation, an exhaustive MD5 h
 | **Internal Duplicates in Test (10k)** | **0** | **PASS — Unique** | 10,000 unique hashes / 10,000 samples |
 | **Total Unique Images in Corpus** | **70,000 / 70,000** | **PASS — Unique** | 0 exact raster duplicates across entire corpus |
 
+### 3.4 Epistemological Scope: What Integrity Checks Prove vs. What They Do Not Prove
+
+To preserve strict scientific integrity, the precise epistemic boundaries of our empirical verification checks are established:
+
+1. **Cryptographic SHA-256 Digest (`731c5ac602752760...`):**
+   - **Proves:** Local physical archive `data/raw/mnist.npz` is bit-for-bit identical to upstream Google Cloud/Keras distribution. Zero local file corruption, bit-rot, or tampering.
+   - **Does NOT Prove:** Infallibility of the original 1998 human labeling, nor absence of ambiguous glyphs in the historical NIST corpus.
+
+2. **Exact-Raster MD5 Byte Hashing (`hashlib.md5(raster.tobytes())`):**
+   - **Proves:** Zero identical 28×28 `uint8` byte rasters exist across splits ($\text{Train} \cap \text{Val} = \emptyset$, $\text{Train} \cap \text{Test} = \emptyset$), and zero identical duplicates exist within any split.
+   - **Does NOT Prove:** **Exact byte matching does NOT rule out semantic or perceptual near-duplicates.** Two digit glyphs penned by the same human writer with identical stroke style, or digits differing by a 1-pixel shift or sub-pixel antialiasing offset, produce different MD5 hashes despite sharing near-identical semantic features. In handwriting recognition, such stylistic commonality is natural and expected.
+
+3. **Virtual Memory Buffer Independence (`np.shares_memory`):**
+   - **Proves:** Partitioned tensors reside in disjoint memory allocations; in-place mutations during batching cannot corrupt validation or test data.
+   - **Does NOT Prove:** Absence of procedural leakage if preprocessing statistics were globally computed before splitting. In DIGITVISION AI, all scaling statistics are computed exclusively on the training split.
+
+4. **Statistical Moment & Sparsity Parity ($\mu \approx 0.131, \sigma \approx 0.309$, 80.86% Zero Background):**
+   - **Proves:** The active 20,000-sample training partition is a statistically unbiased representation of the broader 70,000-sample population.
+   - **Does NOT Prove:** Uniform distribution of stroke complexity or topological difficulty across classes.
+
+5. **Class Balance Uniformity (Max: '1' at 11.40%, Min: '5' at 8.88%):**
+   - **Proves:** Imbalance ratio of 1.284 << 3.0 confirms that unweighted Categorical Cross-Entropy is mathematically optimal.
+   - **Does NOT Prove:** Equal class separability in feature space (e.g., classes 4 and 9 share higher confusion than 0 and 1).
+
 ---
 
 ## 4. Formal Mathematical Formulation

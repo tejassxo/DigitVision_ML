@@ -20,12 +20,15 @@
 ---
 
 ## 3. Dataset Characteristics & Partition Hygiene
-* **Question**: What are the dimensions, sample counts, and partition splits? How do you prevent data leakage?
-* **Answer**: The dataset contains 70,000 grayscale samples of dimension $28 \times 28 \times 1$ (784 features). Under our strict experimental protocol:
-  * **Training Split**: 20,000 samples (60.6% of training partition)
-  * **Validation Split**: 3,000 samples (9.1% of training partition)
-  * **Test Partition**: 10,000 samples (30.3% isolated test partition)
-  * **Data Leakage Prevention Invariant**: The 10,000 test images are completely isolated. No test data is accessed during normalization parameter estimation, Otsu thresholding computation, hyperparameter selection, or temperature scaling fitting. The random seed is fixed to 42.
+* **Question**: What are the dimensions, sample counts, and partition splits? How do you account for all 70,000 samples and prevent data leakage?
+* **Answer**: The MNIST corpus comprises exactly 70,000 scanned grayscale digit images ($28 \times 28 \times 1$, 784 features). Under our cryptographically verified protocol (`data/raw/mnist.npz`, SHA-256 `731c5ac602752760c8e48fbffcf8c3b850d9dc2a2aedcf2cc48468fc17b673d1`), all 70,000 instances are rigorously accounted for:
+  * **Active Training Split**: 20,000 samples (28.57% of corpus; 33.33% of 60k raw training pool). Used for model parameter backpropagation.
+  * **Validation Split**: 3,000 samples (4.29% of corpus; 5.00% of 60k raw training pool). Used for early stopping, learning rate scheduling, and temperature calibration.
+  * **Reserved Training Pool**: 37,000 samples (52.86% of corpus; 61.67% of 60k raw training pool). Preserved untouched in local raw storage for offline scale benchmarking.
+  * **Isolated Benchmark Test Set**: 10,000 samples (14.29% of corpus; 100.0% of official test pool). Air-gapped and evaluated in full with zero subsampling.
+  * **Computational Rationale for 20k/3k**: Training an RBF-kernel SVM on 60,000 instances requires an intractable 28.8 GB Gram matrix ($\mathcal{O}(N^2)$ space complexity). Subsampling active training to 20,000 preserves statistical power (SVM achieves 96.11% test accuracy) while converging on CPU in under 2.5 minutes.
+  * **Leakage & Hash Disjointness**: Exhaustive MD5 raster hashing confirmed 0 duplicate rasters and 0 cross-split leakage instances. `np.shares_memory` unit tests confirm zero virtual memory buffer aliasing.
+  * **Epistemic Scope of Hash Checks**: MD5 raster hashing proves absence of identical byte rasters and memory leakage. It does *not* rule out semantic or perceptual near-duplicates (e.g., natural handwriting similarities across writers), which are inherent to human numeral generation.
 
 ---
 
@@ -43,15 +46,15 @@
 ---
 
 ## 5. Model Landscape & Comparative Benchmark
-* **Question**: Which models were implemented, and what role does each play?
-* **Answer**: We benchmarked 7 distinct learning paradigms:
-  1. **Dummy Baseline (Most Frequent)**: Zero-rule reference providing empirical chance accuracy (~11.35%).
-  2. **Multinomial Logistic Regression (L-BFGS)**: Linear convex baseline modeling cross-entropy over 7,850 parameters (~91.49% accuracy).
-  3. **SVM-RBF (Support Vector Classifier)**: Non-linear kernelized margin maximizer ($C=1.0$, $\gamma=\text{scale}$) yielding strong decision boundaries (~96.11% accuracy).
-  4. **Random Forest Ensemble (60 Trees)**: Non-parametric bagging ensemble capturing non-linear feature interactions (~95.48% accuracy).
-  5. **MLP-Deep (Fully Connected Neural Network)**: 2-hidden layer dense network (256 $\to$ 128 $\to$ 10) with Batch Normalization and Dropout (~95.8% accuracy).
-  6. **Classic LeNet-5 (Yann LeCun, 1998)**: Canonical 5-layer CNN architecture (~96.11% accuracy).
-  7. **DigitVision-DeepConvNet**: Production dual-block CNN with 32 and 64 filters, MaxPool, Dropout (0.25, 0.40), and Dense(128) head (~98%+ accuracy).
+* **Question**: Which models were implemented, and what are their verified empirical metrics?
+* **Answer**: We benchmarked 7 distinct learning paradigms evaluated on the identical 10,000-sample isolated test benchmark:
+  1. **Dummy Baseline (Most Frequent)**: 11.35% Test Accuracy, Macro-F1: 0.0204, Latency: 0.13 ms. Establishes the empirical chance lower bound.
+  2. **Multinomial Logistic Regression (L-BFGS)**: 91.49% Test Accuracy, Macro-F1: 0.9137, Latency: 0.06 ms. Linear baseline across 7,850 parameters.
+  3. **SVM-RBF (Support Vector Classifier)**: 96.11% Test Accuracy, Macro-F1: 0.9607, Latency: 1.73 ms, Model size: 15.78 MB. Highly effective non-linear kernel margin maximizer.
+  4. **Random Forest Ensemble (60 Trees)**: 95.48% Test Accuracy, Macro-F1: 0.9543, Latency: 102.09 ms, Model size: 26.50 MB. Slower inference due to traversing 60 unpruned trees across 784 dimensions.
+  5. **MLP-Deep (Dense Neural Network)**: 95.91% Test Accuracy, Macro-F1: 0.9587, Latency: 3.87 ms, Parameters: 236,682. 2-hidden layer architecture (256 $\to$ 128) with Batch Normalization and Dropout.
+  6. **Classic LeNet-5 (Yann LeCun, 1998)**: 96.25% Test Accuracy, Macro-F1: 0.9623, Latency: 9.72 ms, Parameters: 61,706. 5-layer canonical CNN baseline.
+  7. **DigitVision-DeepConvNet (Primary Model)**: **98.31% Test Accuracy**, **Macro-F1: 0.9831**, **Mean Latency: 9.14 ms (CPU)**, Parameters: 467,818, Model size: 5.41 MB. Dual-stage convolutional architecture with Spatial Dropout and Dense classification head.
 
 ---
 
@@ -81,40 +84,43 @@
 ## 8. Convergence, Overfitting & Underfitting Analysis
 * **Question**: How do you prove your model converged without severe overfitting?
 * **Answer**: Convergence is verified through empirical training and validation loss curves logged across epochs:
-  * In `DigitVision-DeepConvNet`, training loss decreases monotonically from 0.6397 (Epoch 1) to <0.09 (Epoch 4), while validation loss drops from 0.1261 to 0.0524 with validation accuracy reaching >98%.
-  * The small generalization gap ($|\text{Acc}_{\text{train}} - \text{Acc}_{\text{val}}| < 2.0\%$) and absence of validation loss inflection demonstrate that Spatial Dropout ($p=0.25$) and Dense Dropout ($p=0.40$) successfully prevented high-variance overfitting.
+  * In `DigitVision-DeepConvNet`, training loss decreases monotonically from 0.6397 (Epoch 1) to 0.0915 (Epoch 4), while validation loss drops from 0.1261 to 0.0534 with validation accuracy reaching 98.23%.
+  * The small generalization gap ($|\text{Acc}_{\text{train}} - \text{Acc}_{\text{val}}| < 1.1\%$) and absence of validation loss divergence demonstrate that Spatial Dropout ($p=0.25$) and Dense Dropout ($p=0.40$) successfully prevented high-variance overfitting.
 
 ---
 
 ## 9. Evaluation Metrics
 * **Question**: Why is accuracy insufficient on its own, and which metrics did you report?
-* **Answer**: While MNIST has relatively balanced class distributions (~9.8% to 11.3% per class), accuracy fails to expose class-specific vulnerabilities or asymmetry in error costs. DigitVision AI reports:
-  * **Test Accuracy**: Overall fraction of correct predictions.
-  * **Macro-Averaged Precision**: $\frac{1}{10} \sum_{c=0}^9 \frac{TP_c}{TP_c + FP_c}$, penalizing false positives equally across all digit classes.
-  * **Macro-Averaged Recall**: $\frac{1}{10} \sum_{c=0}^9 \frac{TP_c}{TP_c + FN_c}$, measuring sensitivity for each digit.
-  * **Macro & Weighted F1-Score**: Harmonic mean of precision and recall.
-  * **Multiclass ROC-AUC & PR-AUC**: Macro One-vs-Rest area under curve.
-  * **Matthews Correlation Coefficient (MCC)**: High-fidelity contingency matrix metric resistant to class imbalance.
+* **Answer**: While MNIST has relatively balanced class distributions (~8.9% to 11.4% per class), accuracy fails to expose class-specific vulnerabilities or asymmetry in error costs. DigitVision AI reports:
+  * **Test Accuracy**: Overall fraction of correct predictions (98.31%).
+  * **Macro-Averaged Precision**: $\frac{1}{10} \sum_{c=0}^9 \frac{TP_c}{TP_c + FP_c} = 0.9833$.
+  * **Macro-Averaged Recall**: $\frac{1}{10} \sum_{c=0}^9 \frac{TP_c}{TP_c + FN_c} = 0.9830$.
+  * **Macro & Weighted F1-Score**: Harmonic mean of precision and recall (0.9831).
+  * **Expected Calibration Error (ECE)**: Measures statistical calibration gap (0.0031 post-scaling).
+  * **Inference Latency Breakdown**: Mean: 9.14 ms, Median: 8.98 ms, p95: 11.25 ms on CPU.
 
 ---
 
 ## 10. Error Analysis & Confusion Intelligence
 * **Question**: What are the primary confusion patterns identified on the test set, and what causes them?
-* **Answer**: Empirical confusion matrix analysis identifies recurring morphological failure modes:
-  1. **Digit 4 vs Digit 9**: Caused by stroke closure at the top loop of '4' mimicking '9'.
-  2. **Digit 3 vs Digit 5**: Caused by rounded upper strokes and incomplete horizontal bars in rapid cursive handwriting.
-  3. **Digit 7 vs Digit 2**: Caused by exaggerated base serifs or looping descenders.
-  * **Mitigation**: Canonical Otsu skeletonization and aspect-preserving centering minimize bounding-box shifts, reducing geometric overlap between these classes.
+* **Answer**: Empirical confusion matrix analysis on the 10,000 test set reveals that the top failure pairs are:
+  1. **Digit 4 misclassified as 9**: 18 instances (top error mode). Caused by stroke closure at the apex of '4' forming an artificial loop mimicking '9'.
+  2. **Digit 7 misclassified as 2**: 16 instances. Caused by exaggerated horizontal base bars or European mid-stroke crossbars.
+  3. **Digit 5 misclassified as 3**: 11 instances. Caused by fragmented upper bars and rounded lower loops in rapid cursive strokes.
+  4. **Digit 8 misclassified as 2**: 7 instances.
+  5. **Digit 7 misclassified as 3**: 6 instances.
+  * **Mitigation**: Canonical Otsu skeletonization, aspect-preserving bounding box scaling to 20x20, and center-of-mass centering minimize translation and scale offsets, directly mitigating these errors.
 
 ---
 
 ## 11. Confidence Intelligence & Temperature Calibration
 * **Question**: What is the difference between raw softmax confidence and calibrated probability? How did you calibrate DigitVision AI?
-* **Answer**: Deep neural networks trained with cross-entropy are notoriously overconfident: a model outputting 0.99 softmax confidence does not necessarily have a 99% empirical likelihood of correctness (Guo et al., 2017).
+* **Answer**: Deep neural networks trained with cross-entropy are notoriously overconfident: an uncalibrated model predicting with 0.99 confidence may only be correct 80% of the time on hard inputs (Guo et al., 2017).
   * We implemented post-hoc **Temperature Scaling**:
     $$\hat{p}_i = \frac{e^{z_i / T}}{\sum_j e^{z_j / T}}$$
   * The scalar temperature parameter $T > 0$ is optimized on held-out validation logits by minimizing negative log-likelihood via L-BFGS.
-  * With optimal temperature $T = 3.972$, the softmax distribution softens, directly minimizing the Expected Calibration Error (ECE) and preventing false overconfidence on ambiguous sketches.
+  * The empirical optimal temperature converged to **$T = 0.9170$**.
+  * This calibration reduced the Expected Calibration Error (ECE) from 0.0152 down to **0.0031**, ensuring that output probabilities reflect true empirical likelihoods.
 
 ---
 
@@ -142,21 +148,21 @@
 
 ## 14. Robustness & Perturbation Analysis
 * **Question**: How did you evaluate model robustness under real-world corruptions?
-* **Answer**: We subjected all models to 6 controlled image corruptions:
-  1. Gaussian noise ($\sigma = 0.15, 0.30$)
-  2. Affine rotation ($\theta = \pm 15^\circ, \pm 30^\circ$)
-  3. Pixel translation ($\Delta x, \Delta y = \pm 2, \pm 4$ pixels)
-  4. Contrast reduction ($c = 0.5$)
-  5. Thin stroke erosion
-  6. Thick stroke dilation
-  * Convolutional models (DeepConvNet and LeNet-5) maintained >85% accuracy under $\pm 15^\circ$ rotation and mild noise, whereas classical models (Logistic Regression, Random Forest) degraded sharply (<65%), confirming CNN translational and compositional equivariance.
+* **Answer**: We subjected all models to 6 controlled image corruptions across 5 severity levels:
+  1. Gaussian noise ($\sigma = 0.05$ to $0.40$)
+  2. Affine rotation ($\theta = \pm 10^\circ$ to $\pm 45^\circ$)
+  3. Affine shear
+  4. Stroke thickness (morphological dilation and erosion)
+  5. Translation ($\Delta x, \Delta y = \pm 1$ to $\pm 5$ pixels)
+  6. Contrast attenuation ($c = 0.9$ to $0.2$)
+  * **Findings**: DigitVision-DeepConvNet exhibited superior robustness, retaining 94.3% mean accuracy under Gaussian noise and 95.7% under affine shear. Classical models degraded sharply (e.g., Logistic Regression translation accuracy collapsed from 91.0% to 14.1%), demonstrating that CNN spatial weight-sharing provides genuine translation and deformation tolerance.
 
 ---
 
 ## 15. Responsible AI, Ethics & Sustainability
 * **Question**: What societal, environmental, and ethical considerations apply to this project?
 * **Answer**:
-  * **Societal Impact**: Automated check processing, postal routing, and archival document digitization save thousands of human labor hours, but error rates on ambiguous entries can cause financial discrepancy. DigitVision AI incorporates rejection thresholds ($H(p) > 1.2$ or $\text{margin} < 0.20$) to defer ambiguous predictions to human-in-the-loop audit.
+  * **Societal Impact**: Automated check processing, postal routing, and archival document digitization save thousands of human labor hours, but error rates on ambiguous entries can cause financial discrepancy. DigitVision AI incorporates rejection thresholds ($H(p) > 1.2$ bits or $\text{margin} < 0.20$) to defer ambiguous predictions to human-in-the-loop audit.
   * **Fairness & Demographic Bias**: MNIST lacks demographic metadata (gender, age, geographic origin of writers). We transparently document this limitation: the model may exhibit higher error on non-Western numeral writing conventions.
   * **Environmental Footprint**: Training all 7 models on CPU required < 5 minutes of compute (<0.005 kWh), releasing negligible carbon dioxide (<0.002 kg $\text{CO}_2$ eq), aligning directly with UN Sustainable Development Goal (SDG) 12: Responsible Consumption and Production.
 
@@ -166,7 +172,38 @@
 * **Question**: What makes DigitVision AI more advanced than a standard classroom digit classifier?
 * **Answer**:
   1. **Dual Intelligence Engine**: Comprises both high-accuracy prediction and deep forensic analysis (stroke density, bounding-box occupancy, centering displacement, contrast).
-  2. **Calibrated Confidence**: Real-time Temperature Scaling ($T = 3.972$) and Shannon Entropy scoring replace raw misleading softmax scores.
+  2. **Calibrated Confidence**: Real-time Temperature Scaling ($T = 0.9170$) and Shannon Entropy scoring replace raw misleading softmax scores.
   3. **Visual Explainability**: Built-in Grad-CAM heatmaps rendered in real-time alongside inference.
   4. **Strict Architectural Hygiene**: Shared canonical preprocessing invariant across training, unit tests, and live web canvas.
-  5. **Complete Mission Control Dashboard**: Fully functional, dark-mode research console operating at sub-millisecond latencies.
+  5. **Complete Mission Control Dashboard**: Fully functional, dark-mode research console operating at sub-10ms CPU inference latency.
+
+---
+
+## 17. Unsupervised Cluster Structure Analysis (K-Means)
+* **Question**: Why perform K-Means clustering in Chapter 3 if MNIST is already a labeled supervised dataset?
+* **Answer**: K-Means clustering was executed ($K=10$ clusters in 784-dimensional pixel space) as an exploratory data analysis technique to uncover intrinsic morphological geometry without supervisory guidance:
+  * **Objective Function**: Minimizes Within-Cluster Sum of Squares (WCSS / Inertia):
+    $$J = \sum_{k=1}^{K} \sum_{x \in S_k} ||x - \mu_k||_2^2$$
+  * **Findings**: Morphologically uniform digits like '0' and '1' form isolated, tight Voronoi clusters with distinct cluster centroids. Conversely, digits with multi-stroke variations (e.g., open vs closed '4', looped vs unlooped '2', cursive '3' vs '5') exhibit significant centroid overlap in pixel space. This unsupervised geometric overlap explains mathematically why linear models (Logistic Regression at 91.49%) hit a performance ceiling and why non-linear convolutional representations are required.
+
+---
+
+## 18. Individual Team Contributions & Project Roles
+* **Question**: What was each team member's specific contribution to DigitVision AI?
+* **Answer**:
+  1. **M TEJAS YADAV (Roll No. 24VE1A6695, 45% contribution — Lead Architect & Deep Learning Engineer)**:
+     - Formulated end-to-end mathematical and system architecture.
+     - Designed DigitVision DeepConvNet with dual convolutional blocks and Global Average Pooling.
+     - Engineered Keras 3 training, loss convergence, and validation pipelines.
+     - Implemented Grad-CAM (`conv_cam` feature map gradients) and saliency explainability modules.
+     - Coordinated technical report formulation and NBA CO-PO outcome mapping.
+  2. **K Charan Teja (Roll No. 24VE1A6692, 35% contribution — ML Engineer & Statistical Analyst)**:
+     - Implemented the 7-stage canonical invariant preprocessing pipeline (Otsu adaptive thresholding, aspect-preserving bounding box scaling, center-of-mass translation).
+     - Trained and benchmarked classical machine learning baselines (Logistic Regression, Random Forest, SVM-RBF).
+     - Executed temperature scaling calibration ($T=0.9170$, ECE minimization).
+     - Conducted exploratory K-Means clustering analysis and statistical moment telemetry.
+  3. **Y Akshay Raj (Roll No. 24VE1A66C8, 20% contribution — Full-Stack & Telemetry Engineer)**:
+     - Architected the asynchronous FastAPI backend server.
+     - Developed interactive HTML5 drawing canvas and Apple Pro design system.
+     - Integrated real-time inference telemetry HUD, top-K probability distribution charts, and error matrix inspection.
+     - Executed and maintained comprehensive automated test suite (35/35 passing unit tests).

@@ -112,6 +112,30 @@ assert np.shares_memory(x_val, x_test) is False
 assert np.shares_memory(x_reserved, x_test) is False
 ```
 
+### 4.1 Epistemological Scope: What Each Integrity Check Proves vs. What It Does Not Prove
+
+To maintain rigorous scientific integrity, the precise boundaries of what each empirical check proves and does not prove are explicitly delineated:
+
+1. **Cryptographic SHA-256 Digest (`731c5ac602752760...`):**
+   - **What it Proves:** The local raw archive `data/raw/mnist.npz` is bit-for-bit identical to the official upstream Google Cloud / Keras distribution mirror. It conclusively proves that the local physical asset has suffered zero byte corruption, network transmission truncation, or file tampering.
+   - **What it Does NOT Prove:** It does not prove the infallibility of the original 1998 human labeling, nor does it guarantee the absence of ambiguous or noisy handwriting in the upstream NIST benchmark.
+
+2. **Exact-Raster MD5 Byte Hashing (`hashlib.md5(raster.tobytes())`):**
+   - **What it Proves:** It mathematically proves that **zero identical 28×28 `uint8` byte rasters** exist across any partitions ($\text{Train} \cap \text{Val} = \emptyset$, $\text{Train} \cap \text{Test} = \emptyset$, etc.), and that no single image was duplicated within any split.
+   - **What it Does NOT Prove:** **Exact byte matching does NOT rule out semantic, topological, or perceptual near-duplicates.** For example, two digits penned by the same human writer with identical calligraphy, or two rasters differing by a single-pixel translation or subtle sub-pixel antialiasing offset, will produce entirely distinct MD5 hashes despite sharing near-identical semantic features. In handwriting datasets, such natural stylistic commonalities are expected and inherent to the task.
+
+3. **Virtual Memory Buffer Independence (`np.shares_memory`):**
+   - **What it Proves:** The partitioned arrays reside in disjoint virtual memory blocks in RAM. Operations mutating one array (e.g., data normalization) cannot inadvertently modify the validation or test arrays via pointer aliasing or NumPy view mutation.
+   - **What it Does NOT Prove:** It does not prevent procedural feature leakage if feature extraction or normalization parameters (e.g., global mean and variance) were computed across the combined corpus prior to splitting. In DIGITVISION AI, procedural leakage is prevented by deriving all scaling statistics strictly from the training partition.
+
+4. **Statistical Moment & Sparsity Parity ($\mu \approx 0.131, \sigma \approx 0.309$, 80.86% Zero Background):**
+   - **What it Proves:** The active 20,000-sample training partition is a statistically unbiased representation of the broader 70,000-sample population with identical background sparsity and stroke density.
+   - **What it Does NOT Prove:** It does not guarantee that topological difficulty or individual digit stroke complexity is uniformly distributed across classes or partitions.
+
+5. **Class Balance Uniformity (Max: '1' at 11.40%, Min: '5' at 8.88%):**
+   - **What it Proves:** An empirical imbalance ratio of $\frac{11.40\%}{8.88\%} = 1.284 \ll 3.0$ proves that no severe majority-class bias exists, confirming that standard unweighted Categorical Cross-Entropy is mathematically sound.
+   - **What it Does NOT Prove:** It does not imply that all digit classes are equally separable; digits with overlapping morphological loops (e.g., 4 vs. 9, or 3 vs. 5) remain harder to distinguish than simpler digits (e.g., 0 and 1).
+
 ---
 
 ## 5. Empirical Statistical Moments & Sparsity Telemetry
