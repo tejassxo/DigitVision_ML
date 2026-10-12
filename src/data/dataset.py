@@ -83,9 +83,14 @@ class MNISTPipeline:
                     y_te = data["y_test"]
             else:
                 (x_tr, y_tr), (x_te, y_te) = mnist.load_data()
-                # Persist locally for offline reproducibility
+                # Persist exact upstream file locally for offline reproducibility
+                import shutil
+                keras_cached = Path.home() / ".keras" / "datasets" / "mnist.npz"
                 MNIST_RAW_FILE.parent.mkdir(parents=True, exist_ok=True)
-                np.savez_compressed(MNIST_RAW_FILE, x_train=x_tr, y_train=y_tr, x_test=x_te, y_test=y_te)
+                if keras_cached.exists():
+                    shutil.copyfile(keras_cached, MNIST_RAW_FILE)
+                else:
+                    np.savez_compressed(MNIST_RAW_FILE, x_train=x_tr, y_train=y_tr, x_test=x_te, y_test=y_te)
 
             self._raw_train_imgs = x_tr
             self._raw_train_labels = y_tr.astype(np.int64)
