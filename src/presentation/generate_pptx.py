@@ -18,7 +18,10 @@ Color Palette (Deep Obsidian):
 
 import os
 import json
-from pathlib import Path
+from typing import Optional
+import pathlib
+
+Path = pathlib.Path
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
@@ -109,7 +112,7 @@ def set_speaker_notes(slide, notes_dict: dict):
     )
 
 
-def safe_add_image(slide, img_path: str, left: float, top: float, width: float = None, height: float = None):
+def safe_add_image(slide, img_path: str, left: float, top: float, width: Optional[float] = None, height: Optional[float] = None):
     p = Path(img_path)
     if p.exists():
         kwargs = {}

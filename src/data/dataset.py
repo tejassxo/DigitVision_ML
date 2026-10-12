@@ -11,9 +11,11 @@ FORMAL MATHEMATICAL DEFINITION:
 """
 
 import hashlib
-from pathlib import Path
-import numpy as np
+import pathlib
 from typing import Tuple, Dict, Any, Optional
+import numpy as np
+
+Path = pathlib.Path
 from keras.datasets import mnist
 from src.config import (
     RANDOM_SEED,
@@ -52,7 +54,7 @@ class MNISTPipeline:
         if not target.exists():
             return {"exists": False, "verified": False, "sha256": None, "filepath": str(target)}
         
-        sha256_hash = hashlib.sha256()
+        sha256_hash = hashlib.new("sha256")
         with open(target, "rb") as f:
             for byte_block in iter(lambda: f.read(65536), b""):
                 sha256_hash.update(byte_block)
@@ -204,9 +206,9 @@ class MNISTPipeline:
         x_res, y_res = self.get_reserved_pool(n_train, n_val)
 
         def get_split_stats(imgs: np.ndarray, labels: np.ndarray, name: str) -> Dict[str, Any]:
-            class_counts = {int(c): int(np.sum(labels == c)) for c in range(NUM_CLASSES)}
+            class_counts = {c: int(np.sum(labels == c)) for c in range(NUM_CLASSES)}
             total = len(labels)
-            class_props = {int(c): round(float(class_counts[c] / total), 4) for c in range(NUM_CLASSES)}
+            class_props = {c: round(float(class_counts[c] / total), 4) for c in range(NUM_CLASSES)}
             zero_pixel_ratio = float(np.mean(imgs == 0.0))
             active_pixel_ratio = float(np.mean(imgs > 0.05))
 
