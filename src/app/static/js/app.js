@@ -625,8 +625,8 @@ class DigitVisionApp {
       row.className = "topk-bar-row";
 
       const digit = item.digit;
-      const prob = item.probability ?? item.prob ?? 0;
-      const pct = (prob * 100).toFixed(1);
+      const prob = item.probability ?? item.prob ?? (item.percentage != null ? item.percentage / 100 : 0);
+      const pct = item.percentage != null ? Number(item.percentage).toFixed(1) : (prob * 100).toFixed(1);
 
       row.innerHTML = `
         <div class="topk-label-cell">
