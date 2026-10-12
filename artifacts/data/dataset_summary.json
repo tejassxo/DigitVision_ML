@@ -1,0 +1,266 @@
+{
+  "dataset_name": "MNIST",
+  "dataset_provenance": {
+    "originating_authors": "Yann LeCun (Courant Institute, NYU), Corinna Cortes (Google Research)",
+    "originating_sources": "NIST Special Database 3 and Special Database 19",
+    "upstream_mirror_url": "https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz",
+    "authoritative_archive": "http://yann.lecun.com/exdb/mnist/",
+    "academic_citation": "LeCun, Y., Bottou, L., Bengio, Y., & Haffner, P. (1998). Gradient-based learning applied to document recognition. Proceedings of the IEEE, 86(11), 2278-2324.",
+    "official_license": "Creative Commons Attribution-Share Alike 3.0 (CC BY-SA 3.0)",
+    "access_and_audit_date": "2026-10-12",
+    "local_cache_path": "C:\\Users\\tejas\\Desktop\\ML_project\\data\\raw\\mnist.npz",
+    "sha256_checksum": "731c5ac602752760c8e48fbffcf8c3b850d9dc2a2aedcf2cc48468fc17b673d1",
+    "expected_sha256": "731c5ac602752760c8e48fbffcf8c3b850d9dc2a2aedcf2cc48468fc17b673d1",
+    "checksum_verified": true,
+    "raw_file_size_bytes": 11490434
+  },
+  "partition_hygiene": {
+    "total_corpus_instances": 70000,
+    "raw_training_pool": 60000,
+    "raw_test_pool": 10000,
+    "active_train_samples": 20000,
+    "validation_samples": 3000,
+    "reserved_training_samples": 37000,
+    "isolated_test_samples": 10000,
+    "split_ratio_rationale": "20,000 training and 3,000 validation samples were partitioned from the 60,000 training pool to ensure sub-minute CPU convergence during the training of classical ML algorithms (such as RBF Kernel SVM with O(N^2) Gram matrix complexity) and rapid deep learning hyperparameter benchmarking. The 37,000 unused training instances are strictly reserved and never touched. The official 10,000 test instances remain 100% air-gapped and intact to provide authoritative benchmark comparison.",
+    "zero_leakage_verification": {
+      "train_val_overlap_instances": 0,
+      "train_test_overlap_instances": 0,
+      "val_test_overlap_instances": 0,
+      "reserved_test_overlap_instances": 0,
+      "full_train_pool_test_overlap_instances": 0,
+      "status": "PASS \u2014 Absolute zero cross-partition contamination"
+    },
+    "duplicate_detection": {
+      "train_duplicates": 0,
+      "val_duplicates": 0,
+      "reserved_duplicates": 0,
+      "test_duplicates": 0,
+      "total_duplicates_across_corpus": 0
+    }
+  },
+  "data_specifications": {
+    "image_dimensions": [
+      28,
+      28,
+      1
+    ],
+    "total_pixels_per_sample": 784,
+    "channels": 1,
+    "raw_dtype": "uint8",
+    "raw_range": [
+      0,
+      255
+    ],
+    "normalized_dtype": "float32",
+    "normalized_range": [
+      0.0,
+      1.0
+    ],
+    "num_classes": 10,
+    "class_labels": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ]
+  },
+  "partitions_telemetry": {
+    "train": {
+      "name": "Train_20k",
+      "count": 20000,
+      "ratio_total": 0.28571,
+      "class_counts": {
+        "0": 1994,
+        "1": 2281,
+        "2": 1929,
+        "3": 2076,
+        "4": 1945,
+        "5": 1775,
+        "6": 1971,
+        "7": 2093,
+        "8": 1922,
+        "9": 2014
+      },
+      "class_proportions": {
+        "0": 0.0997,
+        "1": 0.11405,
+        "2": 0.09645,
+        "3": 0.1038,
+        "4": 0.09725,
+        "5": 0.08875,
+        "6": 0.09855,
+        "7": 0.10465,
+        "8": 0.0961,
+        "9": 0.1007
+      },
+      "mean": 0.13158,
+      "std": 0.30932,
+      "var": 0.09568,
+      "min": 0.0,
+      "max": 1.0,
+      "pure_zero_ratio": 0.80812,
+      "active_stroke_ratio": 0.18304,
+      "missing_values": 0,
+      "inf_values": 0
+    },
+    "validation": {
+      "name": "Val_3k",
+      "count": 3000,
+      "ratio_total": 0.04286,
+      "class_counts": {
+        "0": 296,
+        "1": 335,
+        "2": 316,
+        "3": 321,
+        "4": 305,
+        "5": 266,
+        "6": 298,
+        "7": 295,
+        "8": 264,
+        "9": 304
+      },
+      "class_proportions": {
+        "0": 0.09867,
+        "1": 0.11167,
+        "2": 0.10533,
+        "3": 0.107,
+        "4": 0.10167,
+        "5": 0.08867,
+        "6": 0.09933,
+        "7": 0.09833,
+        "8": 0.088,
+        "9": 0.10133
+      },
+      "mean": 0.1341,
+      "std": 0.31221,
+      "var": 0.09748,
+      "min": 0.0,
+      "max": 1.0,
+      "pure_zero_ratio": 0.80538,
+      "active_stroke_ratio": 0.18565,
+      "missing_values": 0,
+      "inf_values": 0
+    },
+    "reserved": {
+      "name": "Reserved_37k",
+      "count": 37000,
+      "ratio_total": 0.52857,
+      "class_counts": {
+        "0": 3633,
+        "1": 4126,
+        "2": 3713,
+        "3": 3734,
+        "4": 3592,
+        "5": 3380,
+        "6": 3649,
+        "7": 3877,
+        "8": 3665,
+        "9": 3631
+      },
+      "class_proportions": {
+        "0": 0.09819,
+        "1": 0.11151,
+        "2": 0.10035,
+        "3": 0.10092,
+        "4": 0.09708,
+        "5": 0.09135,
+        "6": 0.09862,
+        "7": 0.10478,
+        "8": 0.09905,
+        "9": 0.09814
+      },
+      "mean": 0.12988,
+      "std": 0.30711,
+      "var": 0.09432,
+      "min": 0.0,
+      "max": 1.0,
+      "pure_zero_ratio": 0.80944,
+      "active_stroke_ratio": 0.18169,
+      "missing_values": 0,
+      "inf_values": 0
+    },
+    "test": {
+      "name": "Test_10k",
+      "count": 10000,
+      "ratio_total": 0.14286,
+      "class_counts": {
+        "0": 980,
+        "1": 1135,
+        "2": 1032,
+        "3": 1010,
+        "4": 982,
+        "5": 892,
+        "6": 958,
+        "7": 1028,
+        "8": 974,
+        "9": 1009
+      },
+      "class_proportions": {
+        "0": 0.098,
+        "1": 0.1135,
+        "2": 0.1032,
+        "3": 0.101,
+        "4": 0.0982,
+        "5": 0.0892,
+        "6": 0.0958,
+        "7": 0.1028,
+        "8": 0.0974,
+        "9": 0.1009
+      },
+      "mean": 0.13251,
+      "std": 0.31048,
+      "var": 0.0964,
+      "min": 0.0,
+      "max": 1.0,
+      "pure_zero_ratio": 0.80724,
+      "active_stroke_ratio": 0.18386,
+      "missing_values": 0,
+      "inf_values": 0
+    },
+    "total_corpus": {
+      "name": "Total_70k",
+      "count": 70000,
+      "ratio_total": 1.0,
+      "class_counts": {
+        "0": 6903,
+        "1": 7877,
+        "2": 6990,
+        "3": 7141,
+        "4": 6824,
+        "5": 6313,
+        "6": 6876,
+        "7": 7293,
+        "8": 6825,
+        "9": 6958
+      },
+      "class_proportions": {
+        "0": 0.09861,
+        "1": 0.11253,
+        "2": 0.09986,
+        "3": 0.10201,
+        "4": 0.09749,
+        "5": 0.09019,
+        "6": 0.09823,
+        "7": 0.10419,
+        "8": 0.0975,
+        "9": 0.0994
+      },
+      "mean": 0.13093,
+      "std": 0.30845,
+      "var": 0.09514,
+      "min": 0.0,
+      "max": 1.0,
+      "pure_zero_ratio": 0.80858,
+      "active_stroke_ratio": 0.18255,
+      "missing_values": 0,
+      "inf_values": 0
+    }
+  }
+}

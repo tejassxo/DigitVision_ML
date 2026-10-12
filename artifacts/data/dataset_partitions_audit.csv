@@ -1,0 +1,6 @@
+Partition_Name,Role_In_System,Sample_Count,Corpus_Ratio_Pct,Mean_Pixel_Intensity,Std_Pixel_Intensity,Background_Sparsity_Pct,Active_Stroke_Pct,Unique_MD5_Hashes,Internal_Duplicates,Overlap_With_Test_Set
+Active Training Set,Model gradient optimization & parameter tuning,20000,28.57%,0.13158,0.30932,80.81%,18.30%,20000,0,0
+Validation Set,Hyperparameter selection & temperature scaling,3000,4.29%,0.1341,0.31221,80.54%,18.57%,3000,0,0
+Reserved Training Pool,Unused training instances reserved for scale testing,37000,52.86%,0.12988,0.30711,80.94%,18.17%,37000,0,0
+Isolated Test Benchmark,Final unbiased scientific benchmarking (Air-gapped),10000,14.29%,0.13251,0.31048,80.72%,18.39%,10000,0,0
+Total Combined Corpus,Complete verified MNIST population,70000,100.00%,0.13093,0.30845,80.86%,18.25%,70000,0,0
