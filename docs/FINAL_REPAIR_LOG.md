@@ -130,6 +130,30 @@ No models were retrained, no datasets were modified, and zero PowerPoint present
 
 ---
 
+### DEFECT-08: Institutional Layout, Typography & Formatting Discrepancies
+* **Classification:** Institutional Compliance, Typography & Department Template Standardization
+* **Affected Artifact:** `Digit_Recognition_AIML-B.docx`
+* **Inspection & Reproduction:**
+  Comparison against Abhinav's orientation documentation (`AIML_C_24VE1A66H9_ML LAB PROJECT_EV BATTERY DEGRADATION PREDICTION DOCUMENTATION.docx` / `.pdf`) and official department guidelines identified:
+  1. **Page Size & Margins:** Section 0 was Letter size (612x792 pt) instead of mandatory A4 (595.3x841.9 pt).
+  2. **Headers & Footers:** Headers used mixed fonts (`Sitka Heading`, `Palatino Linotype`). Footer had static `"Page 1"` text instead of dynamic Word `PAGE` fields and lacked Roman numeral formatting for preliminaries.
+  3. **Typography & Font Sizes:** Chapter titles were 14 pt instead of 16 pt bold; section headings were 11 pt instead of 13 pt bold; body text was mixed 10–11 pt instead of 12 pt; table text was 7–9 pt instead of 10–11 pt; code segment was 7 pt Times New Roman instead of Courier New 9.5 pt.
+  4. **Line Spacing:** Body text had mixed 1.15/1.3 spacing instead of 1.5; tables had 1.15 line spacing instead of single (1.0).
+  5. **Orientation & Ordering:** Table of Contents was placed ahead of Outcome Mapping. Front matter had legacy course codes and unaligned signatories.
+  6. **Merged Headings & Formatting:** Headings (Sections 1.5, 1.6, 2.2, 2.3, 9.2, 9.3) were merged into body text paragraphs. References had bundled citations.
+* **Minimal Surgical Fix:**
+  Executed `scripts/format_master_digitvision.py`:
+  1. Standardized all sections to exact A4 dimensions with 1.0" margins and 0.45" header/footer distance.
+  2. Converted 4-line institutional header to pure Times New Roman.
+  3. Configured dynamic Word `PAGE` fields with lowercase Roman numerals (`i, ii, iii...`) for Preliminaries and decimal Arabic numerals (`1, 2, 3...`) starting at Chapter 1.
+  4. Enforced strict typography: Chapter titles (16 pt bold), Section headings (13 pt bold), Sub-headings (12 pt bold), Body text (12 pt, 1.5 line spacing, justified), Tables (10–11 pt, single line spacing 1.0, light gray `#E8E8E8` headers), Code (Courier New 9.5 pt).
+  5. Synchronized Front Matter: Course Code `A1612` (Machine Learning Laboratory), Section: B, Academic Year `2026 – 2027`, Regulation: R22, Course Coordinator / Guide: Dr. A. Swathi, Evaluation Date: 13-10-2026.
+  6. Re-ordered Table of Contents to follow Outcome Mapping, separated merged headings into distinct paragraphs, and expanded references into 10 clean IEEE citations.
+* **Verification Evidence:**
+  Word COM inspection confirmed exact 59-page document with 35-page main body (meeting the 25–35 page requirement), 100% Times New Roman paragraph typography, 100% single line spacing across all 52 tables, Courier New code formatting, and 0 guidance notes.
+
+---
+
 ## 3. Summary of Remediations
 
 | Defect ID | Severity | File Modified | Verification Test | Result |
@@ -141,3 +165,4 @@ No models were retrained, no datasets were modified, and zero PowerPoint present
 | **DEFECT-05** | Low | `scripts/update_academic_documentation.py` | `python -m pytest` | **PASS (35/35 pass)** |
 | **DEFECT-06** | High | `scripts/update_academic_documentation.py`, `docs/*` | Word COM & Table 10 inspection | **PASS (54 pages)** |
 | **DEFECT-07** | Medium | `src/data/dataset.py`, `src/presentation/generate_pptx.py` | Static analysis & test execution | **PASS (Clean)** |
+| **DEFECT-08** | High | `Digit_Recognition_AIML-B.docx` | Word COM, Typography & Layout Audit | **PASS (100% Compliant)** |
