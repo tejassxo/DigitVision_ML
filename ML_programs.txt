@@ -1,0 +1,511 @@
+
+### 1. KNN from Scratch vs. Scikit-Learn
+
+Implement KNN from scratch using Euclidean distance and majority vote, and verify with `KNeighborsClassifier`.
+
+```python
+import numpy as np
+from collections import Counter
+from sklearn.neighbors import KNeighborsClassifier
+
+X = np.array([[1, 2], [2, 3], [3, 1], [6, 5], [7, 7], [8, 6]])
+y = np.array([0, 0, 0, 1, 1, 1])
+X_new = np.array([[2, 2], [7, 5]])
+
+# From Scratch (k=3)
+preds_scratch = []
+for p in X_new:
+    dists = np.sqrt(np.sum((X - p) ** 2, axis=1))
+    nearest_labels = y[np.argsort(dists)[:3]]
+    preds_scratch.append(Counter(nearest_labels).most_common(1)[0][0])
+
+# Scikit-Learn
+knn = KNeighborsClassifier(n_neighbors=3).fit(X, y)
+
+print("Scratch:", preds_scratch)
+print("Sklearn:", knn.predict(X_new).tolist())
+
+```
+
+---
+
+### 2. Descriptive Statistics from Scratch vs. `statistics` Module
+
+Compute Mean, Median, Mode, Variance, and Standard Deviation using custom formulas and verify with `statistics`.
+
+```python
+import statistics
+
+d = [12, 15, 12, 18, 21, 24, 19, 15, 12, 27]
+n = len(d)
+s = sorted(d)
+
+mean = sum(d) / n
+median = (s[n//2 - 1] + s[n//2]) / 2 if n % 2 == 0 else s[n//2]
+mode = max(set(d), key=d.count)
+var = sum((x - mean) ** 2 for x in d) / (n - 1)
+std = var ** 0.5
+
+print("Custom :", round(mean, 2), median, mode, round(var, 2), round(std, 2))
+print("Module :", round(statistics.mean(d), 2), statistics.median(d), statistics.mode(d), round(statistics.variance(d), 2), round(statistics.stdev(d), 2))
+
+```
+
+---
+
+### 3. Multiple Linear Regression for House Price Prediction
+
+Predict house prices from area, bedrooms, and age, report MAE, MSE, RMSE, and $R^2$, and predict for a new house.
+
+```python
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+# [Area, Bedrooms, Age]
+X = [[1500, 3, 10], [1800, 3, 15], [2400, 4, 5], [3000, 4, 8], [3500, 5, 2]]
+y = [300000, 340000, 460000, 540000, 650000]
+
+model = LinearRegression().fit(X, y)
+pred = model.predict(X)
+
+print("MAE :", mean_absolute_error(y, pred))
+print("MSE :", mean_squared_error(y, pred))
+print("RMSE:", np.sqrt(mean_squared_error(y, pred)))
+print("R2  :", r2_score(y, pred))
+print("New House Price:", model.predict([[2500, 4, 5]])[0])
+
+```
+
+---
+
+### 4. K-Means Clustering & The Elbow Method
+
+Apply K-Means on 2D data, plot clusters with centroids, and plot the Elbow Method.
+
+```python
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_blobs
+from sklearn.cluster import KMeans
+
+X, _ = make_blobs(n_samples=200, centers=4, random_state=42)
+
+# 1. Elbow Plot
+wcss = [KMeans(n_clusters=k, n_init=10, random_state=42).fit(X).inertia_ for k in range(1, 8)]
+plt.plot(range(1, 8), wcss, marker='o')
+plt.title("Elbow Method")
+plt.show()
+
+# 2. Cluster Plot (k=4)
+km = KMeans(n_clusters=4, n_init=10, random_state=42).fit(X)
+plt.scatter(X[:, 0], X[:, 1], c=km.labels_)
+plt.scatter(km.cluster_centers_[:, 0], km.cluster_centers_[:, 1], c='red', marker='X', s=150)
+plt.title("K-Means Clusters")
+plt.show()
+
+```
+
+---
+
+### 5. Student Marks DataFrame & Visualization
+
+Create a DataFrame of student marks, add Total and Average columns, show top 5 students, and plot a bar chart and histogram.
+
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df = pd.DataFrame({
+    'Name': ['A', 'B', 'C', 'D', 'E', 'F'],
+    'Math': [85, 78, 92, 65, 88, 95],
+    'Sci':  [90, 74, 89, 70, 91, 94],
+    'Eng':  [88, 80, 85, 60, 86, 92]
+})
+
+df['Total'] = df[['Math', 'Sci', 'Eng']].sum(axis=1)
+df['Average'] = df['Total'] / 3
+
+print("Top 5 Students:\n", df.nlargest(5, 'Total'))
+
+df.plot(x='Name', y='Total', kind='bar', title='Total Marks')
+plt.show()
+
+df['Average'].plot(kind='hist', bins=5, title='Average Distribution')
+plt.show()
+
+```
+
+---
+
+### 6. Binary Classification with Logistic Regression
+
+Train Logistic Regression on binary data, report coefficients, accuracy, confusion matrix, and predict probabilities.
+
+```python
+from sklearn.datasets import load_breast_cancer
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix
+
+X, y = load_breast_cancer(return_X_y=True)
+X = X[:, :4]  # Use first 4 features for simplicity
+
+model = LogisticRegression().fit(X, y)
+pred = model.predict(X)
+
+print("Coefficients:", model.coef_)
+print("Accuracy:", accuracy_score(y, pred))
+print("Confusion Matrix:\n", confusion_matrix(y, pred))
+print("Probabilities for first 2 samples:\n", model.predict_proba(X[:2]))
+
+```
+
+---
+
+### 7. Matrix Operations & Linear Equations using NumPy and SciPy
+
+Perform addition, multiplication, transpose, determinant, inverse, and solve linear equations.
+
+```python
+import numpy as np
+from scipy import linalg
+
+A = np.array([[4, 2], [3, 1]])
+B = np.array([[1, 5], [2, 3]])
+
+print("Add:\n", A + B)
+print("Multiply:\n", A @ B)
+print("Transpose:\n", A.T)
+print("Determinant:", linalg.det(A))
+print("Inverse:\n", linalg.inv(A))
+print("Solve (4x+2y=10, 3x+y=7):", linalg.solve(A, [10, 7]))
+
+```
+
+---
+
+### 8. Model Comparison: Logistic Regression, KNN, and Decision Tree
+
+Compare the three models using accuracy, precision, recall, and F1-score, and plot the accuracies.
+
+```python
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+X, y = load_iris(return_X_y=True)
+models = {
+    'LogReg': LogisticRegression(max_iter=200),
+    'KNN': KNeighborsClassifier(),
+    'Tree': DecisionTreeClassifier()
+}
+
+accs = []
+for name, m in models.items():
+    p = m.fit(X, y).predict(X)
+    accs.append(accuracy_score(y, p))
+    print(f"{name}: Acc={accuracy_score(y,p):.2f}, Prec={precision_score(y,p,average='macro'):.2f}, Rec={recall_score(y,p,average='macro'):.2f}, F1={f1_score(y,p,average='macro'):.2f}")
+
+plt.bar(models.keys(), accs)
+plt.title("Accuracy Comparison")
+plt.show()
+
+```
+
+---
+
+### 9. Simple Linear Regression from Scratch (Least-Squares)
+
+Implement Simple Linear Regression using least-squares formulas, predict a new value, compute MSE and $R^2$, and plot.
+
+```python
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = np.array([1, 2, 3, 4, 5], dtype=float)
+y = np.array([3, 5, 7, 9, 11], dtype=float)
+
+b1 = np.sum((x - x.mean()) * (y - y.mean())) / np.sum((x - x.mean()) ** 2)
+b0 = y.mean() - b1 * x.mean()
+y_pred = b0 + b1 * x
+
+mse = np.mean((y - y_pred) ** 2)
+r2 = 1 - np.sum((y - y_pred) ** 2) / np.sum((y - y.mean()) ** 2)
+
+print(f"Slope={b1}, Intercept={b0}, MSE={mse:.2f}, R2={r2:.2f}")
+print("Predict for x=6:", b0 + b1 * 6)
+
+plt.scatter(x, y)
+plt.plot(x, y_pred, color='red')
+plt.show()
+
+```
+
+---
+
+### 10. Decision Tree on Loan Approval Data
+
+Train a Decision Tree on loan data, print rules with `export_text`, and draw the tree with `plot_tree`.
+
+```python
+import matplotlib.pyplot as plt
+from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
+
+# [Income, Credit_Score]
+X = [[30, 600], [45, 650], [80, 750], [25, 580], [90, 800]]
+y = [0, 0, 1, 0, 1]  # 0=Rejected, 1=Approved
+
+clf = DecisionTreeClassifier().fit(X, y)
+print(export_text(clf, feature_names=['Income', 'Credit_Score']))
+
+plot_tree(clf, feature_names=['Income', 'Credit_Score'], class_names=['No', 'Yes'], filled=True)
+plt.show()
+
+```
+
+---
+
+### 11. Multi-Class KNN with Feature Scaling & K-Tuning
+
+Apply KNN on a 3-class dataset after scaling, report accuracy and confusion matrix, and plot accuracy vs. $k$.
+
+```python
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix
+
+X, y = load_iris(return_X_y=True)
+X = StandardScaler().fit_transform(X)
+
+ks = range(1, 10)
+accs = [accuracy_score(y, KNeighborsClassifier(k).fit(X, y).predict(X)) for k in ks]
+
+best_k = ks[accs.index(max(accs))]
+pred = KNeighborsClassifier(best_k).fit(X, y).predict(X)
+
+print("Best K:", best_k, "| Accuracy:", accuracy_score(y, pred))
+print("Confusion Matrix:\n", confusion_matrix(y, pred))
+
+plt.plot(ks, accs, marker='o')
+plt.xlabel('K')
+plt.ylabel('Accuracy')
+plt.show()
+
+```
+
+---
+
+### 12. Monthly Sales Data Analysis & Visualization
+
+Store monthly sales in a DataFrame, fill missing values with mean, find each product's best month, and plot a line chart and pie chart.
+
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+df = pd.DataFrame({
+    'Prod_A': [100, np.nan, 150, 200],
+    'Prod_B': [80, 120, np.nan, 160]
+}, index=['Jan', 'Feb', 'Mar', 'Apr'])
+
+df = df.fillna(df.mean())
+print("Filled Data:\n", df)
+print("\nBest Month per Product:\n", df.idxmax())
+
+df.plot(kind='line', marker='o', title='Monthly Sales')
+plt.show()
+
+df.sum().plot(kind='pie', autopct='%1.1f%%', title='Sales Share')
+plt.show()
+
+```
+
+---
+
+### 13. All-Features vs. Single-Feature Linear Regression
+
+Train Linear Regression using all features and each feature alone, compare $R^2$ values, and plot actual vs. predicted.
+
+```python
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_diabetes
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+
+X, y = load_diabetes(return_X_y=True)
+X = X[:, :3]  # Use first 3 features
+
+for i in range(3):
+    pred_single = LinearRegression().fit(X[:, [i]], y).predict(X[:, [i]])
+    print(f"Feature {i} R2:", round(r2_score(y, pred_single), 4))
+
+pred_all = LinearRegression().fit(X, y).predict(X)
+print("All Features R2:", round(r2_score(y, pred_all), 4))
+
+plt.scatter(y, pred_all)
+plt.xlabel("Actual")
+plt.ylabel("Predicted")
+plt.show()
+
+```
+
+---
+
+### 14. Demonstration of `math`, `statistics`, `numpy`, and `scipy.stats`
+
+Demonstrate the four libraries on a list of values, including reshaping, row/column sums, and `describe()`.
+
+```python
+import math, statistics
+import numpy as np
+from scipy import stats
+
+v = [4, 9, 16, 25, 36, 49]
+
+print("Math sqrt(16):", math.sqrt(v[2]))
+print("Stats Mean & Median:", statistics.mean(v), statistics.median(v))
+
+arr = np.array(v).reshape(2, 3)
+print("Reshaped:\n", arr)
+print("Row Sums:", arr.sum(axis=1), "| Col Sums:", arr.sum(axis=0))
+print("SciPy Describe:\n", stats.describe(v))
+
+```
+
+---
+
+### 15. Pass/Fail Prediction using Logistic Regression
+
+Predict pass/fail from study hours, report accuracy, confusion matrix, classification report, and pass probabilities.
+
+```python
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+X = np.array([[1], [2], [3], [4], [5], [6], [7], [8]])
+y = np.array([0, 0, 0, 0, 1, 1, 1, 1])
+
+model = LogisticRegression().fit(X, y)
+pred = model.predict(X)
+
+print("Accuracy:", accuracy_score(y, pred))
+print("Confusion Matrix:\n", confusion_matrix(y, pred))
+print("Report:\n", classification_report(y, pred))
+print("Pass Probabilities for 3.5 & 6.5 hrs:", model.predict_proba([[3.5], [6.5]])[:, 1])
+
+```
+
+---
+
+### 16. Decision Tree Hyperparameter Tuning (`max_depth` & Criteria)
+
+Tune `max_depth` by plotting training vs. testing accuracy, and compare `gini` and `entropy`.
+
+```python
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+
+X, y = load_breast_cancer(return_X_y=True)
+X_tr, X_te, y_tr, y_te = train_test_split(X, y, random_state=42)
+
+depths = range(1, 8)
+tr_acc = [DecisionTreeClassifier(max_depth=d).fit(X_tr, y_tr).score(X_tr, y_tr) for d in depths]
+te_acc = [DecisionTreeClassifier(max_depth=d).fit(X_tr, y_tr).score(X_te, y_te) for d in depths]
+
+print("Gini Acc   :", DecisionTreeClassifier(criterion='gini').fit(X_tr, y_tr).score(X_te, y_te))
+print("Entropy Acc:", DecisionTreeClassifier(criterion='entropy').fit(X_tr, y_tr).score(X_te, y_te))
+
+plt.plot(depths, tr_acc, label='Train')
+plt.plot(depths, te_acc, label='Test')
+plt.legend()
+plt.show()
+
+```
+
+---
+
+### 17. Population vs. Sample Statistics on Temperature Data
+
+Compute Mean, Median, Mode, and both population and sample Variance and Standard Deviation.
+
+```python
+import statistics as st
+
+t = [30, 32, 31, 30, 33, 34, 30, 32]
+
+print("Mean:", st.mean(t), "| Median:", st.median(t), "| Mode:", st.mode(t))
+print("Population Var & Std:", round(st.pvariance(t), 2), round(st.pstdev(t), 2))
+print("Sample Var & Std    :", round(st.variance(t), 2), round(st.stdev(t), 2))
+
+```
+
+---
+
+### 18. Customer Segmentation with K-Means
+
+Segment customers on income and spending score, find cluster averages using `groupby`, and name each cluster.
+
+```python
+import pandas as pd
+from sklearn.cluster import KMeans
+
+df = pd.DataFrame({
+    'Income': [15, 18, 85, 90, 82, 88],
+    'Spend':  [80, 85, 88, 92, 15, 20]
+})
+
+df['Cluster'] = KMeans(n_clusters=3, n_init=10, random_state=42).fit_predict(df)
+summary = df.groupby('Cluster').mean()
+summary['Name'] = ['High-Income Low-Spend', 'High-Income High-Spend', 'Low-Income High-Spend']
+
+print(summary)
+
+```
+
+---
+
+### 19. Simple Linear Regression on Experience vs. Salary
+
+Fit Simple Linear Regression on experience vs. salary, print slope and intercept, and predict salaries for new values.
+
+```python
+from sklearn.linear_model import LinearRegression
+
+X = [[1], [2], [3], [4], [5]]
+y = [40000, 50000, 60000, 70000, 80000]
+
+model = LinearRegression().fit(X, y)
+
+print("Slope:", model.coef_[0], "| Intercept:", model.intercept_)
+print("Predicted Salaries (3.5 & 7 yrs):", model.predict([[3.5], [7]]))
+
+```
+
+---
+
+### 20. Model Comparison on the Non-Linear "Two Moons" Dataset
+
+Compare Logistic Regression, KNN, and Decision Tree on "two moons" and explain why Logistic Regression performs worse.
+
+```python
+from sklearn.datasets import make_moons
+from sklearn.linear_model import LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+
+X, y = make_moons(n_samples=300, noise=0.2, random_state=42)
+
+for name, model in [('LogReg', LogisticRegression()), ('KNN', KNeighborsClassifier()), ('Tree', DecisionTreeClassifier())]:
+    print(f"{name} Accuracy:", model.fit(X, y).score(X, y))
+
+print("Reason: Logistic Regression only draws a straight line, which cannot separate curved moon shapes.")
+
+```
